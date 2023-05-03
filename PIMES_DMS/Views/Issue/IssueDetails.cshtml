@@ -1,0 +1,125 @@
+﻿@model PIMES_DMS.Models.IssueModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="d-flex">
+    <div class="d-flex justify-content-lg-start">
+        <div>
+            <h1>Issue Details</h1>
+        </div>
+        <div class="align-self-center" style="margin-left:30px">
+            <a class="btn btn-secondary" style="width:90px" asp-controller="Home" asp-action="Home">Back</a>
+        </div>
+    </div>
+    @{
+        string Role = TempData["Role"] as string;
+        TempData.Keep();
+
+        if (Role != "CLIENT" && !Model.ValidatedStatus)
+        {
+            if (!Model.Acknowledged)
+            {
+                <div class="align-self-center d-flex " style="margin-left:auto; width:300px">
+                    <div class="mx-2">
+                        <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
+                    </div>
+                </div>
+            }
+            else if (Model.Acknowledged)
+            {
+                <div class="align-self-center d-flex " style="margin-left:auto; width:300px">
+                    <div class="w-50">
+                        <a class="btn btn-primary w-100 h-100" asp-route-id="@Model.IssueID" asp-controller="Validation" asp-action="ValidateView">VALIDATE</a>
+                    </div>
+                </div>
+            }           
+        }
+    }
+</div>
+<hr />
+<div style="margin-left:10px">
+    Creator: @Model.IssueCreator
+</div>
+<div class="w-100 row mt-2" style="height:500px">
+    <div class="h-100" style="width:60%">
+        <div style="width:100%">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr class="text-center align-content-center">
+                        <th>
+                            Issue#
+                        </th>
+                        <th>
+                            Date Found
+                        </th>
+                        <th>
+                            Product
+                        </th>
+                        <th>
+                            Serial
+                        </th>
+                        <th>
+                            Affected P/N
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Ack. Stat.
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>
+                            @Model.IssueNo
+                        </td>
+                        <td>
+                            @Model.DateFound
+                        </td>
+                        <td>
+                            @Model.Product
+                        </td>
+                        <td>
+                            @Model.SerialNo
+                        </td>
+                        <td>
+                            @Model.AffectedPN
+                        </td>
+                        <td>
+                            @Model.Desc
+                        </td>
+                        @{
+                            if (Model.Acknowledged)
+                            {
+                                <td style="background-color:green">
+                                    YES
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="background-color:red">
+                                    NO
+                                </td>
+                            }
+                        }
+                    </tr>
+                </tbody>
+            </table>
+            <dl>
+                <dt>
+                    Problem Description:
+                </dt>
+                <dd>
+                    @Model.ProbDesc
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="h-100" style="width:40%">
+        Attached file should go and be shown here.
+    </div>
+</div>
+

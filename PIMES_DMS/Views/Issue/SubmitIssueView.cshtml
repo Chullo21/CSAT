@@ -1,0 +1,66 @@
+﻿@model PIMES_DMS.Models.IssueModel
+
+@{
+    ViewData["Title"] = "SubmitIssueView";
+}
+
+<div class="d-flex justify-content-center">
+    <div>
+        <h1>Submit Issue</h1>
+    </div>
+    @*<div class="align-self-center" style="margin-left:30px">
+        <a class="btn btn-secondary" style="width:90px" asp-controller="Home" asp-action="Home">Discard</a>
+    </div>*@
+</div>
+<hr />
+<div class="row d-flex justify-content-center">
+    <div class="col-md-4">
+        <form asp-controller="Issue" asp-action="SubmitIssue">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IssueNo" class="control-label"></label>
+                <input asp-for="IssueNo" class="form-control" name="issueno">
+                <span asp-validation-for="IssueNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateFound" class="control-label"></label>
+                <input asp-for="DateFound" class="form-control" name="datefound" type="date">
+                <span asp-validation-for="DateFound" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product" class="control-label"></label>
+                <input asp-for="Product" class="form-control" name="product"/>
+                <span asp-validation-for="Product" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SerialNo" class="control-label"></label>
+                <input asp-for="SerialNo" class="form-control" name="serialno" type="number"/>
+                <span asp-validation-for="SerialNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AffectedPN" class="control-label"></label>
+                <input asp-for="AffectedPN" class="form-control" name="affectedpn"/>
+                <span asp-validation-for="AffectedPN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Desc" class="control-label"></label>
+                <input asp-for="Desc" class="form-control" name="description"/>
+                <span asp-validation-for="Desc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProbDesc" class="control-label"></label>
+                <input asp-for="ProbDesc" class="form-control" name="problemdescription"/>
+                <span asp-validation-for="ProbDesc" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary"  style="width:250px"/>
+                </div>
+                <div>
+                    <a class="btn btn-danger" style="width:90px" asp-controller="Home" asp-action="Home">Discard</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
