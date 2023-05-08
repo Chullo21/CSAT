@@ -1,0 +1,77 @@
+﻿@model IEnumerable<PIMES_DMS.Models.IssueModel>
+
+@{
+    ViewData["Title"] = "Verified Issues";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Verified Issues - Awaiting for Containment Report</h1>
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueCreator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ControlNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAck)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateVdal)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssueCreator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssueNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SerialNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ControlNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAck)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateVdal)
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-controller="Validation" asp-action="ShowClientandQARep" asp-route-id="@item.IssueID">Details</a>
+                <a class="btn btn-success" asp-controller="ER" asp-action="Create_ContainmentView" asp-route-id="@item.IssueID">G.E.R.</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

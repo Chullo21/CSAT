@@ -35,6 +35,11 @@ namespace PIMES_DMS.Controllers
                 TempData["EN"] = log.AccName as string;
                 TempData["Role"] = log.Role as string;
 
+                if (log.Role == "ADMIN" || log.Role == "EMPLOYEE")
+                {
+                    return RedirectToAction("AdminHome", "Home");
+                }
+
                 return RedirectToAction("Home", "Home");
             }
             

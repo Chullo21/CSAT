@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 
@@ -31,14 +30,14 @@ namespace PIMES_DMS.Controllers
             {
                 Guid guid = Guid.NewGuid();
 
-                AccountsModel acc = new AccountsModel();
+                AccountsModel acc = new();
                 {
                     acc.AccUCode = role + "-" + compname + "-" + guid;
-                    acc.AccName = accname;
+                    acc.AccName = accname!;
                     acc.Role = role;
-                    acc.CompName = compname;
-                    acc.UserName = username;
-                    acc.Password = password;
+                    acc.CompName = compname!;
+                    acc.UserName = username!;
+                    acc.Password = password!;
                 }
 
                 if (ModelState.IsValid)
@@ -61,7 +60,7 @@ namespace PIMES_DMS.Controllers
                 return NotFound();
             }
 
-            AccountsModel findEdit = _Db.AccountsDb.Find(ID);
+            AccountsModel? findEdit = _Db.AccountsDb.Find(ID);
 
             if (findEdit == null)
             {

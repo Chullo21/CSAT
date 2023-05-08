@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 using System.Diagnostics;
 
@@ -6,11 +7,11 @@ namespace PIMES_DMS.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _Db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(AppDbContext db)
         {
-            _logger = logger;
+            _Db = db;
         }
 
         public IActionResult Home()
@@ -18,6 +19,14 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
+        public IActionResult AdminHome()
+        {
+
+            ViewData["InComingIssue"] = _Db.IssueDb.Where(j => !j.Acknowledged && !j.ValidatedStatus);
+            ViewData["OnProgressIssue"] = _Db.IssueDb.Where(j => j.Acknowledged && !j.ValidatedStatus);
+
+            return View();
+        }
 
 
         public IActionResult Privacy()

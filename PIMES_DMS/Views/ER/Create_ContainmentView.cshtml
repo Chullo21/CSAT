@@ -1,0 +1,123 @@
+﻿@model IssueModel
+@{
+    ViewData["Title"] = "Containment Report >";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-controller="ER" asp-action="Create_Containment">
+<div class="d-flex justify-content-between">
+    <div>
+        <h1>Containment Report</h1>
+    </div>
+    <div class="align-self-center">
+        <div>
+            <label>Control No.</label>
+            <input value="@Model.ControlNumber" name="controlno" readonly/>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="d-flex justify-content-center">
+    <table class="table table-striped w-75">
+        <thead>
+            <tr>
+                <th>PHASE</th>
+                <th>SOH</th>
+                <th>GOOD</th>
+                <th>NO GOOD</th>
+                <th>DISPOSITION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>WHSE</th>
+                <td><input class="form-control w-auto" type="number" name="whsoh"/></td>
+                <td><input class="form-control w-auto" type="number" name="whgood" /></td>
+                <td><input class="form-control w-auto" type="number" name="whnogood" /></td>
+                @*<td><input value="0" class="form-control w-auto" name="whdis" /></td>*@
+                    <td>
+                        <select class ="form-select w-100" name="whdis">
+                            <option value="Use as-is">Use as-is</option>
+                            <option value="Scrap">Scrap</option>
+                            <option value="Rework">Rework</option>
+                        </select>
+                    </td>
+            </tr>
+            <tr>
+                <th>IQA</th>
+                <td><input class="form-control w-auto" type="number" name="iqsoh" /></td>
+                <td><input class="form-control w-auto" type="number" name="iqgood" /></td>
+                <td><input class="form-control w-auto" type="number" name="iqnogood" /></td>
+                @*<td><input value="0" class="form-control w-auto" name="iqdis" /></td>*@
+                    <td>
+                        <select class="form-select w-100" name="iqdis">
+                            <option value="Use as-is">Use as-is</option>
+                            <option value="Scrap">Scrap</option>
+                            <option value="Rework">Rework</option>
+                        </select>
+                    </td>
+            </tr>
+            <tr>
+                <th>WIP</th>
+                <td><input class="form-control w-auto" type="number" name="wisoh" /></td>
+                <td><input class="form-control w-auto" type="number" name="wigood" /></td>
+                <td><input class="form-control w-auto" type="number" name="winogood" /></td>
+                @*<td><input value="0" class="form-control w-auto" name="widis" /></td>*@
+                    <td>
+                        <select class="form-select w-100" name="widis">
+                            <option value="Use as-is">Use as-is</option>
+                            <option value="Scrap">Scrap</option>
+                            <option value="Rework">Rework</option>
+                        </select>
+                    </td>
+            </tr>
+            <tr>
+                <th>FG</th>
+                <td><input class="form-control w-auto" type="number" name="fgsoh" /></td>
+                <td><input class="form-control w-auto" type="number" name="fggood" /></td>
+                <td><input class="form-control w-auto" type="number" name="fgnogood" /></td>
+               @* <td><input value="0" class="form-control w-auto" name="fgdis" /></td>*@
+                    <td>
+                        <select class="form-select w-100" name="fgdis">
+                            <option value="Use as-is">Use as-is</option>
+                            <option value="Scrap">Scrap</option>
+                            <option value="Rework">Rework</option>
+                        </select>
+                    </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+    <div class="d-flex justify-content-evenly" style="height:200px; margin-left:20px">
+        <div class="w-50 h-100">
+            <div>
+                <label class="fw-bold">Emergency Response</label>
+            </div>
+            <div>
+                <label class="form-label mt-3">Need Replacement?</label>
+                <select class="form-select w-50" name="rep">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            </div>
+            <div class="mt-1 form-group">
+                <label class="form-label">RMA #</label>
+                <input class="form-control w-50" name="rma"/>
+            </div>
+        </div>
+        <div class="w-50 d-flex justify-content-evenly">
+            <div class="w-25 align-self-end">
+                <input class="btn btn-danger w-100" value="Discard" />
+            </div>
+            <div class="w-75 d-flex align-self-end justify-content-end">
+                <input class="btn btn-primary w-75" type="submit" />
+            </div>
+        </div>
+    </div>
+</form>
+
+              

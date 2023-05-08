@@ -1,0 +1,148 @@
+﻿@{
+    ViewData["Title"] = "ATS QA - HOME";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="d-flex justify-content-center" style="height:450px">
+    <div class="w-25 homebtns">
+        <div>
+            <button class="btn btn-primary homebtn shadow">
+                <a asp-controller="Issue" asp-action="SubmitIssueView" class="btn w-100 h-100 text-white">Submit Claim</a>
+            </button>
+        </div>
+        <div>
+            <button class="btn btn-primary homebtn shadow">
+                <a asp-controller="Issue" asp-action="IssuesList" class="btn w-100 h-100 text-white">Issues</a>
+                </button>
+        </div>
+        <div>
+            <button class="btn btn-primary homebtn shadow">
+                <a asp-controller="Issue" asp-action="AcknowledgedIssues" class="btn w-100 h-100 text-white">On-Process</a>
+            </button>
+        </div>
+        <div>
+            <button class="btn btn-primary homebtn shadow">
+                <a asp-controller="Validation" asp-action="ForGERVal" class="btn w-100 h-100 text-white">Awaiting Containment Rep.</a>
+            </button>
+        </div>
+        <div>
+            <button class="btn btn-primary homebtn shadow">
+                <a asp-controller="ER" asp-action="ERView" class="btn w-100 h-100 text-white">Emergency Responces</a>
+            </button>
+        </div>
+        <div>
+            <button class="btn btn-primary homebtn shadow">
+                <a asp-controller="ER" asp-action="ERView" class="btn w-100 h-100 text-white">RC, CAPA & VERIFICATION</a>
+            </button>
+        </div>
+    </div>
+    <div class="w-75 h-100 d-flex justify-content-evenly"> 
+        <div class="text-center" style="width:45%">
+            <div>
+                <div style="font-weight:bold; font-size:20px">
+                    PENDING ISSUE(S)
+                </div>
+                <div class="table-data">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr style="position: sticky; top: 0; background-color:gray">
+                                <th>ISSUE #</th>
+                                <th>Date Submitted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                IEnumerable<IssueModel>? InComingIssue = ViewData["InComingIssue"] as IEnumerable<IssueModel>;
+                                if (InComingIssue != null)
+                                {
+                                    foreach (var obj in InComingIssue!)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @obj.IssueNo
+                                            </td>
+                                            <td>
+                                                @obj.DateCreated.ToString("MM/dd/yyy")
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="text-center" style="width:45%">
+            <div>
+                <div style="font-weight:bold; font-size:20px">
+                    ON PROCESS
+                </div>
+                <div class="table-data">
+                    <table class="table">
+                        <thead>
+                            <tr style="position: sticky; top: 0; background-color:gray">
+                                <th>ISSUE #</th>
+                                <th>DAYS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                IEnumerable<IssueModel>? Progress = ViewData["OnProgressIssue"] as IEnumerable<IssueModel>;
+                                if (Progress != null)
+                                {
+                                    foreach (var obj in Progress!)
+                                    {
+                                        DateTime dateack = Convert.ToDateTime(obj.DateAck);
+                                        DateTime today = Convert.ToDateTime(DateTime.Now);
+                                        int res = today.Day - dateack.Day;
+
+                                        if (res >= 4)
+                                        {
+                                            <tr class="bg-danger">
+                                                <td>
+                                                    @obj.IssueNo
+                                                </td>
+                                                <td>@{
+                                                        Write(res);
+                                                    }</td>
+                                            </tr>
+                                        }
+                                        else if (res == 3 || res == 2)
+                                        {
+                                            <tr class="bg-success">
+                                                <td>
+                                                    @obj.IssueNo
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        Write(res);
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                        else if (res <= 1)
+                                        {
+                                            <tr class="bg-primary">
+                                                <td>
+                                                    @obj.IssueNo
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        Write(res);
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }                               
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+

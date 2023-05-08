@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIMES_DMS.Data;
 
@@ -11,9 +12,11 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230511043659_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,32 +80,29 @@ namespace PIMES_DMS.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FGDis")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FGDis")
+                        .HasColumnType("int");
 
-                    b.Property<string>("FGGOOD")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FGGOOD")
+                        .HasColumnType("int");
 
-                    b.Property<string>("FGNOGOOD")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FGNOGOOD")
+                        .HasColumnType("int");
 
-                    b.Property<string>("FGSOH")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FGSOH")
+                        .HasColumnType("int");
 
-                    b.Property<string>("IQADis")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("IQADis")
+                        .HasColumnType("int");
 
-                    b.Property<string>("IQAGOOD")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("IQAGOOD")
+                        .HasColumnType("int");
 
-                    b.Property<string>("IQANOGOOD")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("IQANOGOOD")
+                        .HasColumnType("int");
 
-                    b.Property<string>("IQASOH")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<int>("IQASOH")
+                        .HasColumnType("int");
 
                     b.Property<string>("RMAno")
                         .HasColumnType("nvarchar(max)");
@@ -110,29 +110,32 @@ namespace PIMES_DMS.Migrations
                     b.Property<bool>("Rep")
                         .HasColumnType("bit");
 
-                    b.Property<string>("WHSEDis")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WHSEDis")
+                        .HasColumnType("int");
 
-                    b.Property<string>("WHSEGOOD")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WHSEGOOD")
+                        .HasColumnType("int");
 
-                    b.Property<string>("WHSENOGOOD")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WHSENOGOOD")
+                        .HasColumnType("int");
 
-                    b.Property<string>("WHSESOH")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WHSESOH")
+                        .HasColumnType("int");
 
-                    b.Property<string>("WIPDis")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WIPDis")
+                        .HasColumnType("int");
 
-                    b.Property<string>("WIPGOOD")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WIPGOOD")
+                        .HasColumnType("int");
 
-                    b.Property<string>("WIPNOGOOD")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WIPNOGOOD")
+                        .HasColumnType("int");
 
-                    b.Property<string>("WIPSOH")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("WIPSOH")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("ERID");
 

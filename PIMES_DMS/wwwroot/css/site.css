@@ -16,3 +16,64 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.loginbg {
+    background-image: url('../photos/bg2.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 93%;
+}
+
+ .loginfont {
+     font-family:'bills mafia';
+     font-size:80px;
+ }
+
+ .billsfont {
+     font-family:'bills mafia';
+ }
+
+@font-face {
+    font-family: 'anton-regular';
+    src: url('../fonts/anton-regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'bills mafia';
+    src: url('../fonts/bills mafia.ttf') format('truetype');
+}
+
+.loginfooter {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 52px;
+    background-color: #2706F0;
+    border-top:2px solid;
+}
+
+.homebtns {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.table-data {
+    overflow: auto;
+    height: 425px;
+}
+
+.homebtn {
+    width: 100%;
+    height: 50px;
+    border: 1px solid;
+    border-color: blue;
+}
+
+.bgi {
+    background-image: url('../photos/bg2.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 93%;
+}
+

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<PIMES_DMS.Models.IssueModel>
+
+@{
+    ViewData["Title"] = "ERView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Emergency Responces</h1>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueCreator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ControlNumber)
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssueCreator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssueNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ControlNumber)
+            </td>
+            <td>
+                <a class="btn btn-success" asp-controller="ER" asp-action="EditERView" asp-route-id="@item.ControlNumber">Edit</a> |
+                <a class="btn btn-primary" asp-controller="ER" asp-action="ERDet" asp-route-id="@item.ControlNumber">Details</a> |
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.IssueID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,7 +1,7 @@
 ﻿@model PIMES_DMS.Models.IssueModel
 
 @{
-    ViewData["Title"] = "ValidateView";
+    ViewData["Title"] = "Validate Issue";
 }
 
 <h1>Validation and Verification</h1>
@@ -85,32 +85,36 @@
                 </p>
             </div>          
         </div>
-        <form asp-controller="Validation" asp-action="SubmitValidation">
-            <input type="hidden" asp-for="IssueID" name="id" />
-            <div class="d-block">
-                <label style="margin-left:60px; font-weight:bold">Control Number:</label>
-                <input style="margin-left:10px" name="controlno" />
-            </div>
-            <div class="d-block mt-3 w-100">
-                <label class="align-self-center" style="margin-left:60px; font-weight:bold">Attachment:</label>
-                <select class="h-100 w-25 text-center" style="margin-left:10px" name="validation">
-                    <option value="CAPA">
-                        CAPA
-                    </option>
-                    <option value="8D">
-                        8D
-                    </option>
-                </select>
-                <input style="width:35%; height:100%" type="file" name="valrep" />
-            </div>
-            <div class="mt-3 d-flex row">
-                <label style="margin-left:60px; font-weight:bold">Validation Summary Report:</label>
-                <div class="mt-1 d-flex justify-content-center">
-                    <textarea class="w-75 mt-2" style="height:250px; max-height:250px; min-height:250px" name="valsumrep">Report here</textarea>
+        <form asp-controller="Validation" asp-action="SubmitValidation" enctype="multipart/form-data">
+            <input type="hidden" asp-for="IssueID" name="id"/>
+            <div class="d-flex justify-content-center flex-column">
+                <div class="form-group mt-1">
+                    <label class="form-label" style="font-weight:bold">Report:</label>
+                    <select class="form-select" style="width:50%" name="validation">
+                        <option value="CAPA">
+                            CAPA
+                        </option>
+                        <option value="8D">
+                            8D
+                        </option>
+                        <option value="INV">
+                            VALIDATION REPORT
+                        </option>
+                    </select>                    
                 </div>
-            </div>
-            <div class="mt-2 w-100 d-flex justify-content-center">
-                <input type="submit" value="Submit" class="btn btn-primary w-50 h-50"/>
+                <div class="form-group  mt-1">
+                    <label class="form-label" style="font-weight:bold">Attachment: </label>
+                    <input class="form-control" style="width:50%; height:100%" type="file" name="valrep" accept=".pdf"/>
+                </div>
+                <div class="form-group mt-1">
+                    <label class="form-label" style="font-weight:bold">Validation Summary Report:</label>
+                    <div class="mt-1 d-flex justify-content-center">
+                        <textarea class="form-control" style="height:100px; max-height:100px; min-height:100px" name="valsumrep">Report here</textarea>
+                    </div>
+                </div>
+                <div class="mt-2 w-100 d-flex justify-content-center">
+                    <input type="submit" value="Submit" class="btn btn-primary w-50 h-50" />
+                </div>
             </div>
         </form>
     </div>

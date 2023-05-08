@@ -27,5 +27,7 @@ namespace PIMES_DMS.Models
 
         [Required]
         public string Password { get; set; } = string.Empty;
+
+        public bool isDeleted { get; set; }
     }
 }

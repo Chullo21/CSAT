@@ -1,7 +1,7 @@
 ﻿@model PIMES_DMS.Models.IssueModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Details >" + Model.IssueNo;
 }
 
 <div class="d-flex">
@@ -10,11 +10,11 @@
             <h1>Issue Details</h1>
         </div>
         <div class="align-self-center" style="margin-left:30px">
-            <a class="btn btn-secondary" style="width:90px" asp-controller="Home" asp-action="Home">Back</a>
+            <a class="btn btn-secondary" style="width:90px" asp-controller="Issue" asp-action="IssuesList">Back</a>
         </div>
     </div>
     @{
-        string Role = TempData["Role"] as string;
+        string? Role = TempData["Role"] as string;
         TempData.Keep();
 
         if (Role != "CLIENT" && !Model.ValidatedStatus)
@@ -39,11 +39,12 @@
     }
 </div>
 <hr />
-<div style="margin-left:10px">
-    Creator: @Model.IssueCreator
-</div>
+
 <div class="w-100 row mt-2" style="height:500px">
     <div class="h-100" style="width:60%">
+        <div style="margin-left:10px">
+            Creator: @Model.IssueCreator
+        </div>
         <div style="width:100%">
             <table class="table table-bordered table-striped">
                 <thead>
@@ -68,6 +69,9 @@
                         </th>
                         <th>
                             Ack. Stat.
+                        </th>
+                        <th>
+                            Date Ack.
                         </th>
                     </tr>
                 </thead>
@@ -105,6 +109,18 @@
                                 </td>
                             }
                         }
+                        <td>
+                            @{
+                                if (Model.Acknowledged)
+                                {
+                                    Write(Model.DateAck.ToString("MM/dd/yyyy"));
+                                }
+                                else
+                                {
+                                    Write("Not acknowledged yet");
+                                }
+                            }
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -119,7 +135,16 @@
         </div>
     </div>
     <div class="h-100" style="width:40%">
-        Attached file should go and be shown here.
+        @{
+            if (Model.ClientRep != null)
+            {
+                <iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" style="width:100%; height:500px"></iframe>
+            }
+            else
+            {
+                Write("No Attachment");
+            }
+        }
     </div>
 </div>
 

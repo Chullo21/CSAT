@@ -1,7 +1,7 @@
 ﻿@model PIMES_DMS.Models.IssueModel
 
 @{
-    ViewData["Title"] = "SubmitIssueView";
+    ViewData["Title"] = "Submit Issue";
 }
 
 <div class="d-flex justify-content-center">
@@ -13,54 +13,71 @@
     </div>*@
 </div>
 <hr />
-<div class="row d-flex justify-content-center">
-    <div class="col-md-4">
-        <form asp-controller="Issue" asp-action="SubmitIssue">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IssueNo" class="control-label"></label>
-                <input asp-for="IssueNo" class="form-control" name="issueno">
-                <span asp-validation-for="IssueNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateFound" class="control-label"></label>
-                <input asp-for="DateFound" class="form-control" name="datefound" type="date">
-                <span asp-validation-for="DateFound" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Product" class="control-label"></label>
-                <input asp-for="Product" class="form-control" name="product"/>
-                <span asp-validation-for="Product" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SerialNo" class="control-label"></label>
-                <input asp-for="SerialNo" class="form-control" name="serialno" type="number"/>
-                <span asp-validation-for="SerialNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AffectedPN" class="control-label"></label>
-                <input asp-for="AffectedPN" class="form-control" name="affectedpn"/>
-                <span asp-validation-for="AffectedPN" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Desc" class="control-label"></label>
-                <input asp-for="Desc" class="form-control" name="description"/>
-                <span asp-validation-for="Desc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProbDesc" class="control-label"></label>
-                <input asp-for="ProbDesc" class="form-control" name="problemdescription"/>
-                <span asp-validation-for="ProbDesc" class="text-danger"></span>
-            </div>
-            <div class="d-flex justify-content-between mt-3">
+
+<div class="w-100">
+     <form asp-controller="Issue" asp-action="SubmitIssue" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="w-100 d-flex">
+            <div class="w-100 mx-3">
                 <div class="form-group">
-                    <input type="submit" value="Submit" class="btn btn-primary"  style="width:250px"/>
+                    <label asp-for="IssueNo" class="control-label"></label>
+                    <input asp-for="IssueNo" class="form-control" name="issueno">
+                    <span asp-validation-for="IssueNo" class="text-danger"></span>
                 </div>
-                <div>
-                    <a class="btn btn-danger" style="width:90px" asp-controller="Home" asp-action="Home">Discard</a>
+                <div class="form-group">
+                    <label asp-for="DateFound" class="control-label"></label>
+                    <input asp-for="DateFound" class="form-control" name="datefound" type="date">
+                    <span asp-validation-for="DateFound" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product" class="control-label"></label>
+                    <input asp-for="Product" class="form-control" name="product" />
+                    <span asp-validation-for="Product" class="text-danger"></span>
                 </div>
             </div>
-        </form>
-    </div>
+            <div class="w-100 mx-3">
+                <div class="form-group">
+                    <label asp-for="SerialNo" class="control-label"></label>
+                    <input asp-for="SerialNo" class="form-control" name="serialno" type="number" />
+                    <span asp-validation-for="SerialNo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AffectedPN" class="control-label"></label>
+                    <input asp-for="AffectedPN" class="form-control" name="affectedpn" />
+                    <span asp-validation-for="AffectedPN" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Desc" class="control-label"></label>
+                    <input asp-for="Desc" class="form-control" name="description" />
+                    <span asp-validation-for="Desc" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="w-100 mx-3">
+                <div class="form-group">
+                    <label asp-for="ProbDesc" class="control-label"></label>
+                    <input asp-for="ProbDesc" class="form-control" name="problemdescription" />
+                    <span asp-validation-for="ProbDesc" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ClientRep" class="control-label">Attachment(PDF only):</label>
+                    <input asp-for="ClientRep" class="form-control" name="cp" type="file" accept=".pdf"/>
+                    <span asp-validation-for="ClientRep" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary form-control mt-4" />
+                </div>
+            </div>
+        </div>
+        <div class="w-100">
+            <div class="mt-5 d-flex justify-content-center w-100">
+               @* <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>*@
+                <div>
+                    <a class="btn btn-danger" style="width:300px; height:40px" asp-controller="Home" asp-action="Home">Discard</a>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 

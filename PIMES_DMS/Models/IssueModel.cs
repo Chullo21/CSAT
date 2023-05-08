@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace PIMES_DMS.Models
@@ -8,37 +9,36 @@ namespace PIMES_DMS.Models
         [Key]
         public int IssueID { get; set; }
 
-        [Required]
+        [DisplayName("Issue Creator")]
+        [Required(ErrorMessage = "Failed to obtain issue creator.")]
         public string IssueCreator { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Please Input Issue number.")]
         [DisplayName("Issue#")]
         public string IssueNo { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Please insert date found.")]
         [DisplayName("Date Found")]
         public string DateFound { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Failed to obtain date.")]
         [DisplayName("Date Created")]
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
-        [Required]
+        [Required(ErrorMessage = "Please input product.")]
         public string Product { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Please input Serial number.")]
         [DisplayName("Serial#")]
         public int SerialNo { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please input affected part number.")]
         [DisplayName("Affected P/N")]
         public string AffectedPN { get; set; } = string.Empty;
 
-        [Required]
-        [DisplayName("Description")]
+        [Required(ErrorMessage = "Please input at least a short description."), DisplayName("Description")]
         public string Desc { get; set; } = string.Empty;
 
-        [Required]
         [DisplayName("Problem Description")]
         public string ProbDesc { get; set; } = string.Empty;
 
@@ -61,5 +61,15 @@ namespace PIMES_DMS.Models
 
         [DisplayName("Control No.")]
         public string ControlNumber { get; set; } = string.Empty;
+
+        [DisplayName("Date Acknowledged")]
+        public DateTime DateAck { get; set; }
+
+        [DisplayName("Date Validated")]
+        public DateTime DateVdal { get; set; }
+
+        public bool HasCR { get; set; } = false;
+
+        public bool isDeleted { get; set; }
     }
 }

@@ -13,5 +13,7 @@ namespace PIMES_DMS.Data
         public DbSet<IssueModel> IssueDb { get; set; }
 
         public DbSet<AccountsModel> AccountsDb { get; set; }
+
+        public DbSet<ERModel> ERDb { get; set; }
     }
 }

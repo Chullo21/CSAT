@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 
@@ -16,12 +17,12 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult ValidateView(int ID)
         {
-            IssueModel val = _Db.IssueDb.Find(ID);
+            IssueModel? val = _Db.IssueDb.Find(ID);
 
             return View(val);
         }
 
-        public IActionResult SubmitValidation(int id, string controlno, string validation, string valsumrep)
+        public IActionResult SubmitValidation(int id, string validation, string valsumrep, IFormFile? valrep)
         {
             var fromDb = _Db.IssueDb.FirstOrDefault(j => j.IssueID == id);
 
@@ -35,10 +36,18 @@ namespace PIMES_DMS.Controllers
             var val = new IssueModel();
             {
                 val = fromDb;
-                val.ControlNumber = controlno;
+                val.ControlNumber = validation + "-" + DateTime.Now.ToString("yy") + "-" + fromDb.IssueID.ToString("000");
                 val.CoD = validation;
                 val.ValidatedStatus = true;
                 val.ValidationRepSum = valsumrep;
+                val.DateVdal = DateTime.Now;
+            }
+
+            if (valrep != null)
+            {
+                using MemoryStream ms = new MemoryStream();
+                valrep.CopyTo(ms);
+                val.Report = ms.ToArray();
             }
 
             if (ModelState.IsValid)
@@ -55,22 +64,28 @@ namespace PIMES_DMS.Controllers
             return View("ValidatedIssueDetail", val);
         }
 
-        public IActionResult ShowIssuesWithReport(int ID)
+        public IActionResult InvalidRep()
         {
-            string Role = TempData["Role"] as string;
-            string EN = TempData["EN"] as string;
-            TempData.Keep();
+            return View();
+        }
 
+        public IActionResult ShowIssuesWithReport()
+        {
+            string? Role = TempData["Role"] as string;
+            TempData.Keep();
 
             if (Role == "CLIENT")
             {
-                IEnumerable<IssueModel> det = _Db.IssueDb.Where(j => j.IssueCreator == EN && j.ValidatedStatus);
+                string? EN = TempData["EN"] as string;
+                TempData.Keep();
+
+                IEnumerable<IssueModel> det = _Db.IssueDb.Where(j => j.IssueCreator == EN && j.ValidatedStatus && j.Acknowledged);
 
                 return View(det);
             }
             else
             {
-                IEnumerable<IssueModel> det1 = _Db.IssueDb.Where(j => j.ValidatedStatus);
+                IEnumerable<IssueModel> det1 = _Db.IssueDb.Where(j => j.ValidatedStatus && j.Acknowledged);
                 return View(det1);
             }
 
@@ -79,9 +94,76 @@ namespace PIMES_DMS.Controllers
         public IActionResult ValidatedIssueDetail(int id)
         {
 
-            IssueModel det = _Db.IssueDb.Find(id);
+            IssueModel? det = _Db.IssueDb.Find(id);
 
             return View(det);
         }
+
+        public IActionResult SearchVal(string ss)
+        {
+            string? Role = TempData["Role"] as string;
+            TempData.Keep();
+
+            if (ss.IsNullOrEmpty())
+            {
+                return View("ShowIssuesWithReport", _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus));
+            }
+
+            if (Role == "CLIENT")
+            {
+
+                string? EN = TempData["EN"] as string;
+                TempData.Keep();
+
+                IEnumerable<IssueModel> obj = from m in _Db.IssueDb
+                                              where m.IssueCreator == EN && m.ValidatedStatus && m.Acknowledged &&
+                                              (m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) ||
+                                              m.SerialNo.ToString().Contains(ss) || m.ControlNumber.Contains(ss))
+                                              select m;
+
+                return View("ShowIssuesWithReport", obj);
+            }
+            else
+            {
+                IEnumerable<IssueModel> obj = _Db.IssueDb.Where(m => m.ValidatedStatus && m.Acknowledged && (m.IssueCreator.Contains(ss)
+                                              || m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) ||
+                                              m.SerialNo.ToString().Contains(ss) || m.ControlNumber.Contains(ss)));
+
+                return View("ShowIssuesWithReport", obj);
+            }
+        }
+
+        public IActionResult ShowPdf(int id, string type)
+        {
+            var details = _Db.IssueDb.Find(id);
+
+            if (type == "Client")
+            {
+                byte[]? docinByte = details!.ClientRep;
+
+                return File(docinByte!, "application/pdf");
+            }
+            else
+            {
+                byte[]? docinByte = details!.Report;
+
+                return File(docinByte!, "application/pdf");
+            }           
+        }
+
+        public IActionResult ForGERVal()
+        {
+            IEnumerable<IssueModel> obj = _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus && !j.HasCR);
+
+            return View(obj);
+        }
+
+        public IActionResult ShowClientandQARep(int ID)
+        {
+
+
+            return View(_Db.IssueDb.FirstOrDefault(j => j.IssueID == ID));
+        }
+
     }
 }

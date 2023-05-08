@@ -12,8 +12,8 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230428084143_AddIssueModel")]
-    partial class AddIssueModel
+    [Migration("20230509064340_update")]
+    partial class update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,43 @@ namespace PIMES_DMS.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("PIMES_DMS.Models.AccountsModel", b =>
+                {
+                    b.Property<int>("AccID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccID"));
+
+                    b.Property<string>("AccName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AccUCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AccID");
+
+                    b.ToTable("AccountsDb");
+                });
 
             modelBuilder.Entity("PIMES_DMS.Models.IssueModel", b =>
                 {
@@ -40,12 +77,19 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("CoD")
-                        .HasColumnType("bit");
+                    b.Property<byte[]>("ClientRep")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("CoD")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ControlNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateAck")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -54,7 +98,14 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateVdal")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IssueCreator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

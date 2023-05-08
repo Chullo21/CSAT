@@ -1,7 +1,7 @@
 ﻿@model AccountsModel
 
 @{
-    ViewData["Title"] = "EditView";
+    ViewData["Title"] = "Edit >" + Model.AccName;
 }
 
 <h1>EditView</h1>
@@ -43,7 +43,7 @@
                 <input asp-for="Password" class="form-control" name="password"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group d-flex justify-content-between">
+            <div class="form-group d-flex justify-content-between mt-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a class="btn btn-danger" asp-action="AdminView">Back to List</a>
             </div>

@@ -13,6 +13,28 @@
     <Compile Remove="Migrations\20230428092126_AddAccs.Designer.cs" />
     <Compile Remove="Migrations\20230503003026_Addmigration.cs" />
     <Compile Remove="Migrations\20230503003026_Addmigration.Designer.cs" />
+    <Compile Remove="Migrations\20230503004425_addmigration.cs" />
+    <Compile Remove="Migrations\20230503004425_addmigration.Designer.cs" />
+    <Compile Remove="Migrations\20230504050439_Migrate.cs" />
+    <Compile Remove="Migrations\20230504050439_Migrate.Designer.cs" />
+    <Compile Remove="Migrations\20230504060012_Migrate.cs" />
+    <Compile Remove="Migrations\20230504060012_Migrate.Designer.cs" />
+    <Compile Remove="Migrations\20230505000113_addmigration.cs" />
+    <Compile Remove="Migrations\20230505000113_addmigration.Designer.cs" />
+    <Compile Remove="Migrations\20230505001947_updatedb.cs" />
+    <Compile Remove="Migrations\20230505001947_updatedb.Designer.cs" />
+    <Compile Remove="Migrations\20230509064340_update.cs" />
+    <Compile Remove="Migrations\20230509064340_update.Designer.cs" />
+    <Compile Remove="Migrations\20230509064539_update.cs" />
+    <Compile Remove="Migrations\20230509064539_update.Designer.cs" />
+    <Compile Remove="Migrations\20230509085412_update.cs" />
+    <Compile Remove="Migrations\20230509085412_update.Designer.cs" />
+    <Compile Remove="Migrations\20230509091645_update.cs" />
+    <Compile Remove="Migrations\20230509091645_update.Designer.cs" />
+    <Compile Remove="Migrations\20230511043659_update.cs" />
+    <Compile Remove="Migrations\20230511043659_update.Designer.cs" />
+    <Compile Remove="Migrations\20230511044802_update.cs" />
+    <Compile Remove="Migrations\20230511044802_update.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

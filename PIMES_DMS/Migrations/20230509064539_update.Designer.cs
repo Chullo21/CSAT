@@ -12,8 +12,8 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230428092126_AddAccs")]
-    partial class AddAccs
+    [Migration("20230509064539_update")]
+    partial class update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,77 @@ namespace PIMES_DMS.Migrations
                     b.ToTable("AccountsDb");
                 });
 
+            modelBuilder.Entity("PIMES_DMS.Models.ERModel", b =>
+                {
+                    b.Property<int>("ERID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ERID"));
+
+                    b.Property<string>("ControlNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FGDis")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FGGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FGNOGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FGSOH")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IQADis")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IQAGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IQANOGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IQASOH")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RMAno")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Rep")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("WHSEDis")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WHSEGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WHSENOGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WHSESOH")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WIPDis")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WIPGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WIPNOGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WIPSOH")
+                        .HasColumnType("int");
+
+                    b.HasKey("ERID");
+
+                    b.ToTable("ERDb");
+                });
+
             modelBuilder.Entity("PIMES_DMS.Models.IssueModel", b =>
                 {
                     b.Property<int>("IssueID")
@@ -77,12 +148,19 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("CoD")
-                        .HasColumnType("bit");
+                    b.Property<byte[]>("ClientRep")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("CoD")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ControlNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateAck")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -90,6 +168,9 @@ namespace PIMES_DMS.Migrations
                     b.Property<string>("DateFound")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateVdal")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Desc")
                         .IsRequired()

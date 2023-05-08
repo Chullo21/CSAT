@@ -12,8 +12,8 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230503004425_addmigration")]
-    partial class addmigration
+    [Migration("20230511044802_update")]
+    partial class update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,9 +57,89 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("AccID");
 
                     b.ToTable("AccountsDb");
+                });
+
+            modelBuilder.Entity("PIMES_DMS.Models.ERModel", b =>
+                {
+                    b.Property<int>("ERID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ERID"));
+
+                    b.Property<string>("ControlNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FGDis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FGGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FGNOGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FGSOH")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IQADis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IQAGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IQANOGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IQASOH")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RMAno")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Rep")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("WHSEDis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WHSEGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WHSENOGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WHSESOH")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WIPDis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WIPGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WIPNOGOOD")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WIPSOH")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ERID");
+
+                    b.ToTable("ERDb");
                 });
 
             modelBuilder.Entity("PIMES_DMS.Models.IssueModel", b =>
@@ -88,6 +168,9 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateAck")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -95,9 +178,15 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateVdal")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Desc")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasCR")
+                        .HasColumnType("bit");
 
                     b.Property<string>("IssueCreator")
                         .IsRequired()
@@ -127,6 +216,9 @@ namespace PIMES_DMS.Migrations
                     b.Property<string>("ValidationRepSum")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("IssueID");
 
