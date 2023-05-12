@@ -1,0 +1,62 @@
+﻿@model IEnumerable<IssueModel>
+@{
+    ViewData["Title"] = "RC, CAPA & VERIFICATION";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<form asp-controller="RCV" asp-action="Search">
+<div class="w-100 d-flex justify-content-between">
+    <div class="w-50">
+        <h1>RC, CAPA & VERIFICATION</h1>
+    </div>
+   <div class="w-50 d-flex justify-content-end">
+        <div>
+             <input class="form-control w-100" placeholder="Search" name="ss" />
+             <input type="submit" hidden />
+        </div>
+   </div>
+</div>
+</form>
+
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueCreator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ControlNumber)
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IssueCreator)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IssueNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ControlNumber)
+                </td>
+                <td>
+                    <a class="btn btn-success" asp-controller="RCV" asp-action="RCVView" asp-route-id="@item.IssueID">Create Summary</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

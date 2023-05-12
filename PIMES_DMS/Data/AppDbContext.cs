@@ -15,5 +15,9 @@ namespace PIMES_DMS.Data
         public DbSet<AccountsModel> AccountsDb { get; set; }
 
         public DbSet<ERModel> ERDb { get; set; }
+
+        public DbSet<SumRepModel> SRDb { get; set; }
+
+        public DbSet<ActionModel> ActionDb { get; set; }
     }
 }

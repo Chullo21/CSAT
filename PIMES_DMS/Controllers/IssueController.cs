@@ -20,7 +20,8 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
-        public IActionResult SubmitIssue(string issueno, string datefound, string product, int serialno, string affectedpn, string description, string problemdescription, IFormFile? cp)
+        public IActionResult SubmitIssue(string issueno, string datefound, string product, int serialno, 
+            string affectedpn, string description, string problemdescription, IFormFile? cp, int qty)
         {
             string? creator = TempData["EN"] as string;
             TempData.Keep();
@@ -35,6 +36,7 @@ namespace PIMES_DMS.Controllers
                 issue.AffectedPN = affectedpn;
                 issue.Desc = description;
                 issue.ProbDesc = problemdescription;
+                issue.Qty = qty;
             }
             
             if (cp != null)

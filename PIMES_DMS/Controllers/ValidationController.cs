@@ -45,7 +45,7 @@ namespace PIMES_DMS.Controllers
 
             if (valrep != null)
             {
-                using MemoryStream ms = new MemoryStream();
+                using MemoryStream ms = new();
                 valrep.CopyTo(ms);
                 val.Report = ms.ToArray();
             }

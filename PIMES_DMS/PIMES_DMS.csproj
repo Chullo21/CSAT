@@ -35,6 +35,28 @@
     <Compile Remove="Migrations\20230511043659_update.Designer.cs" />
     <Compile Remove="Migrations\20230511044802_update.cs" />
     <Compile Remove="Migrations\20230511044802_update.Designer.cs" />
+    <Compile Remove="Migrations\20230511050342_update.cs" />
+    <Compile Remove="Migrations\20230511050342_update.Designer.cs" />
+    <Compile Remove="Migrations\20230511065042_update.cs" />
+    <Compile Remove="Migrations\20230511065042_update.Designer.cs" />
+    <Compile Remove="Migrations\20230511071020_update.cs" />
+    <Compile Remove="Migrations\20230511071020_update.Designer.cs" />
+    <Compile Remove="Migrations\20230511074339_update.cs" />
+    <Compile Remove="Migrations\20230511074339_update.Designer.cs" />
+    <Compile Remove="Migrations\20230511084130_update.cs" />
+    <Compile Remove="Migrations\20230511084130_update.Designer.cs" />
+    <Compile Remove="Migrations\20230512021405_update.cs" />
+    <Compile Remove="Migrations\20230512021405_update.Designer.cs" />
+    <Compile Remove="Migrations\20230512021637_update.cs" />
+    <Compile Remove="Migrations\20230512021637_update.Designer.cs" />
+    <Compile Remove="Migrations\20230512021847_update.cs" />
+    <Compile Remove="Migrations\20230512021847_update.Designer.cs" />
+    <Compile Remove="Migrations\20230512022033_update.cs" />
+    <Compile Remove="Migrations\20230512022033_update.Designer.cs" />
+    <Compile Remove="Migrations\20230512022219_update.cs" />
+    <Compile Remove="Migrations\20230512022219_update.Designer.cs" />
+    <Compile Remove="Migrations\20230512022356_update.cs" />
+    <Compile Remove="Migrations\20230512022356_update.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

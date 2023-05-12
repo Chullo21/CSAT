@@ -1,8 +1,100 @@
-﻿
+﻿@model IssueModel
 @{
     ViewData["Title"] = "RC, CAPA & VERIFICATION";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<h1>RC, CAPA & VERIFICATION</h1>
 
+
+<div class="w-100 d-flex justify-content-between">
+    <div>
+        <h1>RC, CAPA & VERIFICATION</h1>
+    </div>
+    <div>
+        <button class="btn btn-primary" id="addButton">Add cell</button>
+    </div>
+</div>
+<hr />
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Date Found</th>
+            <th>Issue #</th>
+            <th>Product</th>
+            <th>Affected Qty</th>
+            <th>Problem Desc.</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.DateFound</td>
+            <td>@Model.IssueNo</td>
+            <td>@Model.Product</td>
+            <td>@Model.Qty</td>
+            <td>@Model.ProbDesc</td>
+        </tr>
+    </tbody>
+</table>
+
+<form asp-controller="RCV" asp-action="SubmitRCV" enctype="multipart/form-data">
+<input value="@Model.ControlNumber" name="controlno" hidden/>
+<div class="w-100">
+    <table class="table table-bordered table-striped" id="rcvtable">
+        <thead>
+            <tr>
+               
+                <th>Technical/Systemic Cause</th>
+                <th>Escape Cause</th>
+                <th>Action</th>
+                <th>PIC</th>
+                <th>Target Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>              
+                <td style="width:300px">
+                        <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="tsc"></textarea>
+                </td>
+                <td style="width:300px">
+                        <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="ec"></textarea>
+                </td>
+                <td style="width:300px">
+                        <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="action"></textarea>
+                </td>
+                <td style="width:300px">
+                        <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="pic"></textarea>
+                </td>
+                <td style="width:5px">
+                    <input class="form-control w-100" type="date" name="td"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-end w-100">
+            <input type="submit" id="submitbtn" class="btn btn-primary w-25"/>
+    </div>
+</div>
+</form>
+
+<div>
+    <iframe src=""></iframe>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#addButton').click(function () {
+            var newRow = '<tr>' +
+                '<td style="width:300px"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="tsc"></textarea></td>' +
+                '<td style="width:300px"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="ec"></textarea></td>' +
+                '<td style="width:300px"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="action"></textarea></td>' +
+                '<td style="width:300px"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="pic"></textarea></td>' +
+                '<td><input class="form-control w-100" type="date" name="td"/></td>'
+                
+                '</tr>';
+            $('#rcvtable tbody').append(newRow);
+        });
+    });
+</script>

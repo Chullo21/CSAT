@@ -71,5 +71,8 @@ namespace PIMES_DMS.Models
         public bool HasCR { get; set; } = false;
 
         public bool isDeleted { get; set; }
+
+        [DisplayName("Affected Quantity"), Required(ErrorMessage = "Please input quantity")]
+        public int Qty { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIMES_DMS.Data;
 
@@ -11,9 +12,11 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230511074339_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,9 +80,6 @@ namespace PIMES_DMS.Migrations
                     b.Property<string>("ControlNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EC")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte[]>("Files")
                         .HasColumnType("varbinary(max)");
 
@@ -93,15 +93,14 @@ namespace PIMES_DMS.Migrations
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<string>("TSC")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("TargetDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int?>("SumRepModelSumRepID")
+                        .HasColumnType("int");
 
                     b.HasKey("ActionID");
 
-                    b.ToTable("ActionDb");
+                    b.HasIndex("SumRepModelSumRepID");
+
+                    b.ToTable("ActionModel");
                 });
 
             modelBuilder.Entity("PIMES_DMS.Models.ERModel", b =>
@@ -296,6 +295,18 @@ namespace PIMES_DMS.Migrations
                     b.HasKey("SumRepID");
 
                     b.ToTable("SRDb");
+                });
+
+            modelBuilder.Entity("PIMES_DMS.Models.ActionModel", b =>
+                {
+                    b.HasOne("PIMES_DMS.Models.SumRepModel", null)
+                        .WithMany("Actions")
+                        .HasForeignKey("SumRepModelSumRepID");
+                });
+
+            modelBuilder.Entity("PIMES_DMS.Models.SumRepModel", b =>
+                {
+                    b.Navigation("Actions");
                 });
 #pragma warning restore 612, 618
         }

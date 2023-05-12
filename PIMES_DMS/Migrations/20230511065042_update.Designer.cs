@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIMES_DMS.Data;
 
@@ -11,9 +12,11 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230511065042_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,48 +63,6 @@ namespace PIMES_DMS.Migrations
                     b.HasKey("AccID");
 
                     b.ToTable("AccountsDb");
-                });
-
-            modelBuilder.Entity("PIMES_DMS.Models.ActionModel", b =>
-                {
-                    b.Property<int>("ActionID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ActionID"));
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ControlNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EC")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Files")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("PIC")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("TSC")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("TargetDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ActionID");
-
-                    b.ToTable("ActionDb");
                 });
 
             modelBuilder.Entity("PIMES_DMS.Models.ERModel", b =>
@@ -265,37 +226,6 @@ namespace PIMES_DMS.Migrations
                     b.HasKey("IssueID");
 
                     b.ToTable("IssueDb");
-                });
-
-            modelBuilder.Entity("PIMES_DMS.Models.SumRepModel", b =>
-                {
-                    b.Property<int>("SumRepID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SumRepID"));
-
-                    b.Property<int>("AffectedQty")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateFound")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DefCat")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IssueNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProblemDesc")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Product")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SumRepID");
-
-                    b.ToTable("SRDb");
                 });
 #pragma warning restore 612, 618
         }

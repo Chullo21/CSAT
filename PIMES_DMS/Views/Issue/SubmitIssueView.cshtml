@@ -47,12 +47,18 @@
                     <span asp-validation-for="AffectedPN" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="Qty" class="control-label">Quantity</label>
+                    <input asp-for="Qty" class="form-control" name="qty"  type="number"/>
+                    <span asp-validation-for="Qty" class="text-danger"></span>
+                </div>
+               
+            </div>
+            <div class="w-100 mx-3">
+                <div class="form-group">
                     <label asp-for="Desc" class="control-label"></label>
                     <input asp-for="Desc" class="form-control" name="description" />
                     <span asp-validation-for="Desc" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="w-100 mx-3">
                 <div class="form-group">
                     <label asp-for="ProbDesc" class="control-label"></label>
                     <input asp-for="ProbDesc" class="form-control" name="problemdescription" />
@@ -62,19 +68,16 @@
                     <label asp-for="ClientRep" class="control-label">Attachment(PDF only):</label>
                     <input asp-for="ClientRep" class="form-control" name="cp" type="file" accept=".pdf"/>
                     <span asp-validation-for="ClientRep" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Submit" class="btn btn-primary form-control mt-4" />
-                </div>
+                </div>               
             </div>
         </div>
         <div class="w-100">
-            <div class="mt-5 d-flex justify-content-center w-100">
-               @* <div class="form-group">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
-                </div>*@
-                <div>
-                    <a class="btn btn-danger" style="width:300px; height:40px" asp-controller="Home" asp-action="Home">Discard</a>
+            <div class="mt-5 d-flex justify-content-between w-100">              
+                <div class="w-50">
+                    <a class="btn btn-danger w-50" asp-controller="Home" asp-action="Home">Discard</a>
+                </div>
+                <div class="w-50 d-flex justify-content-end">
+                    <input type="submit" value="Submit" class="btn btn-primary w-50"/>
                 </div>
             </div>
         </div>
