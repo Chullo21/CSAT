@@ -13,6 +13,8 @@ namespace PIMES_DMS.Controllers
             _Db = db;
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult AdminView()
         {
             return View(_Db.AccountsDb);
@@ -23,6 +25,8 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public IActionResult CreateUser(string username, string password, string accname, string compname, string role)
         {
 
@@ -52,6 +56,7 @@ namespace PIMES_DMS.Controllers
         }
 
         [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult EditView(int ID)
         {
 
@@ -70,6 +75,8 @@ namespace PIMES_DMS.Controllers
             return View(findEdit);
         }
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public IActionResult EditUser(AccountsModel obj)
         {
 
@@ -82,6 +89,8 @@ namespace PIMES_DMS.Controllers
             return RedirectToAction("AdminView");
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult Details(int ID)
         {
             var det = _Db.AccountsDb.Find(ID);
@@ -94,6 +103,8 @@ namespace PIMES_DMS.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult DeleteView(int ID)
         {
             var del = _Db.AccountsDb.Find(ID);
@@ -101,10 +112,13 @@ namespace PIMES_DMS.Controllers
             return View(del);
         }
 
-        public IActionResult Delete(AccountsModel obj)
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Delete(int ID)
         {
 
-            _Db.AccountsDb.Remove(obj);
+            var del = _Db.AccountsDb.FirstOrDefault(j => j.AccID == ID);
+
+            _Db.AccountsDb.Remove(del);
             _Db.SaveChanges();
 
             return RedirectToAction("AdminView");

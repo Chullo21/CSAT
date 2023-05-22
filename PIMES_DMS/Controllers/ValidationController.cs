@@ -15,6 +15,8 @@ namespace PIMES_DMS.Controllers
             _Db = controller;
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ValidateView(int ID)
         {
             IssueModel? val = _Db.IssueDb.Find(ID);
@@ -22,6 +24,8 @@ namespace PIMES_DMS.Controllers
             return View(val);
         }
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public IActionResult SubmitValidation(int id, string validation, string valsumrep, IFormFile? valrep)
         {
             var fromDb = _Db.IssueDb.FirstOrDefault(j => j.IssueID == id);
@@ -69,6 +73,8 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ShowIssuesWithReport()
         {
             string? Role = TempData["Role"] as string;
@@ -91,6 +97,8 @@ namespace PIMES_DMS.Controllers
 
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ValidatedIssueDetail(int id)
         {
 
@@ -99,6 +107,8 @@ namespace PIMES_DMS.Controllers
             return View(det);
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult SearchVal(string ss)
         {
             string? Role = TempData["Role"] as string;
@@ -133,6 +143,8 @@ namespace PIMES_DMS.Controllers
             }
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ShowPdf(int id, string type)
         {
             var details = _Db.IssueDb.Find(id);
@@ -151,6 +163,8 @@ namespace PIMES_DMS.Controllers
             }           
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ForGERVal()
         {
             IEnumerable<IssueModel> obj = _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus && !j.HasCR);
@@ -158,11 +172,47 @@ namespace PIMES_DMS.Controllers
             return View(obj);
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ShowClientandQARep(int ID)
         {
-
-
             return View(_Db.IssueDb.FirstOrDefault(j => j.IssueID == ID));
+        }
+
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Search(string ss)
+        {
+            string? Role = TempData["Role"] as string;
+            TempData.Keep();
+
+            if (ss.IsNullOrEmpty())
+            {
+                return View("ForGERVal", _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus));
+            }
+
+            if (Role == "CLIENT")
+            {
+
+                string? EN = TempData["EN"] as string;
+                TempData.Keep();
+
+                IEnumerable<IssueModel> obj = from m in _Db.IssueDb
+                                              where m.IssueCreator == EN && m.ValidatedStatus && m.Acknowledged &&
+                                              (m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) ||
+                                              m.SerialNo.ToString().Contains(ss) || m.ControlNumber.Contains(ss))
+                                              select m;
+
+                return View("ForGERVal", obj);
+            }
+            else
+            {
+                IEnumerable<IssueModel> obj = _Db.IssueDb.Where(m => m.ValidatedStatus && m.Acknowledged && (m.IssueCreator.Contains(ss)
+                                              || m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) ||
+                                              m.SerialNo.ToString().Contains(ss) || m.ControlNumber.Contains(ss)));
+
+                return View("ForGERVal", obj);
+            }
         }
 
     }

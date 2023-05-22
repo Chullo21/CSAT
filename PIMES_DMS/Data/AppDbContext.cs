@@ -19,5 +19,7 @@ namespace PIMES_DMS.Data
         public DbSet<SumRepModel> SRDb { get; set; }
 
         public DbSet<ActionModel> ActionDb { get; set; }
+
+        public DbSet<Vermodel> VerDb { get; set; }
     }
 }

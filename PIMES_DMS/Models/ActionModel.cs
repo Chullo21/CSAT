@@ -14,10 +14,10 @@ namespace PIMES_DMS.Models
         [DisplayName("PIC"), Required(ErrorMessage = "PIC left blank")]
         public string? PIC { get; set; }
 
-        public bool? Status { get; set; }
+        //public string? Status { get; set; } = "OPEN";
 
-        [DataType(DataType.Upload)]
-        public byte[]? Files { get; set; }
+        //[DataType(DataType.Upload)]
+        //public byte[]? Files { get; set; }
 
         public string? Remarks { get; set; }
 
@@ -27,6 +27,15 @@ namespace PIMES_DMS.Models
 
         public string? EC { get; set; }
 
-        public DateTime? TargetDate { get; set; }
+        [Required(ErrorMessage = "Please input target date.")]
+        public DateTime TargetDate { get; set; }
+
+        //public DateTime DateVer { get; set; }
+
+        //public string Result { get; set; } = string.Empty;
+
+        public bool IsDeleted { get; set; }
+
+        public bool HasVer { get; set; } = false;
     }
 }

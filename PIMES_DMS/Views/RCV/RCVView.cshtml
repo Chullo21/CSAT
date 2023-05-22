@@ -5,8 +5,6 @@
 
 }
 
-
-
 <div class="w-100 d-flex justify-content-between">
     <div>
         <h1>RC, CAPA & VERIFICATION</h1>
@@ -20,6 +18,7 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th>Control Number</th>
             <th>Date Found</th>
             <th>Issue #</th>
             <th>Product</th>
@@ -29,6 +28,7 @@
     </thead>
     <tbody>
         <tr>
+            <th>@Model.ControlNumber</th>
             <td>@Model.DateFound</td>
             <td>@Model.IssueNo</td>
             <td>@Model.Product</td>
@@ -38,7 +38,7 @@
     </tbody>
 </table>
 
-<form asp-controller="RCV" asp-action="SubmitRCV" enctype="multipart/form-data">
+<form asp-controller="RCV" asp-action="SubmitRCV" enctype="multipart/form-data" method="post">
 <input value="@Model.ControlNumber" name="controlno" hidden/>
 <div class="w-100">
     <table class="table table-bordered table-striped" id="rcvtable">
@@ -67,7 +67,7 @@
                         <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="pic"></textarea>
                 </td>
                 <td style="width:5px">
-                    <input class="form-control w-100" type="date" name="td"/>
+                    <input class="form-control w-100" type="date" name="td" required/>
                 </td>
             </tr>
         </tbody>
@@ -78,10 +78,6 @@
 </div>
 </form>
 
-<div>
-    <iframe src=""></iframe>
-</div>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -91,7 +87,7 @@
                 '<td style="width:300px"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="ec"></textarea></td>' +
                 '<td style="width:300px"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="action"></textarea></td>' +
                 '<td style="width:300px"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="pic"></textarea></td>' +
-                '<td><input class="form-control w-100" type="date" name="td"/></td>'
+                '<td><input class="form-control w-100" type="date" name="td" required/></td>'
                 
                 '</tr>';
             $('#rcvtable tbody').append(newRow);

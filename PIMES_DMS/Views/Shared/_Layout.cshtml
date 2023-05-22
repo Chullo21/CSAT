@@ -1,8 +1,12 @@
 ﻿@{
-    string EN = TempData["EN"] as string;
-    string Role = TempData["Role"] as string;
+    string? EN = TempData["EN"] as string;
+    string? Role = TempData["Role"] as string;
     TempData.Keep();
 
+    if (EN.ToString() == "" || Role.ToString() == "")
+    {
+        Url.Action("Login", "Login");
+    }
 }
 
 <!DOCTYPE html>
@@ -35,11 +39,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-controller="Home" asp-action="AdminHome">QA</a>
                                 </li>
+                                //<li class="nav-item">
+                                //    <a class="nav-link text-white" asp-controller="Admin" asp-action="AdminView">QIM</a>
+                                //</li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Admin" asp-action="AdminView">QIM</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Admin" asp-action="AdminView">Dashboard</a>
+                                    <a class="nav-link text-white" asp-controller="Dashboard" asp-action="DashView">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-controller="Admin" asp-action="AdminView">Accounts</a>

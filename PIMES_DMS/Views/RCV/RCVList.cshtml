@@ -2,12 +2,14 @@
 @{
     ViewData["Title"] = "RC, CAPA & VERIFICATION";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string? role = TempData["Role"] as string;
+    TempData.Keep();
+
+    IEnumerable<Vermodel>? vers = ViewData["Stat"] as IEnumerable<Vermodel>;
 }
 
-
-
-
-<form asp-controller="RCV" asp-action="Search">
+<form asp-controller="RCV" asp-action="Search" method="get">
 <div class="w-100 d-flex justify-content-between">
     <div class="w-50">
         <h1>RC, CAPA & VERIFICATION</h1>
@@ -22,7 +24,7 @@
 </form>
 
 <hr />
-<table class="table">
+<table class="table text-center">
     <thead>
         <tr>
             <th>
@@ -35,6 +37,15 @@
                 @Html.DisplayNameFor(model => model.ControlNumber)
             </th>
             <th>
+                On-Going
+            </th>
+            <th>
+                Open
+            </th>
+            <th>
+                Closed
+            </th>
+            <th>
                 Action
             </th>
         </tr>
@@ -42,6 +53,10 @@
     <tbody>
         @foreach (var item in Model)
         {
+            int going = vers!.Count(j => j.ControlNo == item.ControlNumber && j.Status == "g");
+            int open = vers!.Count(j => j.ControlNo == item.ControlNumber && j.Status == "o");
+            int closed = vers!.Count(j => j.ControlNo == item.ControlNumber && j.Status == "c");
+
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.IssueCreator)
@@ -53,10 +68,57 @@
                     @Html.DisplayFor(modelItem => item.ControlNumber)
                 </td>
                 <td>
-                    <a class="btn btn-success" asp-controller="RCV" asp-action="RCVView" asp-route-id="@item.IssueID">Create Summary</a>
+                    @{
+                        Write(going);
+                    }
+                </td>                    
+                <td>
+                    @{
+                        Write(open);
+                    }
+                </td>
+                <td>
+                    @{
+                        Write(closed);
+                    }
+                </td>
+                <td>
+                    @{
+                        if (item.HasAction)
+                        {
+                            <div class="d-flex">
+                                @if (role == "ADMIN")
+                                {
+                                    <div>
+                                        <a class="btn btn-secondary w-100" asp-controller="RCV" asp-action="RCVView" asp-route-id="@item.IssueID">Add Action</a>
+                                    </div>
+                                }
+                                <div style="margin-left:10px">
+                                    <a class="btn btn-success w-100" asp-controller="RCV" asp-action="RCVDet" asp-route-id="@item.ControlNumber">View</a>
+                                </div>                               
+                            </div>
+                        }
+                        else
+                        {
+                            if (role == "ADMIN")
+                            {
+                                <div class="d-flex">
+                                    <a class="btn btn-primary" asp-controller="RCV" asp-action="RCVView" asp-route-id="@item.IssueID">Create Summary</a>
+                                </div>
+                            }
+                        }
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@functions {
+    public int GetStatus(string ID, string stat)
+    {
+
+        return 0;
+    }
+}
 

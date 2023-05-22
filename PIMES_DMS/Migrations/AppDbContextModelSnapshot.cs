@@ -80,8 +80,11 @@ namespace PIMES_DMS.Migrations
                     b.Property<string>("EC")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Files")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<bool>("HasVer")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PIC")
                         .IsRequired()
@@ -90,13 +93,10 @@ namespace PIMES_DMS.Migrations
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("Status")
-                        .HasColumnType("bit");
-
                     b.Property<string>("TSC")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("TargetDate")
+                    b.Property<DateTime>("TargetDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ActionID");
@@ -224,6 +224,9 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("HasAction")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("HasCR")
                         .HasColumnType("bit");
 
@@ -296,6 +299,45 @@ namespace PIMES_DMS.Migrations
                     b.HasKey("SumRepID");
 
                     b.ToTable("SRDb");
+                });
+
+            modelBuilder.Entity("PIMES_DMS.Models.Vermodel", b =>
+                {
+                    b.Property<int>("VerID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VerID"));
+
+                    b.Property<int>("ActionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateVer")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("Files")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVer")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Result")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VerID");
+
+                    b.ToTable("VerDb");
                 });
 #pragma warning restore 612, 618
         }

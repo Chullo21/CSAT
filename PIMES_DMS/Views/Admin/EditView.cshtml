@@ -1,16 +1,15 @@
 ﻿@model AccountsModel
 
 @{
-    ViewData["Title"] = "Edit >" + Model.AccName;
+    ViewData["Title"] = "Edit > " + Model.AccName;
 }
 
-<h1>EditView</h1>
+<h1>Edit Account</h1>
 
-<h4>AccountsModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditUser">
+        <form asp-controller="Admin" asp-action="EditUser" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AccID" name="accid"/>
             <div class="form-group">

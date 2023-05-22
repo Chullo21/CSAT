@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 
@@ -13,6 +14,8 @@ namespace PIMES_DMS.Controllers
             _Db = db;
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult Create_ContainmentView(int ID)
         {
             IssueModel? obj = _Db.IssueDb.FirstOrDefault(j => j.IssueID == ID);
@@ -20,6 +23,8 @@ namespace PIMES_DMS.Controllers
             return View(obj);
         }
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public IActionResult Create_Containment(string? controlno, string? whsoh, string? whgood, string? whnogood, string? whdis, string? iqsoh, string? iqgood,
             string? iqnogood, string? iqdis, string? wisoh, string? wigood, string? winogood, string? widis, string? fgsoh, string? fggood, string? fgnogood, string? fgdis,
             bool rep, string? rma)
@@ -62,6 +67,8 @@ namespace PIMES_DMS.Controllers
             return RedirectToAction("AdminHome", "Home");
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ERView()
         {
             string? Role = TempData["Role"] as string;
@@ -79,13 +86,13 @@ namespace PIMES_DMS.Controllers
             else
             {
                 IEnumerable<IssueModel> objs = _Db.IssueDb.Where(j => j.HasCR && !j.isDeleted);
-
+                
                 return View(objs);
-            }
-
-            
+            }           
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ERDet(string ID)
         {
             var obj = _Db.ERDb.FirstOrDefault(j => j.ControlNo == ID);
@@ -93,6 +100,8 @@ namespace PIMES_DMS.Controllers
             return View("ERDet", obj);
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult EditERView(string ID)
         {
 
@@ -101,6 +110,8 @@ namespace PIMES_DMS.Controllers
             return View(obj);
         }
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public IActionResult EditER(int erid, string? controlno, string? whsoh, string? whgood, string? whnogood, string? whdis, string? iqsoh, string? iqgood,
             string? iqnogood, string? iqdis, string? wisoh, string? wigood, string? winogood, string? widis, string? fgsoh, string? fggood, string? fgnogood, string? fgdis,
             bool rep, string? rma)
@@ -140,6 +151,65 @@ namespace PIMES_DMS.Controllers
         public IActionResult DeleteView()
         {
             return View();
+        }
+
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult ClientListER()
+        {
+            string? Role = TempData["Role"] as string;
+            TempData.Keep();
+
+            if (Role == "CLIENT")
+            {
+                string? EN = TempData["EN"] as string;
+                TempData.Keep();
+
+                IEnumerable<IssueModel> objs = _Db.IssueDb.Where(j => j.HasCR && !j.isDeleted && j.IssueCreator == EN);
+
+                return View(objs);
+            }
+            else
+            {
+                IEnumerable<IssueModel> objs = _Db.IssueDb.Where(j => j.HasCR && !j.isDeleted);
+
+                return View(objs);
+            }
+        }
+
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Search(string ss)
+        {
+            string? Role = TempData["Role"] as string;
+            TempData.Keep();
+
+            if (ss.IsNullOrEmpty())
+            {
+                return View("ERView", _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus));
+            }
+
+
+            if (Role == "CLIENT")
+            {
+
+                string? EN = TempData["EN"] as string;
+                TempData.Keep();
+
+                IEnumerable<IssueModel> obj = from m in _Db.IssueDb
+                                              where m.IssueCreator == EN && m.ValidatedStatus && m.Acknowledged &&
+                                              (m.IssueNo.Contains(ss) || m.ControlNumber.Contains(ss))
+                                              select m;
+
+                return View("ERView", obj);
+            }
+            else
+            {
+                IEnumerable<IssueModel> obj = _Db.IssueDb.Where(m => m.ValidatedStatus && m.Acknowledged && (m.IssueCreator.Contains(ss)
+                                              || m.IssueNo.Contains(ss) || m.ControlNumber.Contains(ss)));
+
+                return View("ERView", obj);
+            }
         }
     }
 }

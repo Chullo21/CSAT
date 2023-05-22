@@ -21,6 +21,8 @@ namespace PIMES_DMS.Controllers
             return View("Login_View");
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult LoginAcc(string user, string pass)
         {
             if (user == null || pass == null)

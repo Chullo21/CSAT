@@ -85,7 +85,7 @@
                 </p>
             </div>          
         </div>
-        <form asp-controller="Validation" asp-action="SubmitValidation" enctype="multipart/form-data">
+        <form asp-controller="Validation" asp-action="SubmitValidation" enctype="multipart/form-data" method="post">
             <input type="hidden" asp-for="IssueID" name="id"/>
             <div class="d-flex justify-content-center flex-column">
                 <div class="form-group mt-1">

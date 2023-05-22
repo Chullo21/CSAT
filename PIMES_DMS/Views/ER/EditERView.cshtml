@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-controller="ER" asp-action="EditER">
+<form asp-controller="ER" asp-action="EditER" method="post">
     <input value="@Model.ERID" name="erid" hidden/>
     <div class="d-flex justify-content-between">
         <div>

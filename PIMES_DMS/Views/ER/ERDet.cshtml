@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-controller="ER" asp-action="Create_Containment">
+<form asp-controller="ER" asp-action="Create_Containment" method="get">
     <div class="d-flex justify-content-between">
         <div>
             <h1>Containment Report</h1>
@@ -70,22 +70,36 @@
                 <label class="fw-bold">Emergency Response</label>
             </div>
             <div>
+                @{
+                    string rep;
+                    if (Model.Rep)
+                    {
+                        rep = "For Replacement";
+                    }
+                    else
+                    {
+                        rep = "No";
+                    }
+                }
                 <label class="form-label mt-3">Need Replacement?</label>
-                <input class="form-control" value="@Model.Rep" readonly/>
+                <input class="form-control" value="@rep" readonly/>               
             </div>
             <div class="mt-1 form-group">
+                @{
+                    string rma;
+                    if (Model.RMAno != null)
+                    {
+                        rma = Model.RMAno;
+                    }
+                    else
+                    {
+                        rma = "No RMA # yet.";
+                    }
+                }
                 <label class="form-label">RMA #</label>
-                <input class="form-control w-50" value="@Model.RMAno" readonly/>
+                <input class="form-control w-50" value="@rma" readonly/>
             </div>
         </div>
-        @*<div class="w-50 d-flex justify-content-evenly">
-            <div class="w-25 align-self-end">
-                <input class="btn btn-danger w-100" value="Discard" />
-            </div>
-            <div class="w-75 d-flex align-self-end justify-content-end">
-                <input class="btn btn-primary w-75" type="submit" />
-            </div>
-        </div>*@
     </div>
 </form>
 

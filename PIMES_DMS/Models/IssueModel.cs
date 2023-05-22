@@ -74,5 +74,7 @@ namespace PIMES_DMS.Models
 
         [DisplayName("Affected Quantity"), Required(ErrorMessage = "Please input quantity")]
         public int Qty { get; set; }
+
+        public bool HasAction { get; set; } = false;
     }
 }

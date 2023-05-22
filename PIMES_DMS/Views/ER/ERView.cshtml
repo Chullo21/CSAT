@@ -1,15 +1,24 @@
 ﻿@model IEnumerable<PIMES_DMS.Models.IssueModel>
 
 @{
-    ViewData["Title"] = "ERView";
+    ViewData["Title"] = "E.R List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Emergency Responces</h1>
+<div class="d-flex justify-content-between">
+    <div>
+        <h1>Emergency Responces</h1>
+    </div>
+    <div class="mt-2">
+        <form asp-controller="ER" asp-action="Search" method="get">
+            <input class="form-control w-100" placeholder="Search" name="ss"/>
+        </form>
+    </div>
+</div>
 
 <hr />
 
-<table class="table">
+<table class="table text-center">
     <thead>
         <tr>
             <th>

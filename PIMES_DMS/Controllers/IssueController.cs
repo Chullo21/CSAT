@@ -20,6 +20,8 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public IActionResult SubmitIssue(string issueno, string datefound, string product, int serialno, 
             string affectedpn, string description, string problemdescription, IFormFile? cp, int qty)
         {
@@ -57,6 +59,8 @@ namespace PIMES_DMS.Controllers
             return RedirectToAction("IssuesList");
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult ShowPdf(int ID)
         {
             var details = _context.IssueDb.Find(ID);
@@ -66,6 +70,7 @@ namespace PIMES_DMS.Controllers
             return File(docinByte!, "application/pdf");
         }
 
+        [AutoValidateAntiforgeryToken]
         public IActionResult IssuesList()
         {
             if (TempData.ContainsKey("Role"))
@@ -91,6 +96,8 @@ namespace PIMES_DMS.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult AcknowledgedIssues()
         {
             string? Role = TempData["Role"] as string;
@@ -113,6 +120,7 @@ namespace PIMES_DMS.Controllers
             }
         }
 
+        [AutoValidateAntiforgeryToken]
         public IActionResult IssueDetails(int ID)
         {
             IssueModel? det = _context.IssueDb.Find(ID);
@@ -120,6 +128,7 @@ namespace PIMES_DMS.Controllers
             return View(det);
         }
 
+        [AutoValidateAntiforgeryToken]
         public IActionResult AcknowledgeIssue(int ID)
         {
             var issue = _context.IssueDb.Find(ID);
@@ -142,10 +151,11 @@ namespace PIMES_DMS.Controllers
             return RedirectToAction("IssuesList");
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult Search(string ss)
         {
             string? Role = TempData["Role"] as string;
-            string? EN = TempData["EN"] as string;
             TempData.Keep();
 
             if (ss.IsNullOrEmpty())
@@ -155,18 +165,20 @@ namespace PIMES_DMS.Controllers
 
            if (Role == "CLIENT")
             {
-                IEnumerable<IssueModel> obj = from m in _context.IssueDb where m.IssueCreator == EN && !m.ValidatedStatus &&
-                                              (m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) || 
-                                              m.SerialNo.ToString().Contains(ss)) select m;
+                string? EN = TempData["EN"] as string;
+                TempData.Keep();
+                
+                IEnumerable<IssueModel> obj = _context.IssueDb.Where(m => (!m.Acknowledged && !m.ValidatedStatus && m.IssueCreator == EN) && (m.IssueNo.Contains(ss) || 
+                                                m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) ||
+                                                m.SerialNo.ToString().Contains(ss)));
 
                 return View("IssuesList", obj);
             }
             else
             {
-                IEnumerable<IssueModel> obj = from m in _context.IssueDb where !m.ValidatedStatus && m.IssueCreator.Contains(ss) 
-                                              || (m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) || 
-                                              m.SerialNo.ToString().Contains(ss))
-                                              select m;
+                IEnumerable<IssueModel> obj = _context.IssueDb.Where(m => (!m.Acknowledged && !m.ValidatedStatus) && (m.IssueCreator.Contains(ss)
+                                              || m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) ||
+                                              m.SerialNo.ToString().Contains(ss) ));
 
                 return View("IssuesList", obj);
             }

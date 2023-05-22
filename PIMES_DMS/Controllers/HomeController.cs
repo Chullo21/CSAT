@@ -19,6 +19,8 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
         public IActionResult AdminHome()
         {
 

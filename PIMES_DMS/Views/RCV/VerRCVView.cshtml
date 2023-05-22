@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "Validate RCV";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var issue = ViewData["Issue"] as IssueModel;
+    var action = ViewData["Action"] as ActionModel;
+}
+<form asp-controller="RCV" asp-action="VerRCV" enctype="multipart/form-data" method="post">
+    <input value="@action!.ActionID" name="id" hidden/>
+<div class="w-100 d-flex justify-content-between">
+    <div>
+        <h1>@issue!.ControlNumber > Verify</h1>
+    </div>
+    <div>
+        <input class="btn btn-primary" type="submit"/>
+    </div>
+</div>
+<hr />
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <td>Control No.</td>
+            <th>Date Found</th>
+            <th>Issue #</th>
+            <th>Product</th>
+            <th>Affected Qty</th>
+            <th>Problem Desc.</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@issue!.ControlNumber</td>
+            <td>@issue!.DateFound</td>
+            <td>@issue!.IssueNo</td>
+            <td>@issue!.Product</td>
+            <td>@issue!.Qty</td>
+            <td>@issue!.ProbDesc</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="w-100">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+
+                <th>Technical/Systemic Cause</th>
+                <th>Escape Cause</th>
+                <th>Action</th>
+                <th>PIC</th>
+                <th>Target Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width:20%">
+                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.TSC</textarea>
+                </td>
+                <td style="width:20%">
+                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.EC</textarea>
+                </td>
+                <td style="width:20%">
+                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.Action</textarea>
+                </td>
+                <td style="width:20%">
+                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.PIC</textarea>
+                </td>
+                <td style="width:20%">
+                    <div>
+                        <div>
+                            <input class="form-control w-100" value="@action!.TargetDate" readonly />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="w-100">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Result</th>
+                <th>Date</th>
+                <th>Evidence</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                    <td style ="width:20%"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" name="result" ></textarea></td>
+                    <td style="width:20%"><input class="form-control" type="date" name="date" /></td>
+                    <td style="width:20%"><input class="form-control" type="file" name="evidence" ></td>
+                    <td style="width:20%">
+                        <select class="form-select" name="status" required>
+                        <option value="o">OPEN</option>
+                        <option value="g">ON-GOING</option>
+                        <option value="c">CLOSED</option>
+                    </select></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</form>

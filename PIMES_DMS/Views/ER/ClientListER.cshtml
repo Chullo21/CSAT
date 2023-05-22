@@ -1,0 +1,57 @@
+﻿@model IEnumerable<IssueModel>
+@{
+    ViewData["Title"] = "ClientListER";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between">
+    <div>
+        <h1>Emergency Responces</h1>
+    </div>
+    <div class="mt-2">
+        <form asp-controller="ER" asp-action="Search" method="get">
+            <input class="form-control w-100" placeholder="Search" name="ss" />
+        </form>
+    </div>
+</div>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueCreator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ControlNumber)
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IssueCreator)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IssueNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ControlNumber)
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="ER" asp-action="ERDet" asp-route-id="@item.ControlNumber">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

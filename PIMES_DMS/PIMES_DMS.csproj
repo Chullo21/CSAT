@@ -57,15 +57,42 @@
     <Compile Remove="Migrations\20230512022219_update.Designer.cs" />
     <Compile Remove="Migrations\20230512022356_update.cs" />
     <Compile Remove="Migrations\20230512022356_update.Designer.cs" />
+    <Compile Remove="Migrations\20230512050403_update.cs" />
+    <Compile Remove="Migrations\20230512050403_update.Designer.cs" />
+    <Compile Remove="Migrations\20230515023334_update.cs" />
+    <Compile Remove="Migrations\20230515023334_update.Designer.cs" />
+    <Compile Remove="Migrations\20230515050354_update.cs" />
+    <Compile Remove="Migrations\20230515050354_update.Designer.cs" />
+    <Compile Remove="Migrations\20230516012638_update.cs" />
+    <Compile Remove="Migrations\20230516012638_update.Designer.cs" />
+    <Compile Remove="Migrations\20230516023054_update.cs" />
+    <Compile Remove="Migrations\20230516023054_update.Designer.cs" />
+    <Compile Remove="Migrations\20230516024012_update.cs" />
+    <Compile Remove="Migrations\20230516024012_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517004633_update.cs" />
+    <Compile Remove="Migrations\20230517004633_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517004807_update.cs" />
+    <Compile Remove="Migrations\20230517004807_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517005634_update.cs" />
+    <Compile Remove="Migrations\20230517005634_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517010719_update.cs" />
+    <Compile Remove="Migrations\20230517010719_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517012700_update.cs" />
+    <Compile Remove="Migrations\20230517012700_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517012808_update.cs" />
+    <Compile Remove="Migrations\20230517012808_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517013049_update.cs" />
+    <Compile Remove="Migrations\20230517013049_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517013959_update.cs" />
+    <Compile Remove="Migrations\20230517013959_update.Designer.cs" />
+    <Compile Remove="Migrations\20230517061937_update.cs" />
+    <Compile Remove="Migrations\20230517061937_update.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Chart.js" Version="3.7.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
   </ItemGroup>
 

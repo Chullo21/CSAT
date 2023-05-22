@@ -48,8 +48,8 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="AccID" />
+    <form asp-controller="Admin" asp-action="Delete" method="post" method="post">
+        <input type="hidden" asp-for="AccID" name="ID"/>
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="AdminView">Back to List</a>
     </form>

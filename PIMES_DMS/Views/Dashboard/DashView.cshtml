@@ -1,0 +1,173 @@
+﻿@using System.Globalization
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="d-flex justify-content-between">
+    <div>
+        <h1>Dashboard</h1>
+    </div>
+    <div class="align-self-center">
+        <form asp-controller="Dashboard" asp-action="RecentYear" id="dashForm">
+            <select class="form-select" id="dateSelect" onchange="Submit()" name="year">
+                <option>Select Year</option>
+            </select>
+        </form>
+    </div>
+</div>
+<hr />
+
+<div class="w-100" style="background-color:black; height:500px">
+    <div class="w-100 h-100 d-flex justify-content-between shadow" >
+        <div class="w-50 d-flex justify-content-center">
+            <canvas class="w-100 h-auto" id="bar"></canvas>
+        </div>
+        <div class="w-50 h-100 d-flex justify-content-center">
+            <canvas class="w-100 h-auto" id="pie"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Submit()
+    {
+        document.getElementById('dashForm').submit();
+    }
+</script>
+
+<script>
+
+    var select = document.getElementById("dateSelect");
+
+    var currentYear = new Date().getFullYear();
+
+    for (var year = currentYear; year >= 2019; year--) 
+    {
+
+        var option = document.createElement("option");
+
+        option.text = year;
+        option.value = year
+
+        select.appendChild(option);
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var currentDate = new Date();
+        var currentMonth = currentDate.getMonth();
+
+        var months = [];
+        var monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        for (var i = 0; i <= @TempData["Months"]; i++) {
+            months.push(monthNames[i]);
+        }
+
+        var ctx = document.getElementById('bar').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: 'Valid',
+                        data: @ViewBag.valid,
+                        backgroundColor: 'rgb(255, 0, 0)',
+                        borderColor: 'rgb(255, 0, 0)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Invalid',
+                        data: @ViewBag.invalid,
+                        backgroundColor: 'rgb(0, 255, 0)',
+                        borderColor: 'rgb(0, 255, 0)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        stacked: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'white'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        stacked: true,
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'white'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var data = [@ViewBag.open, @ViewBag.closed, @ViewBag.going];
+        var labels = ['Open', 'Closed', 'On-Going'];
+
+        var pp = document.getElementById('pie').getContext('2d');
+        var piechart = new Chart(pp, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: data,
+                        backgroundColor: [
+                            'rgb(255, 0, 0)',
+                            'rgb(0, 255, 0)',
+                            'rgb(255, 191, 0)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 0, 0)',
+                            'rgb(0, 255, 0)',
+                            'rgb(255, 191, 0)'
+                        ],
+                        borderWidth: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>                        
