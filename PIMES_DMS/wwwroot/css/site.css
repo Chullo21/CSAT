@@ -18,7 +18,7 @@ body {
 }
 
 .loginbg {
-    background-image: url('../photos/bg2.jpg');
+    background-image: url('../photos/pimesbg6.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 93%;
@@ -27,6 +27,7 @@ body {
  .loginfont {
      font-family:'bills mafia';
      font-size:80px;
+     color: black;
  }
 
  .billsfont {
@@ -48,8 +49,16 @@ body {
     bottom: 0;
     width: 100%;
     height: 52px;
-    background-color: #2706F0;
+    background-color: blue;
     border-top:2px solid;
+}
+
+.header-nav{
+
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:2000;
 }
 
 .homebtns {
@@ -75,5 +84,146 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 93%;
+}
+
+thead {
+    color:white;
+    background-color:lightseagreen;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none;
+}
+
+/* Modal content */
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    width: 75%;
+    max-width: 90%;
+    height: 80%;
+    border-radius: 4px;
+    display: none;
+}
+
+/* Close button */
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.header-container {
+    flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+    #chuchu
+
+{
+    display: none;
+}
+
+}
+
+@media (max-width: 576px) {
+    /* Mobile devices */
+    .billsfont {
+        font-size: 60%;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 991px) {
+    /* Tablets */
+    .billsfont {
+        font-size: 70%;
+    }
+}
+
+@media (min-width: 992px) {
+    /* Desktops and larger screens */
+    .billsfont {
+        font-size: 80%;
+    }
+}
+
+@media (max-width: 576px) {
+    .table-responsive-mobile {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .desktop-only {
+        display: none;
+    }
+}
+
+.TESTextArea {
+    min-height: 70px;
+    min-width: 100%;
+    max-height: 70px;
+    max-width: 100%;
+}
+
+.loading-icon {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+}
+
+    .loading-icon.loading {
+        animation: spin 1s linear infinite;
+    }
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.legend-color {
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.legend-label {
+    font-size: 12px;
 }
 

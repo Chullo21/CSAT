@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<IssueModel>
 @{
-    ViewData["Title"] = "ClientListER";
+    ViewData["Title"] = "E.R List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var mod = Model.OrderByDescending(j => j.DateCreated).ToList();
 }
 
 <div class="d-flex justify-content-between">
@@ -35,7 +36,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in mod.Take(8))
         {
             <tr>
                 <td>

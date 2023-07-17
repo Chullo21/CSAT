@@ -19,27 +19,32 @@
             </div>
             <div class="form-group">
                 <label asp-for="AccName" class="control-label"></label>
-                <input asp-for="AccName" class="form-control" name="accname"/>
+                <input asp-for="AccName" class="form-control" name="accname" required/>
                 <span asp-validation-for="AccName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CompName" class="control-label"></label>
-                <input asp-for="CompName" class="form-control" name="compname"/>
-                <span asp-validation-for="CompName" class="text-danger"></span>
+                <label asp-for="Section" class="control-label"></label>
+                <input asp-for="Section" class="form-control" name="section" required />
+                <span asp-validation-for="Section" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Role" class="control-label"></label>
-                <input asp-for="Role" class="form-control" readonly name="role"/>
+                <input asp-for="Role" class="form-control" readonly name="role" required />
                 <span asp-validation-for="Role" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" name="email" required />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" name="username"/>
+                <input asp-for="UserName" class="form-control" name="username" required />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" name="password"/>
+                <input asp-for="Password" class="form-control" name="password" required />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group d-flex justify-content-between mt-3">

@@ -2,17 +2,38 @@
 using Microsoft.IdentityModel.Tokens;
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace PIMES_DMS.Controllers
 {
     public class IssueController : Controller
     {
-
         private readonly AppDbContext _context;
 
         public IssueController(AppDbContext context)
         {
             _context = context;
+        }
+
+        public void UpdateNotif(DateTime time, string message, string t)
+        {
+            string EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            NotifModel nm = new NotifModel();
+            {
+                nm.Message = EN + message;
+                nm.DateCreated = time;
+                nm.Type = t;
+            }
+
+
+            if (ModelState.IsValid)
+            {
+                _context.NotifDb.Add(nm);
+                _context.SaveChangesAsync();
+            }
         }
 
         public IActionResult SubmitIssueView()
@@ -22,7 +43,7 @@ namespace PIMES_DMS.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult SubmitIssue(string issueno, string datefound, string product, int serialno, 
+        public IActionResult SubmitIssue(string issueno, DateTime datefound, string product, string serialno,
             string affectedpn, string description, string problemdescription, IFormFile? cp, int qty)
         {
             string? creator = TempData["EN"] as string;
@@ -39,8 +60,9 @@ namespace PIMES_DMS.Controllers
                 issue.Desc = description;
                 issue.ProbDesc = problemdescription;
                 issue.Qty = qty;
+                issue.Validator = "";
             }
-            
+
             if (cp != null)
             {
                 using MemoryStream memoryStream = new();
@@ -50,8 +72,12 @@ namespace PIMES_DMS.Controllers
 
             if (ModelState.IsValid)
             {
+                NotifyAboutSubmittedIssue();
+
                 _context.IssueDb.Add(issue);
                 _context.SaveChanges();
+
+                UpdateNotif(DateTime.Now, ", have submitted a claim. " + issueno, "All");
 
                 return View("IssueDetails", issue);
             }
@@ -73,51 +99,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult IssuesList()
         {
-            if (TempData.ContainsKey("Role"))
-            {
-                string? Role = TempData["Role"] as string;
-                TempData.Keep();               
-
-                if (Role == "CLIENT")
-                {
-                    string? user = TempData["EN"] as string;
-                    TempData.Keep();
-
-                    var issues = _context.IssueDb.Where(j => j.IssueCreator == user && !j.ValidatedStatus);
-                    return View(issues);
-                }
-                else
-                {
-                    var issues = _context.IssueDb.Where(j => !j.ValidatedStatus);
-                    return View(issues);
-                }
-            }
-
-            return NotFound();
+            return View(_context.IssueDb.Where(j => !j.isDeleted && j.ValRes != "Invalid"));
         }
 
         [HttpGet]
         [AutoValidateAntiforgeryToken]
         public IActionResult AcknowledgedIssues()
         {
-            string? Role = TempData["Role"] as string;
-            TempData.Keep();
-
-            if (Role == "CLIENT")
-            {
-                string? EN = TempData["EN"] as string;
-                TempData.Keep();
-
-                IEnumerable<IssueModel> obj = _context.IssueDb.Where(j => j.IssueCreator == EN && j.Acknowledged && !j.ValidatedStatus);
-
-                return View("AckIssues", obj);
-            }
-            else
-            {
-                IEnumerable<IssueModel> obj = _context.IssueDb.Where(j => j.Acknowledged && !j.ValidatedStatus);
-
-                return View("AckIssues", obj);
-            }
+            return View("AckIssues", _context.IssueDb.Where(j => j.Acknowledged && !j.ValidatedStatus));
         }
 
         [AutoValidateAntiforgeryToken]
@@ -144,6 +133,8 @@ namespace PIMES_DMS.Controllers
             {
                 _context.IssueDb.Update(ackissue);
                 _context.SaveChanges();
+
+                UpdateNotif(DateTime.Now, ", have acknowledged a claim. " + issue.IssueNo, "All");
 
                 return View("IssueDetails", ackissue);
             }
@@ -184,7 +175,143 @@ namespace PIMES_DMS.Controllers
             }
         }
 
-    }    
+        public IActionResult EditIssueView(int ID)
+        {
+            return View(_context.IssueDb.FirstOrDefault(j => j.IssueID == ID));
+        }
 
-    
+        public IActionResult EditIssue(int ID, string? issueno, string? serial, string? affected, int qty, string? desc, string? probdesc, IFormFile? doc)
+        {
+            var issue = _context.IssueDb.FirstOrDefault(j => j.IssueID == ID);
+
+            IssueModel model = new IssueModel();
+            {
+                model = issue;
+                model.IssueNo = issueno;
+                model.SerialNo = serial;
+                model.AffectedPN = affected;
+                model.Qty = qty;
+                model.Desc = desc;
+                model.ProbDesc = probdesc;
+            }
+
+            if (doc != null)
+            {
+                using(MemoryStream ms =  new MemoryStream())
+                {
+                    doc.CopyTo(ms);
+                    model.ClientRep = ms.ToArray();
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.IssueDb.Update(model);
+                _context.SaveChanges();
+
+                UpdateNotif(DateTime.Now, ", have edited a claim. " + issue.IssueNo, "All");
+            }
+
+            return RedirectToAction("IssuesList");
+        }
+
+        public IActionResult GetInvalids()
+        {
+            return View(_context.IssueDb.Where(j => !j.isDeleted && j.Acknowledged && j.ValidatedStatus && j.ValRes == "Invalid"));
+        }
+
+        public IActionResult GetValids()
+        {
+            return View(_context.IssueDb.Where(j => j.ValRes == "Valid"));
+        }
+
+        public IActionResult GetRMA()
+        {
+            return View(_context.RMADb.OrderByDescending(j => j.DateCreated));
+        }
+
+        public IActionResult ArchiveFunct(string aval)
+        {
+            if (aval == "Invalid")
+            {
+                return RedirectToAction("GetInvalids");
+            }
+            else if (aval == "Valid")
+            {
+                return RedirectToAction("GetValids");
+            }
+            else if (aval == "RMA")
+            {
+                return RedirectToAction("GetRMA");
+            }
+            else
+            {
+                return Ok();
+            }
+        }
+
+        public void NotifyAboutSubmittedIssue()
+        {
+            List<string?> sendTo = _context.AccountsDb.Where(j => !string.IsNullOrEmpty(j.Email)).Select(j => j.Email).ToList();
+
+            UserAndPass randtobeused = new UserAndPass();
+            {
+                Random rand = new Random();
+                int random = rand.Next(0, 2);
+
+                if (random == 0)
+                {
+                    randtobeused.Email = "atsnoreply01@gmail.com";
+                    randtobeused.Password = "dlthqvxnsbnfpwzs";
+                }
+                else if (random == 1)
+                {
+                    randtobeused.Email = "noreplyATS1@gmail.com";
+                    randtobeused.Password = "mxmppmodmskwwzhv";
+                }
+                else
+                {
+                    randtobeused.Email = "noreplyATS3@gmail.com";
+                    randtobeused.Password = "peddcrnhcsswsjuf";
+                }
+            }
+
+            string link = "http://192.168.3.39";
+
+            string body = "Good day,\r\n\r\nWe have received a new quality claim from our costumer. Feel free to access our CSat Portal to review the said claim.\r\n\r\n";
+            body += $"Please click \"{link}\" for your reference.\r\n\r\nHave a great day!";
+
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(randtobeused.Email);
+                foreach (var to in sendTo)
+                {
+                    message.To.Add(to);
+                }
+                message.Subject = "New Quality Issue Claim";
+                message.Body = body;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com"))
+                {
+                    smtp.Port = 587;
+                    smtp.Credentials = new NetworkCredential(randtobeused.Email, randtobeused.Password);
+                    smtp.EnableSsl = true;
+                    smtp.Timeout = 10000;
+                    if (message.To.Count() > 0)
+                    {
+                        smtp.Send(message);
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    public class UserAndPass
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
 }

@@ -1,42 +1,44 @@
-﻿@model PIMES_DMS.Models.IssueModel
+﻿ @model PIMES_DMS.Models.IssueModel
 
 @{
-    ViewData["Title"] = "Details >" + Model.IssueNo;
+    ViewData["Title"] = "Details > " + Model.IssueNo;
+
+    string? Role = TempData["Role"] as string;
+    TempData.Keep();
 }
 
-<div class="d-flex">
-    <div class="d-flex justify-content-lg-start">
-        <div>
-            <h1>Issue Details</h1>
-        </div>
-        <div class="align-self-center" style="margin-left:30px">
-            <a class="btn btn-secondary" style="width:90px" asp-controller="Issue" asp-action="IssuesList">Back</a>
+<div>
+    <div class="d-flex justify-content-between">
+        <div class="d-flex">
+            <div>
+                <h1>Claim Details</h1>
+            </div>
+            <div class="align-self-center mx-2" style="margin-left:30px">
+                <a class="btn btn-secondary" style="width:90px" asp-controller="Issue" asp-action="IssuesList">Back</a>
+            </div>
+            @{
+                if (Role == "Admin" && !Model.ValidatedStatus)
+                {
+                    if (!Model.Acknowledged)
+                    {
+                        <div class="align-self-center d-flex">
+                            <div class="mx-2">
+                                <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Acknowledged)
+                    {
+                        <div class="align-self-center d-flex ">
+                            <div class="mx-2">
+                                <button class="btn btn-primary" onclick="openValModal()">Validate</button>
+                            </div>
+                        </div>
+                    }
+                }
+            }
         </div>
     </div>
-    @{
-        string? Role = TempData["Role"] as string;
-        TempData.Keep();
-
-        if (Role != "CLIENT" && !Model.ValidatedStatus)
-        {
-            if (!Model.Acknowledged)
-            {
-                <div class="align-self-center d-flex " style="margin-left:auto; width:300px">
-                    <div class="mx-2">
-                        <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
-                    </div>
-                </div>
-            }
-            else if (Model.Acknowledged)
-            {
-                <div class="align-self-center d-flex " style="margin-left:auto; width:300px">
-                    <div class="w-50">
-                        <a class="btn btn-primary w-100 h-100" asp-route-id="@Model.IssueID" asp-controller="Validation" asp-action="ValidateView">VALIDATE</a>
-                    </div>
-                </div>
-            }           
-        }
-    }
 </div>
 <hr />
 
@@ -52,26 +54,29 @@
                         <th>
                             Issue#
                         </th>
-                        <th>
+                        <th class="desktop-only">
                             Date Found
                         </th>
                         <th>
                             Product
                         </th>
-                        <th>
+                        <th class="desktop-only">
                             Serial
                         </th>
-                        <th>
+                        <th class="desktop-only">
                             Affected P/N
                         </th>
                         <th>
                             Description
                         </th>
-                        <th>
+                        <th class ="desktop-only">
                             Ack. Stat.
                         </th>
-                        <th>
+                        <th class="desktop-only">
                             Date Ack.
+                        </th>
+                        <th>
+                            Attachment
                         </th>
                     </tr>
                 </thead>
@@ -80,16 +85,16 @@
                         <td>
                             @Model.IssueNo
                         </td>
-                        <td>
-                            @Model.DateFound
+                        <td class="desktop-only">
+                            @Model.DateFound.ToShortDateString()
                         </td>
                         <td>
                             @Model.Product
                         </td>
-                        <td>
+                        <td class="desktop-only">
                             @Model.SerialNo
                         </td>
-                        <td>
+                        <td class="desktop-only">
                             @Model.AffectedPN
                         </td>
                         <td>
@@ -98,28 +103,43 @@
                         @{
                             if (Model.Acknowledged)
                             {
-                                <td style="background-color:green">
+                                <td style="background-color:green" class="desktop-only">
                                     YES
                                 </td>
                             }
                             else
                             {
-                                <td style="background-color:red">
+                                <td style="background-color:red" class="desktop-only">
                                     NO
                                 </td>
                             }
                         }
-                        <td>
+                        <td class="desktop-only">
                             @{
                                 if (Model.Acknowledged)
                                 {
-                                    Write(Model.DateAck.ToString("MM/dd/yyyy"));
+                                    Write(Model.DateAck.ToShortDateString());
                                 }
                                 else
                                 {
                                     Write("Not acknowledged yet");
                                 }
                             }
+                        </td>
+                        <td>
+                            <div class="align-self-center">
+                                @{
+                                    if (Model.ClientRep != null)
+                                    {
+                                    //<iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" style="width:100%; height:500px"></iframe>
+                                        <button class="btn btn-primary" onclick="openAttachModal()">Show Attachment</button>
+                                    }
+                                    else
+                                    {
+                                        Write("No Attachment");
+                                    }
+                                }
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -134,17 +154,114 @@
             </dl>
         </div>
     </div>
-    <div class="h-100" style="width:40%">
-        @{
-            if (Model.ClientRep != null)
-            {
-                <iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" style="width:100%; height:500px"></iframe>
-            }
-            else
-            {
-                Write("No Attachment");
-            }
-        }
+</div>
+
+<div id="validateModal" class="modal-content w-75 h-75" style="background-color:darkgray">
+    <button class="modal-close btn btn-danger" onclick="closeValModal()"><span style='font-size:30px;'>&#10006;</span></button>
+    <div class="flex-column justify-content-center">
+        <div>
+            <p class="text-center" style="font-weight:bolder; font-size:30px">
+                Validate Claim
+            </p>
+        </div>
+        <hr />
+        <div>
+            <form asp-controller="Validation" asp-action="SubmitValidation" enctype="multipart/form-data" method="post">
+                <input value="@Model.IssueID" name="id" hidden/>
+                <div class="d-flex">
+                    <div>
+                        <label class="form-label fw-bold">
+                            Investigation Conclusion
+                        </label>
+                        <select class="form-select w-100" id="invvalue" name="validation" onchange="invorv(invvalue.value)">
+                            <option value="Invalid">INVALID</option>
+                            <option value="Valid">VALID</option>
+                        </select>
+                    </div>
+                    <div style="margin-left:30px" id="nrmadiv">
+                        <label class="fw-bold form-label">Need RMA?</label>
+                        <select class="form-select" name="nrma">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label fw-bold">
+                        Date Verified:
+                    </label>
+                    <input class="form-control fw-bold w-25" type="date" name="dateval" required/>
+                </div>
+                <div>
+                    <label class="form-label fw-bold">
+                        Attachment:
+                    </label>
+                    <input class="form-control fw-bold w-25" type="file" name="valrep" accept=".pdf" required/>
+                </div>
+                <div>
+                    <label class="form-label fw-bold">
+                        Remarks:
+                    </label>
+                    <textarea class="form-control" style="max-height:150px; min-height:150px; max-width:100%; min-width:100%" name="valsumrep"></textarea>
+                </div>
+                <div class="d-flex justify-content-center mt-2">
+                    <input type="submit" class="btn btn-primary w-25"/>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
+<div class="modal-content w-100 h-100" style="background-color:lightgray; z-index:2100" id="attachModal">
+    <button class="modal-close btn btn-danger" onclick="closeAttachModal()">Close</button>
+    <h4 class="modal-title text-center">Claim Attachment</h4>
+    @if (Model.ClientRep != null)
+    {
+        <iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" class="w-100 h-100"></iframe>
+    }
+
+</div>
+
+<script>
+    //var nrmadiv = document.getElementById('nrmadiv');
+    //nrmadiv.style.display = "none";
+
+    function invorv(str)
+    {
+        if (str === "Valid")
+        {            
+            var Nrmadiv = document.getElementById('nrmadiv');
+            Nrmadiv.style.display = "none";
+        }
+        else
+        {
+            var Nrmadiv = document.getElementById('nrmadiv');
+            Nrmadiv.style.display = "block";
+        }
+    }
+
+    function openValModal()
+    {
+        var valModal = document.getElementById('validateModal');
+        valModal.style.display = "block";
+    }
+
+    function closeValModal()
+    {
+        var valModal = document.getElementById('validateModal');
+        valModal.style.display = "none";
+    }
+
+    function openAttachModal()
+    {
+        var oam = document.getElementById('attachModal');
+        oam.style.display = "block";
+    }
+
+    function closeAttachModal()
+    {
+        var oam = document.getElementById('attachModal');
+        oam.style.display = "none";
+    }
+
+</script>

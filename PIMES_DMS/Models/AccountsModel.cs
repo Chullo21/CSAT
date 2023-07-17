@@ -15,8 +15,8 @@ namespace PIMES_DMS.Models
         [DisplayName("Name")]
         public string AccName { get; set; } = string.Empty;
 
-        [Required, DisplayName("Company Name")]
-        public string CompName { get; set; } = string.Empty;
+        [Required, DisplayName("Section")]
+        public string Section { get; set; } = string.Empty;
 
         
         [Required, DisplayName("Role")]
@@ -28,6 +28,26 @@ namespace PIMES_DMS.Models
         [Required]
         public string Password { get; set; } = string.Empty;
 
+        public string? Email { get; set; }
+
         public bool isDeleted { get; set; }
+    }
+
+    public enum Roles
+    {
+        Admin,
+        Verificator,
+        Viewer
+    }
+
+    public enum Sections
+    {
+        QA,
+        QE,
+        Engineering,
+        BC,
+        Purchasing,
+        PPIC,
+        Production
     }
 }

@@ -1,0 +1,87 @@
+﻿@model IssueModel
+@{
+    ViewData["Title"] = "Create 3x5 Whys";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">3x5 Whys</h1>
+
+<form asp-controller="RCV" asp-action="CreateTES" method="post">
+    <input value="@Model.ControlNumber" name="ID" hidden/>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="text-center mb-3 fw-bold">
+                    TECHNICAL CAUSE:
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 1" name="twhy" required></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 2" name="twhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 3" name="twhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 4" name="twhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 5" name="twhy"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="text-center mb-3 fw-bold">
+                    ESCAPE CAUSE:
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 1" name="ewhy"required></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 2" name="ewhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 3" name="ewhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 4" name="ewhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 5" name="ewhy"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="text-center mb-3 fw-bold">
+                    SYSTEMIC CAUSE:
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 1" name="swhy" required></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 2" name="swhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 3" name="swhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 4" name="swhy"></textarea>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <textarea class="TESTextArea form-control" placeholder="Why 5" name="swhy"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <input class="w-100 btn btn-primary" type="submit" />
+        </div>
+    </div>
+</form>
+
+

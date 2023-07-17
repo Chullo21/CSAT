@@ -1,0 +1,147 @@
+﻿@model IEnumerable<PIMES_DMS.Models.RMAModel>
+
+@{
+    ViewData["Title"] = "Get RMA";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                searching: true,
+                lengthChange: false,
+                pageLength: 7,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+}
+
+<h1 class="text-center">RMA Monitoring</h1>
+<form asp-controller="RMA" asp-action="SelectedDate" method="get">
+    <div class="w-100 d-flex justify-content-center mt-3 align-items-center">
+        <div class="mx-2 d-flex">
+            <select class="form-select" id="yearSelect" name="year">
+                <option value="0">Year</option>
+            </select>
+        </div>
+        <div class="mx-2 align-items-center">
+            <select class="form-select" id="monthSelect" name="month">
+                <option value="0">Month</option>
+            </select>
+        </div>
+        <div class="mx-2 align-items-center">
+            <input class="btn btn-primary" type="submit" value="Download"/>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    RMA#
+                </th>
+                <th>
+                    Issue#
+                </th>
+                <th>
+                    Product
+                </th>
+                <th>
+                    Aff. P/N
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Problem Description
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RMANo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IssueNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AffectedPN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProblemDesc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QTY)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="RMA" asp-action="GenerateExcelFile" asp-route-id="@item.RMAID">Download</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var yearSelect = document.getElementById('yearSelect');
+    var monthSelect = document.getElementById('monthSelect');
+
+    function populateMonthOptions(year) {
+        var currentYear = new Date().getFullYear();
+        var currentMonth = new Date().getMonth();
+
+        monthSelect.innerHTML = '';
+
+        if (year === currentYear) {
+            for (var month = 0; month <= currentMonth + 1; month++) {
+                var monthOpt = document.createElement("option");
+                monthOpt.text = month;
+                monthOpt.value = month;
+                monthSelect.appendChild(monthOpt);
+            }
+        } else {
+            for (var month = 0; month <= 12; month++) {
+                var monthOpt = document.createElement("option");
+                monthOpt.text = month;
+                monthOpt.value = month;
+                monthSelect.appendChild(monthOpt);
+            }
+        }
+    }
+
+    yearSelect.addEventListener('change', function () {
+        var selectedYear = parseInt(yearSelect.value);
+        populateMonthOptions(selectedYear);
+    });
+
+    var currentYear = new Date().getFullYear();
+    for (var year = currentYear; year >= 2022; year--) {
+        var yearOpt = document.createElement("option");
+        yearOpt.text = year;
+        yearOpt.value = year;
+        yearSelect.appendChild(yearOpt);
+    }
+
+    populateMonthOptions(currentYear);
+</script>
+

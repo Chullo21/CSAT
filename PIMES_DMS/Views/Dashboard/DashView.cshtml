@@ -2,33 +2,127 @@
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<IssueModel>? DataForTat = ViewData["DataForTat"] as List<IssueModel>;
+
+    var m = @Html.Raw(TempData["Months"]);
+    TempData.Keep();
 }
 
+@functions
+{
+    public static TimeSpan GetBusinessDays(DateTime startDate, DateTime endDate)
+    {
+        int totalDays = (int)(endDate - startDate).TotalDays;
+        int businessDays = 0;
 
-<div class="d-flex justify-content-between">
-    <div>
-        <h1>Dashboard</h1>
-    </div>
-    <div class="align-self-center">
-        <form asp-controller="Dashboard" asp-action="RecentYear" id="dashForm">
-            <select class="form-select" id="dateSelect" onchange="Submit()" name="year">
-                <option>Select Year</option>
-            </select>
-        </form>
+        for (int i = 0; i <= totalDays; i++)
+        {
+            DateTime currentDate = startDate.AddDays(i);
+            if (currentDate.DayOfWeek != DayOfWeek.Saturday && currentDate.DayOfWeek != DayOfWeek.Sunday)
+            {
+                businessDays++;
+            }
+        }
+
+        return TimeSpan.FromDays(businessDays);
+    }
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-6 col-md-5">
+            <div class="bg-transparent h-100">
+                <div class="w-100">
+                    <form asp-controller="Dashboard" asp-action="RecentYear" id="dashForm">
+                        <div class="d-flex justify-content-end">
+                            <select class="form-select border-primary w-100" id="dateSelect" onchange="Submit()" name="year">
+                                <option>Select Year</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+               <div class="d-flex justify-content-center mt-2">
+                    <div class="card border-0 bg-transparent h-75 w-100">
+                        <h4 class="card-header text-center">Validation Status</h4>
+                        <canvas id="pieChartValid" class="w-100 h-100"></canvas>
+                    </div>
+               </div>
+            </div>          
+        </div>
+        <div class="col-sm-6 col-md-5">
+            <div class="card bg-transparent">
+                <h4 class="card-header text-center">CSat Performance</h4>
+                <canvas id="bar" class="w-100"></canvas>
+            </div>
+            <div class="card bg-transparent">
+                <h4 class="card-header text-center">Turn Around Time</h4>
+                <div class="legend-item d-flex justify-content-center justify-content-evenly">
+                    <div class="d-flex">
+                        <div class="legend-color align-self-center" style="background-color:#F3D0B9; border: 1px solid black"></div>
+                        <div class="legend-label align-self-center">Valid</div>
+                    </div>
+                     <div class="d-flex">
+                        <div class="legend-color align-self-center" style="background-color:#AED6C5; border: 1px solid black"></div>
+                        <div class="legend-label align-self-center">Invalid</div>
+                    </div>
+                     <div class="d-flex">
+                        <div class="legend-color align-self-center" style="background-color:orangered; border: 1px solid black"></div>
+                        <div class="legend-label align-self-center">Overdue Invalid</div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="legend-color align-self-center" style="background-color:maroon; border: 1px solid black"></div>
+                        <div class="legend-label align-self-center">Deadline</div>
+                    </div>
+                </div>
+                <canvas id="responsive" class="w-100"></canvas>
+                @*<div style="max-height: 200px; overflow-y: scroll;">
+                    <table class="table table-bordered">
+                        <thead class="sticky-top">
+                            <tr>
+                                <th>Issue#</th>
+                                <th>Description</th>
+                                <th>Days</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var issue in DataForTat)
+                            {
+                                DateTime startDate = issue.DateFound;
+                                DateTime endDate = issue.DateVdal;
+
+                                TimeSpan duration = GetBusinessDays(startDate, endDate);
+                                int days = duration.Days - 1;
+                                string style = "background-color:green";
+
+                                if (days >= 3)
+                                {
+                                    style = "background-color:red";
+                                }
+
+                                <tr class="text-white" style="@style">
+                                    <td>@issue.IssueNo</td>
+                                    <td>@issue.Desc</td>
+                                    <td>@days</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>*@
+
+            </div>
+        </div>
     </div>
 </div>
-<hr />
 
-<div class="w-100" style="background-color:black; height:500px">
-    <div class="w-100 h-100 d-flex justify-content-between shadow" >
-        <div class="w-50 d-flex justify-content-center">
-            <canvas class="w-100 h-auto" id="bar"></canvas>
-        </div>
-        <div class="w-50 h-100 d-flex justify-content-center">
-            <canvas class="w-100 h-auto" id="pie"></canvas>
-        </div>
-    </div>
-</div>
+<script>
+    var bgiv = '#AED6C5';
+    var bciv = '#8097BA';
+    var bgv = '#F3D0B9';
+    var bcv = '#E09B94';
+</script>
 
 <script>
     function Submit()
@@ -43,131 +137,255 @@
 
     var currentYear = new Date().getFullYear();
 
-    for (var year = currentYear; year >= 2019; year--) 
+    for (var year = currentYear; year >= 2022; year--) 
     {
-
         var option = document.createElement("option");
 
         option.text = year;
-        option.value = year
+        option.value = year;
 
         select.appendChild(option);
     }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    var currentDate = new Date();
+    var currentMonth = currentDate.getMonth();
 
-        var currentDate = new Date();
-        var currentMonth = currentDate.getMonth();
+    var months = [];
+    var monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
 
-        var months = [];
-        var monthNames = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ];
+    for (var i = 0; i <= @m; i++) {
+        months.push(monthNames[i]);
+    }
+</script>
 
-        for (var i = 0; i <= @TempData["Months"]; i++) {
-            months.push(monthNames[i]);
+<script>
+    var res = document.getElementById('responsive').getContext('2d');
+    var dataForTat = @Html.Raw(ViewBag.DataForTat);
+
+    var dataset = [];
+
+    for (var i = 0; i < dataForTat.length; i++) {
+        var bg = bgiv;
+        var bc = bciv;
+        //var lastVal = dataForTat[i].length - 1;
+
+        if (dataForTat[i].Validation === 'Valid') 
+        {          
+            bg = bgv;
+            bc = bcv;
+        }
+        else if (dataForTat[i].Validation === 'Invalid' && dataForTat[i].Days[dataForTat[i].Days.length - 1] > 2) 
+        {
+            bg = 'orange';
+            bc = '#D43B1B';
         }
 
+        //console.log(dataForTat[i].Days[dataForTat[i].Days.length - 1]);
+        var data = {
+            label: dataForTat[i].Validation,
+            backgroundColor: bg,
+            borderColor: bc,
+            borderWidth: 1,
+            data: dataForTat[i].Days,
+        };
+
+        dataset.push(data);
+    }
+
+    var chartData = {
+        labels: months,
+        datasets: dataset
+    };
+
+    var maxDays = Math.max(...dataForTat.map(item => Math.max(...item.Days))) + 3;
+
+    var chart = new Chart(res, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    max: maxDays,
+                    beginAtZero: true,
+                    grid: {
+                        color: function (context) {
+                            if (context.tick.value === 3) {
+                                return 'maroon';
+                            }
+                            return 'rgba(0, 0, 0, 0.1)';
+                        }
+                    },
+                    ticks: {
+                        precision: 0,
+                    },
+                    title: {
+                        display: true,
+                        text: 'Days'
+                    }
+                },
+                x: {
+                    ticks: {},
+                    barPercentage: 1, // Set barPercentage to 1
+                    categoryPercentage: 1, // Set categoryPercentage to 1
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
         var ctx = document.getElementById('bar').getContext('2d');
         var chart = new Chart(ctx, {
-            type: 'bar',
             data: {
                 labels: months,
                 datasets: [
                     {
-                        label: 'Valid',
-                        data: @ViewBag.valid,
-                        backgroundColor: 'rgb(255, 0, 0)',
-                        borderColor: 'rgb(255, 0, 0)',
-                        borderWidth: 1
+                        type: 'line',
+                        label: 'Trend Invalid',
+                        data: @Html.Raw(ViewBag.LineInvalid),
+                        backgroundColor: bgiv,
+                        borderColor: bciv,
+                        borderWidth: 2,
+                        pointStyle: 'circle'
                     },
                     {
+                        type: 'line',
+                        label: 'Trend Valid',
+                        data: @Html.Raw(ViewBag.LineValid),
+                        backgroundColor: bgv,
+                        borderColor: bcv,
+                        borderWidth: 2,
+                        pointStyle: 'circle'
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Valid',
+                        data: @ViewBag.valid,
+                        backgroundColor: bgv,
+                        borderColor: bcv,
+                        borderWidth: 1,
+                        stack: 'stack1',
+                        pointStyle: 'rect'
+                    },
+                    {
+                        type: 'bar',
                         label: 'Invalid',
                         data: @ViewBag.invalid,
-                        backgroundColor: 'rgb(0, 255, 0)',
-                        borderColor: 'rgb(0, 255, 0)',
-                        borderWidth: 1
-                    }
-                ]
+                        backgroundColor: bgiv,
+                        borderColor: bciv,
+                        borderWidth: 1,
+                        stack: 'stack1',
+                        pointStyle: 'rect'
+                    },
+                ],
             },
             options: {
-                responsive: false,
+                responsive: true,
                 scales: {
-                    x: {
-                        beginAtZero: true,
-                        stacked: true,
-                        ticks: {
-                            color: 'white'
-                        },
-                        grid: {
-                            color: 'white'
-                        }
-                    },
                     y: {
+                        max: Math.max(...@ViewBag.LineValid, ...@ViewBag.LineInvalid) + 2,
                         beginAtZero: true,
-                        stacked: true,
-                        ticks: {
-                            color: 'white'
-                        },
                         grid: {
-                            color: 'white'
+                        },
+                        ticks: {
+                            precision: 0
+                        },
+                        title: {
+                            display: true,
+                            text: 'QI Count'
+                        },
+                    },
+                    x: {
+
+                        ticks: {
+
                         }
                     }
                 },
                 plugins: {
                     legend: {
                         labels: {
-                            color: 'white'
+                            usePointStyle: true,
                         }
                     }
                 }
             }
+           
         });
     });
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var data = [@ViewBag.invalidforpie, @ViewBag.validforpie];
+        var invalid = 'Invalid = ' + @ViewBag.invalidforpie;
+        var valid = 'Valid = ' + @ViewBag.validforpie;
+        var labels = [invalid, valid];
 
-        var data = [@ViewBag.open, @ViewBag.closed, @ViewBag.going];
-        var labels = ['Open', 'Closed', 'On-Going'];
-
-        var pp = document.getElementById('pie').getContext('2d');
+        var pp = document.getElementById('pieChartValid').getContext('2d');
         var piechart = new Chart(pp, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: labels,
                 datasets: [
                     {
                         data: data,
                         backgroundColor: [
-                            'rgb(255, 0, 0)',
-                            'rgb(0, 255, 0)',
-                            'rgb(255, 191, 0)'
+                            bgiv,
+                            bgv,
                         ],
                         borderColor: [
-                            'rgb(255, 0, 0)',
-                            'rgb(0, 255, 0)',
-                            'rgb(255, 191, 0)'
+                            bciv,
+                            bcv
                         ],
-                        borderWidth: 5
+                        borderWidth: 2,
+                        pointStyle: 'circle'
                     }
                 ]
             },
             options: {
-                responsive: false,
+                responsive: true,
                 plugins: {
                     legend: {
                         labels: {
-                            color: 'white'
+                            usePointStyle: true,
                         }
                     }
-                }
+                },
+                onClick: function (event, elements) {
+                    if (elements.length > 0) {
+                        var dataIndex = elements[0].index;
+                        var selectedItem = labels[dataIndex];
+
+                        switch (selectedItem) {
+                            case invalid:
+
+                                window.location.href = '@Url.Action("GetInvalids", "Dashboard")';
+                                break;
+                            case valid:
+
+                                window.location.href = '@Url.Action("GetValids", "Dashboard")';
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                },
+
             }
         });
     });
-</script>                        
+</script>

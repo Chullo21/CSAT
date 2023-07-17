@@ -7,7 +7,7 @@ namespace PIMES_DMS.Models
         [Key]
         public int ERID { get; set; }
 
-        [Required]
+        public string IssueNo { get; set; }
         public string? ControlNo { get; set; }
 
         public string? WHSESOH { get; set; }

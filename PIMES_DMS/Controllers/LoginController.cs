@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PIMES_DMS.Data;
-using PIMES_DMS.Models;
+
 
 namespace PIMES_DMS.Controllers
 {
@@ -17,17 +17,25 @@ namespace PIMES_DMS.Controllers
         public IActionResult Login()
         {
             TempData.Clear();
+            TempData["loginTimes"] = 0;
 
             return View("Login_View");
         }
 
-        [HttpGet]
+        [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult LoginAcc(string user, string pass)
         {
-            if (user == null || pass == null)
+            int loginTimes = (int)TempData["loginTimes"];
+
+            if (user == null || pass == null || (user == null && pass == null))
             {
-                return RedirectToAction("Login");
+                loginTimes += 1;
+                TempData["loginTimes"] = loginTimes;
+
+                TempData["message"] = "Please input your loging credentials.";
+
+                return View("Login_View");
             }
 
             var log = _Db.AccountsDb.FirstOrDefault(j => j.UserName == user && j.Password == pass);
@@ -37,16 +45,18 @@ namespace PIMES_DMS.Controllers
                 TempData["EN"] = log.AccName as string;
                 TempData["Role"] = log.Role as string;
 
-                if (log.Role == "ADMIN" || log.Role == "EMPLOYEE")
-                {
-                    return RedirectToAction("AdminHome", "Home");
-                }
-
-                return RedirectToAction("Home", "Home");
+                return RedirectToAction("DashView", "Dashboard");
             }
-            
-            return RedirectToAction("Login");
+            else
+            {
+                loginTimes += 1;
+                TempData["loginTimes"] = loginTimes;
+                TempData["message"] = "Invalid loging credentials.";
+
+                return View("Login_View");
+            }
         }
+
 
         public IActionResult Logout()
         {

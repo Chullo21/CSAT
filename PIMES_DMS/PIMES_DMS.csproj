@@ -87,13 +87,75 @@
     <Compile Remove="Migrations\20230517013959_update.Designer.cs" />
     <Compile Remove="Migrations\20230517061937_update.cs" />
     <Compile Remove="Migrations\20230517061937_update.Designer.cs" />
+    <Compile Remove="Migrations\20230519012226_update.cs" />
+    <Compile Remove="Migrations\20230519012226_update.Designer.cs" />
+    <Compile Remove="Migrations\20230525005355_update.cs" />
+    <Compile Remove="Migrations\20230525005355_update.Designer.cs" />
+    <Compile Remove="Migrations\20230526013830_update.cs" />
+    <Compile Remove="Migrations\20230526013830_update.Designer.cs" />
+    <Compile Remove="Migrations\20230526020805_update.cs" />
+    <Compile Remove="Migrations\20230526020805_update.Designer.cs" />
+    <Compile Remove="Migrations\20230529045456_update.cs" />
+    <Compile Remove="Migrations\20230529045456_update.Designer.cs" />
+    <Compile Remove="Migrations\20230529052105_update.cs" />
+    <Compile Remove="Migrations\20230529052105_update.Designer.cs" />
+    <Compile Remove="Migrations\20230601001809_updateSerialNumbertoString.cs" />
+    <Compile Remove="Migrations\20230601001809_updateSerialNumbertoString.Designer.cs" />
+    <Compile Remove="Migrations\20230601022736_compnametoBU.cs" />
+    <Compile Remove="Migrations\20230601022736_compnametoBU.Designer.cs" />
+    <Compile Remove="Migrations\20230602070619_AddSMTPtoDB.cs" />
+    <Compile Remove="Migrations\20230602070619_AddSMTPtoDB.Designer.cs" />
+    <Compile Remove="Migrations\20230602075009_Fixsmtpemails.cs" />
+    <Compile Remove="Migrations\20230602075009_Fixsmtpemails.Designer.cs" />
+    <Compile Remove="Migrations\20230606003901_addDatecreatedinaction.cs" />
+    <Compile Remove="Migrations\20230606003901_addDatecreatedinaction.Designer.cs" />
+    <Compile Remove="Migrations\20230606014746_addValresinIssue.cs" />
+    <Compile Remove="Migrations\20230606014746_addValresinIssue.Designer.cs" />
+    <Compile Remove="Migrations\20230608043808_addForceClose.cs" />
+    <Compile Remove="Migrations\20230608043808_addForceClose.Designer.cs" />
+    <Compile Remove="Migrations\20230613005912_AddART8D.cs" />
+    <Compile Remove="Migrations\20230613005912_AddART8D.Designer.cs" />
+    <Compile Remove="Migrations\20230614004915_addValNo.cs" />
+    <Compile Remove="Migrations\20230614004915_addValNo.Designer.cs" />
+    <Compile Remove="Migrations\20230616023902_addTESDb.cs" />
+    <Compile Remove="Migrations\20230616023902_addTESDb.Designer.cs" />
+    <Compile Remove="Migrations\20230616025915_Addcontrolnototes.cs" />
+    <Compile Remove="Migrations\20230616025915_Addcontrolnototes.Designer.cs" />
+    <Compile Remove="Migrations\20230616053411_changetesrc.cs" />
+    <Compile Remove="Migrations\20230616053411_changetesrc.Designer.cs" />
+    <Compile Remove="Migrations\20230616075537_changeactionmodeltsc.cs" />
+    <Compile Remove="Migrations\20230616075537_changeactionmodeltsc.Designer.cs" />
+    <Compile Remove="Migrations\20230616082119_addstatustoaction.cs" />
+    <Compile Remove="Migrations\20230616082119_addstatustoaction.Designer.cs" />
+    <Compile Remove="Migrations\20230616082349_addactionmodel.cs" />
+    <Compile Remove="Migrations\20230616082349_addactionmodel.Designer.cs" />
+    <Compile Remove="Models\ECActionModel.cs" />
+    <Compile Remove="Models\ECVersModel.cs" />
+    <Compile Remove="Models\SCActionModel.cs" />
+    <Compile Remove="Models\SCVersModel.cs" />
+    <Compile Remove="Models\TCActionModel.cs" />
+    <Compile Remove="Models\TCVersModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Validation\ShowClientandQARep.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Chart.js" Version="3.7.1" />
+    <PackageReference Include="EPPlus" Version="6.2.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

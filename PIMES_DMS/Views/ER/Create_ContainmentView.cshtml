@@ -5,6 +5,7 @@
 }
 
 <form asp-controller="ER" asp-action="Create_Containment" method="post">
+    <input value="@Model.IssueNo" name="issueno" hidden/>
 <div class="d-flex justify-content-between">
     <div>
         <h1>Containment Report</h1>
@@ -104,10 +105,10 @@
                     <option value="true">Yes</option>
                 </select>
             </div>
-            <div class="mt-1 form-group">
+            @*<div class="mt-1 form-group">
                 <label class="form-label">RMA #</label>
                 <input class="form-control w-50" name="rma"/>
-            </div>
+            </div>*@
         </div>
         <div class="w-50 d-flex justify-content-evenly">
             <div class="w-25 align-self-end">
@@ -120,4 +121,15 @@
     </div>
 </form>
 
-              
+<div id="loading-icon" class="loading-icon"></div>
+
+<script>
+
+    $('#loading-icon').removeClass('loading');
+    $('#loading-icon').hide();
+
+    function showLoadingIcon() {
+        $('#loading-icon').addClass('loading');
+        $('#loading-icon').show();
+    }
+</script>

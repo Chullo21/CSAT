@@ -1,66 +1,68 @@
 ﻿@model PIMES_DMS.Models.IssueModel
 
 @{
-    ViewData["Title"] = "Submit Issue";
+    ViewData["Title"] = "Submit Claim";
 }
 
 <div class="d-flex justify-content-center">
     <div>
-        <h1>Submit Issue</h1>
+        <h1>Submit Claim</h1>
     </div>
 </div>
 <hr />
 
-<div class="w-100">
+<div id="loading-icon" class="loading-icon"></div>
+
+<div class="col-12 col-md-12 row">
      <form asp-controller="Issue" asp-action="SubmitIssue" enctype="multipart/form-data" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="w-100 d-flex">
-            <div class="w-100 mx-3">
+        <div class="col-12 col-md-12 row justify-content-center">
+            <div class="col-12 col-md-4">
                 <div class="form-group">
                     <label asp-for="IssueNo" class="control-label"></label>
-                    <input asp-for="IssueNo" class="form-control" name="issueno" required/>
+                    <input asp-for="IssueNo" class="form-control" name="issueno" placeholder="Issue Number" required/>
                     <span asp-validation-for="IssueNo" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="DateFound" class="control-label"></label>
-                    <input asp-for="DateFound" class="form-control" name="datefound" type="date" required/>
+                    <input asp-for="DateFound" class="form-control" name="datefound" type="date"  required />
                     <span asp-validation-for="DateFound" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Product" class="control-label"></label>
-                    <input asp-for="Product" class="form-control" name="product" required />
+                    <input asp-for="Product" class="form-control" name="product" placeholder="Product" required />
                     <span asp-validation-for="Product" class="text-danger"></span>
                 </div>
             </div>
-            <div class="w-100 mx-3">
+            <div class="col-12 col-md-4">
                 <div class="form-group">
                     <label asp-for="SerialNo" class="control-label"></label>
-                    <input asp-for="SerialNo" class="form-control" name="serialno" type="number" required />
+                    <input asp-for="SerialNo" class="form-control" name="serialno" type="text" placeholder="Serial Number" required />
                     <span asp-validation-for="SerialNo" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="AffectedPN" class="control-label"></label>
-                    <input asp-for="AffectedPN" class="form-control" name="affectedpn" required />
+                    <input asp-for="AffectedPN" class="form-control" name="affectedpn" placeholder="Affected Part Number" required />
                     <span asp-validation-for="AffectedPN" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Qty" class="control-label">Quantity</label>
-                    <input asp-for="Qty" class="form-control" name="qty" type="number" required />
+                    <input asp-for="Qty" class="form-control" name="qty" type="number" value="0" required />
                     <span asp-validation-for="Qty" class="text-danger"></span>
                 </div>
                
             </div>
-            <div class="w-100 mx-3">
-                <div class="form-group">
-                    <label asp-for="Desc" class="control-label"></label>
-                    <input asp-for="Desc" class="form-control" name="description" required />
-                    <span asp-validation-for="Desc" class="text-danger"></span>
-                </div>
+            <div class="col-12 col-md-4">
                 <div class="form-group">
                     <label asp-for="ProbDesc" class="control-label"></label>
-                    <input asp-for="ProbDesc" class="form-control" name="problemdescription" required />
+                    <input asp-for="ProbDesc" class="form-control" name="problemdescription" placeholder="Problem Description" required />
                     <span asp-validation-for="ProbDesc" class="text-danger"></span>
                 </div>
+                <div class="form-group">
+                    <label asp-for="Desc" class="control-label"></label>
+                    <input asp-for="Desc" class="form-control" name="description" placeholder="Description" required />
+                    <span asp-validation-for="Desc" class="text-danger"></span>
+                </div>                
                 <div class="form-group">
                     <label asp-for="ClientRep" class="control-label">Attachment(PDF only):</label>
                     <input asp-for="ClientRep" class="form-control" name="cp" type="file" accept=".pdf"/>
@@ -68,16 +70,25 @@
                 </div>               
             </div>
         </div>
-        <div class="w-100">
+        <div class="col-12 col-md-12">
             <div class="mt-5 d-flex justify-content-between w-100">              
                 <div class="w-50">
-                    <a class="btn btn-danger w-50" asp-controller="Home" asp-action="Home">Discard</a>
+                    <a class="btn btn-danger w-50" asp-controller="Home" asp-action="AdminHome">Discard</a>
                 </div>
                 <div class="w-50 d-flex justify-content-end">
-                    <input type="submit" value="Submit" class="btn btn-primary w-50"/>
+                    <input type="submit" value="Submit" onclick="showLoadingIcon()" class="btn btn-primary w-50" />
                 </div>
             </div>
         </div>
     </form>
 </div>
 
+<script>
+    $('#loading-icon').removeClass('loading');
+    $('#loading-icon').hide();
+
+    function showLoadingIcon() {
+        $('#loading-icon').addClass('loading');
+        $('#loading-icon').show();
+    }
+</script>

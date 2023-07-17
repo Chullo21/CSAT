@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<IssueModel>
+@using PIMES_DMS.Controllers;
 @{
     ViewData["Title"] = "RC, CAPA & VERIFICATION";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,104 +7,103 @@
     string? role = TempData["Role"] as string;
     TempData.Keep();
 
-    IEnumerable<Vermodel>? vers = ViewData["Stat"] as IEnumerable<Vermodel>;
+    var mod = Model.ToList();
+
+    var oac = ViewData["openandclosed"] as List<OpenAndClosed>;
+    var fvd = ViewData["ForVers"] as List<ForVerificationData>;
 }
 
-<form asp-controller="RCV" asp-action="Search" method="get">
-<div class="w-100 d-flex justify-content-between">
-    <div class="w-50">
-        <h1>RC, CAPA & VERIFICATION</h1>
-    </div>
-   <div class="w-50 d-flex justify-content-end">
-        <div>
-             <input class="form-control w-100" placeholder="Search" name="ss" />
-             <input type="submit" hidden />
-        </div>
-   </div>
-</div>
-</form>
+@section scripts {
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                searching: true,
+                lengthChange: false,
+                pageLength: 7,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+}
 
-<hr />
-<table class="table text-center">
+<h1 class="text-center">RC, CAPA & VERIFICATION</h1>
+
+<table class="table text-center" id="myTable">
     <thead>
         <tr>
-            <th>
+            <th class="desktop-only">
                 @Html.DisplayNameFor(model => model.IssueCreator)
             </th>
-            <th>
+            <th class="desktop-only">
                 @Html.DisplayNameFor(model => model.IssueNo)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ControlNumber)
             </th>
-            <th>
-                On-Going
+            <th style="width:10%" class="desktop-only">
+                For Verification
             </th>
-            <th>
+            <th style="width:10%">
                 Open
             </th>
-            <th>
+            <th style="width:10%">
                 Closed
             </th>
-            <th>
+            <th style="width:20%">
                 Action
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in mod)
         {
-            int going = vers!.Count(j => j.ControlNo == item.ControlNumber && j.Status == "g");
-            int open = vers!.Count(j => j.ControlNo == item.ControlNumber && j.Status == "o");
-            int closed = vers!.Count(j => j.ControlNo == item.ControlNumber && j.Status == "c");
+            int fv;
+            int open = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Open;
+            int close = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Closed;
+            if (fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber) != null) fv = fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber).ForVer; else fv = 0;
 
             <tr>
-                <td>
+                <td class="desktop-only">
                     @Html.DisplayFor(modelItem => item.IssueCreator)
                 </td>
-                <td>
+                <td class="desktop-only">
                     @Html.DisplayFor(modelItem => item.IssueNo)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ControlNumber)
                 </td>
-                <td>
+                <td class="desktop-only">
                     @{
-                        Write(going);
+                        Write(fv.ToString());
                     }
                 </td>                    
                 <td>
                     @{
-                        Write(open);
+                        Write(open.ToString());
                     }
                 </td>
                 <td>
                     @{
-                        Write(closed);
+                        Write(close.ToString());
                     }
                 </td>
                 <td>
                     @{
-                        if (item.HasAction)
+                        if (item.HasTES)
                         {
-                            <div class="d-flex">
-                                @if (role == "ADMIN")
-                                {
-                                    <div>
-                                        <a class="btn btn-secondary w-100" asp-controller="RCV" asp-action="RCVView" asp-route-id="@item.IssueID">Add Action</a>
-                                    </div>
-                                }
-                                <div style="margin-left:10px">
-                                    <a class="btn btn-success w-100" asp-controller="RCV" asp-action="RCVDet" asp-route-id="@item.ControlNumber">View</a>
-                                </div>                               
+                            <div>
+                                <a class="btn btn-success w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">View</a>
                             </div>
                         }
                         else
                         {
-                            if (role == "ADMIN")
+                            if (role == "Admin")
                             {
                                 <div class="d-flex">
-                                    <a class="btn btn-primary" asp-controller="RCV" asp-action="RCVView" asp-route-id="@item.IssueID">Create Summary</a>
+                                    <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="CreateTESView" asp-route-id="@item.IssueID">Create 3x5Whys</a>
                                 </div>
                             }
                         }
@@ -113,12 +113,4 @@
         }
     </tbody>
 </table>
-
-@functions {
-    public int GetStatus(string ID, string stat)
-    {
-
-        return 0;
-    }
-}
 

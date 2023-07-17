@@ -1,58 +1,71 @@
-﻿
-@{
+﻿@{
     Layout = null;
+    int times = (int)TempData["loginTimes"];
+    TempData.Keep();
+
+    
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
+    <link rel="icon" type="image/png" href="@Url.Content("~/favicon.ico")">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - ATS QA</title>
+    <title>Login - ATS QA</title>    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PIMES_DMS.styles.css" asp-append-version="true" />
-    <title>login - ATS QA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="loginbg">
-    <header>
-        <div class="d-flex justify-content-between" style="border:1px solid; height:55px; background-color:#2706F0">
+<body class="loginbg" style="max-height:600px">    
+    <header class="header-nav">
+        <div class="d-flex justify-content-between w-100" style="border-bottom:2px solid; height:55px; background-color:#2706F0">
             <div class="align-self-center">
                 <img style="height:30px; margin-inline:25px" src="~/photos/pimeslogo.png" />
             </div>
             <div class="align-self-center">
-                <a class="text-white billsfont text-decoration-none" href="https://pimes.com.ph/">P. IMES CORP. - AUTOMATION TECHNOLOGY SOLUTIONS - QUALITY ASSURANCE</a>
+                <a class="text-white billsfont text-decoration-none" href="https://pimes.com.ph/">AUTOMATION TECHNOLOGY SOLUTIONS - QUALITY ASSURANCE</a>
             </div>
             <div class="align-self-center">
                 <img style="height:30px; margin-inline:25px" src="~/photos/ats wbg.png" />
             </div>
         </div>
     </header>
-    <div>
-        <div class="d-flex justify-content-center" style="margin-top:50px">
-            <div>
-                <h1 class="loginfont">P. IMES - ATS QA</h1>
-            </div>
-        </div>
 
-        <div class="d-flex justify-content-center mt-5">
-            <div style="border: 5px solid; height:250px; width:350px; border-radius:10%; background-color:white" class="d-flex justify-content-center">
-                <div>
-                    <h3 class="mt-3">Welcome Back!</h3>
-                    <form class="d-flex justify-content-center flex-column" asp-controller="Login" asp-action="LoginAcc" method="get">
-                        <input class="form-control mt-3 text-center" placeholder="Username" name="user" />
-                        <input class="form-control mt-3 text-center" placeholder="Password" type="password" name="pass" />
-                        <button class="btn btn-primary mt-3">Login</button>
-                    </form>
+    <div class="d-flex justify-content-center" style="margin-top:250px">
+        <div class="card bg-primary border-3 text-white border-primary col-10 col-sm-8 col-md-6 col-lg-3" style="background-color:dimgray">
+            <form asp-controller="Login" asp-action="LoginAcc" method="post">
+                <h3 class="text-center card-header">Welcome to CSat Portal</h3>
+                @{
+                    if (times > 0)
+                    {
+                        <div class="alert alert-danger text-center" role="alert">
+                            @TempData["message"]
+                        </div>
+                    }
+                }
+                <div class="input-group mt-3 mb-3 mx-auto w-75">
+                    <span class="input-group-text" id="basic-addon1">&#64;</span>
+                    <input class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="user">
                 </div>
-            </div>
+                <div class="input-group mx-auto w-75">
+                    <span class="input-group-text" id="basic-addon1"><i style="font-size:24px" class="fa">&#xf023;</i></span>
+                    <input class="form-control" placeholder="Password" type="password" name="pass" />
+                </div>
+                <div class="text-center mt-3">
+                    <input type="submit" class ="btn btn-info w-75" value="Login"/>
+                </div>
+                <div class="mt-3"></div>
+            </form>
         </div>
     </div>
+
     <footer class="loginfooter">
         <p class="mx-5 text-white">
             &copy; 2023 - P. IMES - ATS QA
         </p>
     </footer>
 </body>
+
 </html>

@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-controller="ER" asp-action="Create_Containment" method="get">
     <div class="d-flex justify-content-between">
         <div>
             <h1>Containment Report</h1>
@@ -12,7 +11,7 @@
         <div class="align-self-center">
             <div>
                 <label>Control No.</label>
-                <input value="@Model.ControlNo" name="controlno" readonly />
+                <input value="@Model.ControlNo" readonly/>
             </div>
         </div>
     </div>
@@ -20,7 +19,7 @@
     <hr />
 
     <div>
-        <table class="table table-striped">
+        <table class="table table-responsive-mobile">
             <thead>
                 <tr>
                     <th style="width:15%">PHASE</th>
@@ -101,5 +100,4 @@
             </div>
         </div>
     </div>
-</form>
 

@@ -1,0 +1,552 @@
+﻿@model TESModel
+@{
+    ViewData["Title"] = "CAPA";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var tcdb = ViewData["actions"] as List<ActionModel>;
+    List<TargetDateModel> tds = ViewBag.tds as List<TargetDateModel>;
+    List<string> names = ViewBag.pic;
+
+    var remarks = ViewBag.remarks as List<Vermodel>;
+
+    string EN = TempData["EN"] as string;
+    string Role = TempData["Role"] as string;
+    TempData.Keep();
+}
+
+@functions
+{
+    public static TimeSpan GetBusinessDays(DateTime startDate, DateTime endDate)
+    {
+        int totalDays = (int)(endDate - startDate).TotalDays;
+        int businessDays = 0;
+
+        for (int i = 0; i <= totalDays; i++)
+        {
+            DateTime currentDate = startDate.AddDays(i);
+            if (currentDate.DayOfWeek != DayOfWeek.Saturday && currentDate.DayOfWeek != DayOfWeek.Sunday)
+            {
+                businessDays++;
+            }
+        }
+
+        return TimeSpan.FromDays(businessDays);
+    }
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container-fluid flex-column">
+    <div class="col-12 col-md-4 w-100 flex-column">
+        <div>
+            <div class="w-100 d-flex justify-content-end">
+                <button class="btn btn-primary" onclick="openModal()">Add Action</button>
+            </div>
+        </div>
+        <div class="d-flex flex-column flex-md-row">
+            <div class="col-12 col-md-3">
+                <table class="table table-bordered text-center border-dark h-100">
+                    <thead>
+                        <tr>
+                            <th>
+                                Technical Cause:
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea class="w-100 h-100 bg-transparent" readonly>@Model.TRC</textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-md-9 mx-md-2">
+                <table class="table table-bordered text-center border-dark h-100 table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="w-50">
+                                Action
+                            </th>
+                            <th class="desktop-only">
+                                PIC
+                            </th>
+                            <th class="desktop-only">
+                                TD
+                            </th>
+                            <th>
+                                STATUS
+                            </th>
+                            <th class="w-25">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (tcdb.Where(j => j.Type == "tc") != null)
+                            {
+                                foreach (var tc in tcdb.Where(j => j.Type == "tc").OrderByDescending(j => j.DateCreated))
+                                {
+                                    string style = "background-color: green";
+                                    if (tc.ActionStatus == "Open")
+                                    {
+                                        style = "background-color: red";
+                                    }
+                                    <tr>
+                                        <td>
+                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%">@tc.Action</textarea>
+                                        </td>
+                                        <td class="desktop-only">
+                                            @tc.PIC
+                                        </td>
+                                        <td class="desktop-only">
+                                            @{
+                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList();
+                                                int index = 0;
+
+                                                foreach (var td in tdss)
+                                                {
+                                                    string print = td.TD.ToShortDateString() + "\r\n";
+                                                    if (index != tdss.Count() - 1)
+                                                    {
+                                                        <s>@print</s>
+                                                    }
+                                                    else
+                                                    {
+                                                        Write(print);
+                                                    }
+
+                                                    index++;
+                                                }
+                                            }
+                                        </td>
+                                        <td style="@style" class="text-white">
+                                            @tc.ActionStatus
+                                            @if(tc.ActionStatus == "Closed")
+                                            {
+                                                Write(tc.TargetDate.ToShortDateString());
+                                            }
+                                        </td>
+                                        <td class="">
+                                            <div class="d-flex flex-column flex-lg-row">
+                                                @{
+                                                    string settext = "Action";
+
+                                                    if (tc.HasVer && tc.ActionStatus == "Closed" && tc.PIC != EN)
+                                                    {
+                                                        settext = "Verify";
+                                                    }
+
+                                                    if (tc.HasVer)
+                                                    {
+                                                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@tc.ActionID">View</a>
+                                                    }
+                                                    if (tc.PIC == EN || Role == "Admin")
+                                                    {
+                                                        if (tc.PIC == EN)
+                                                        {
+                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
+                                                        }
+                                                        else if (Role == "Admin" && tc.ActionStatus == "Closed")
+                                                        {
+                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
+                                                        }
+                                                    }
+                                                    if (tc.HasVer)
+                                                    {
+                                                        string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
+                                                        <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
+                                                    }
+                                                }
+                                            </div>
+
+                                            @if (tc.ActionStatus == "Closed")
+                                            {
+                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.First().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+           </div>          
+        </div>
+    </div>
+    <div class="col-12 col-md-4 w-100 flex-column mt-2">
+        <div class="d-flex flex-column flex-md-row">
+            <div class="col-12 col-md-3">
+                <table class="table table-bordered text-center border-dark h-100">
+                    <thead>
+                        <tr>
+                            <th>
+                                Escape Cause:
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea class="w-100 h-100 bg-transparent" readonly>@Model.ERC</textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-md-9 mx-md-2">
+                <table class="table table-bordered text-center border-dark h-100 table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="w-50">
+                                Action
+                            </th>
+                            <th class="desktop-only">
+                                PIC
+                            </th>
+                            <th class="desktop-only">
+                                TD
+                            </th>
+                            <th>
+                                STATUS
+                            </th>
+                            <th class="w-25">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (tcdb.Where(j => j.Type == "ec") != null)
+                            {
+                                foreach (var tc in tcdb.Where(j => j.Type == "ec").OrderByDescending(j => j.DateCreated))
+                                {
+                                    string style = "background-color: green";
+                                    if (tc.ActionStatus == "Open")
+                                    {
+                                        style = "background-color: red";
+                                    }
+
+                                    <tr>
+                                        <td>
+                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%">@tc.Action</textarea>
+                                        </td>
+                                        <td class="desktop-only">
+                                            @tc.PIC
+                                        </td>
+                                        <td class="desktop-only">
+                                            @{
+                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList();
+                                                int index = 0;
+
+                                                foreach (var td in tdss)
+                                                {
+                                                    string print = td.TD.ToShortDateString() + "\r\n";
+                                                    if (index != tdss.Count() - 1)
+                                                    {
+                                                        <s>@print</s>
+                                                    }
+                                                    else
+                                                    {
+                                                        Write(print);
+                                                    }
+
+                                                    index++;
+                                                }
+                                            }
+                                        </td>
+                                        <td style="@style" class="text-white">
+                                            @tc.ActionStatus
+                                            @if (tc.ActionStatus == "Closed")
+                                            {
+                                                Write(tc.TargetDate.ToShortDateString());
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column flex-lg-row">
+                                                @{
+                                                    string settext = "Action";
+
+                                                    if (tc.HasVer && tc.ActionStatus == "Closed" && tc.PIC != EN)
+                                                    {
+                                                        settext = "Verify";
+                                                    }
+                                                    if (tc.HasVer)
+                                                    {
+                                                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@tc.ActionID">View</a>
+                                                    }
+                                                    if (tc.PIC == EN || Role == "Admin")
+                                                    {
+                                                        if (tc.PIC == EN)
+                                                        {
+                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
+                                                        }
+                                                        else if (Role == "Admin" && tc.ActionStatus == "Closed")
+                                                        {
+                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
+                                                        }
+                                                    }
+                                                    if (tc.HasVer)
+                                                    {
+                                                        string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
+                                                        <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
+                                                    }
+                                                }
+                                            </div>
+
+                                            @if (tc.ActionStatus == "Closed")
+                                            {
+                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.First().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4 w-100 flex-column mt-2">
+        <div class="d-flex flex-column flex-md-row">
+            <div class="col-12 col-md-3">
+                <table class="table table-bordered text-center border-dark h-100">
+                    <thead>
+                        <tr>
+                            <th>
+                                Systematic Cause:
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea class="w-100 h-100 bg-transparent" readonly>@Model.SRC</textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-md-9 mx-md-2">
+                <table class="table table-bordered text-center border-dark h-100 table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="w-50">
+                                Action
+                            </th>
+                            <th class="desktop-only">
+                                PIC 
+                            </th>
+                            <th class="desktop-only">
+                                TD
+                            </th>
+                            <th>
+                                STATUS
+                            </th>
+                            <th class="w-25">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (tcdb.Where(j => j.Type == "sc") != null)
+                            {
+                                foreach (var tc in tcdb.Where(j => j.Type == "sc").OrderByDescending(j => j.DateCreated))
+                                {
+                                    string style = "background-color: green";
+                                    if (tc.ActionStatus == "Open")
+                                    {
+                                        style = "background-color: red";
+                                    }
+
+                                    <tr>
+                                        <td>
+                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%">@tc.Action</textarea>
+                                        </td>
+                                        <td class="desktop-only">
+                                            @tc.PIC
+                                        </td>
+                                        <td class="desktop-only">
+                                            @{
+                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList();
+                                                int index = 0;
+
+                                                foreach (var td in tdss)
+                                                {
+                                                    string print = td.TD.ToShortDateString() + "\r\n";
+                                                    if (index != tdss.Count() - 1)
+                                                    {
+                                                        <s>@print</s>
+                                                    }
+                                                    else
+                                                    {
+                                                        Write(print);
+                                                    }
+
+                                                    index++;
+                                                }
+                                            }
+                                        </td>
+                                        <td style="@style" class="text-white">
+                                            @tc.ActionStatus
+                                            @if (tc.ActionStatus == "Closed")
+                                            {
+                                                Write(tc.TargetDate.ToShortDateString());
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column flex-lg-row">
+                                                @{
+                                                    string settext = "Action";
+
+                                                    if (tc.HasVer && tc.ActionStatus == "Closed" && tc.PIC != EN)
+                                                    {
+                                                        settext = "Verify";
+                                                    }
+                                                    if (tc.HasVer)
+                                                    {
+                                                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@tc.ActionID">View</a>
+                                                    }
+                                                    if (tc.PIC == EN || Role == "Admin")
+                                                    {
+                                                        if (tc.PIC == EN)
+                                                        {
+                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
+                                                        }
+                                                        else if (Role == "Admin" && tc.ActionStatus == "Closed")
+                                                        {
+                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
+                                                        }
+                                                    }
+                                                    if (tc.HasVer)
+                                                    {
+                                                        string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
+                                                        <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
+                                                    }
+                                                }
+                                            </div>
+
+                                            @if (tc.ActionStatus == "Closed")
+                                            {
+                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.First().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-controller="RCV" asp-action="SubmitActionItem" method="post">
+<div class="modal-content w-75 h-75 flex-column" id="modal" style="z-index:2100">
+    <div>
+            <button class="btn btn-danger modal-close" onclick="closeModal()"><i style="font-size:24px" class="fa">&#xf00d;</i></button>
+        <h4 class="modal-title text-center">Create Action ID</h4>
+    </div>
+    <div class="mt-2">        
+            <input value="@Model.ControlNo" name="ID" hidden/>
+            <div>
+                <label class="form-label">Action Item:</label>
+                <textarea class="w-100 h-100 border-dark form-control" name="action" required></textarea>
+            </div>
+            <div>
+                <label class="form-label">Person In Charge:</label>
+                <select class="form-select w-100 border-dark" name="pic">
+                    @foreach(string name in names)
+                    {
+                        <option value="@name">@name</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="form-label">Dependency:</label>
+                <input class="w-100 h-100 form-control border-dark" name="dep" required />
+            </div>
+            <div>
+                <label class="form-label">Target Date:</label>
+                <input class="w-100 h-100 form-control border-dark" type="date" name="td" required>
+            </div>
+            <div>
+                <label class="form-label">Pick Cause:</label>
+                <select class="form-select border-dark w-100" name="whichdb">
+                    <option value="tc">
+                        Technical Cause
+                    </option>
+                    <option value="ec">
+                        Escape Cause
+                    </option>
+                    <option value="sc">
+                        Systematic Cause
+                    </option>
+                </select>
+            </div>
+            <div class="mt-5">
+                <input class="btn btn-primary w-100" type="submit" />
+            </div>       
+    </div>
+</div>
+</form>
+
+<div class="modal-content w-50 h-50" style="z-index:2100" id="showremarks">
+    <button class="modal-close btn btn-danger" onclick="CloseRemarks()"><i style="font-size:24px" class="fa">&#xf00d;</i></button>
+    <h4 class="modal-title text-center">Remarks</h4>
+    <textarea id="remarkstextarea" style="max-width:100%; max-height:85%; min-height:85%; min-width:100%; background-color:transparent" readonly>
+
+    </textarea>
+</div>
+
+@*<div class="modal-content w-50 h-50" style="z-index:2100" id="verifyaction">
+    <button class="modal-close btn btn-danger" onclick="CloseVer()"><i style="font-size:24px" class="fa">&#xf00d;</i></button>
+    <h4 class="modal-title text-center">Verify Action</h4>
+    <div>
+        <label class="form-label">Status:</label>
+        <select>
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option>
+        </select>
+    </div>
+</div>*@
+
+<script>
+    function ShowRemarks(str)
+    {
+        var Remarks = document.getElementById('showremarks');
+        var Textarea = document.getElementById('remarkstextarea');
+
+        Textarea.innerText = str;
+        Remarks.style.display = 'block';
+    }
+
+    function CloseRemarks()
+    {
+        var Remarks = document.getElementById('showremarks');
+
+        Remarks.style.display = 'none';
+    }
+
+    function openModal()
+    {
+        var modal = document.getElementById('modal');
+
+        modal.style.display = 'block';
+    }
+
+    function closeModal()
+    {
+        var modal = document.getElementById('modal');
+
+        modal.style.display = 'none';
+    }
+</script>

@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewData["Title"] = "Valid Claims";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Valid Claims</h1>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-6 col-md-5">
+            <div class="card bg-transparent d-flex justify-content-center text-center">
+                <h4 class="card-header">CA Status</h4>
+                <canvas id="status" class="h-100 w-100"></canvas>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="bg-transparent">
+                <div class="d-flex justify-content-around text-center">
+                    <div class="card bg-transparent col-5">
+                        <h5 class="card-header" style="background-color:#EDB4B4">Open</h5>
+                        <input class="text-center bg-transparent" value="@ViewBag.open" style="height:50px" readonly />
+                    </div>
+                    <div class="card bg-transparent col-5">
+                        <h5 class="card-header" style="background-color:#BDDEA9">Closed</h5>
+                        <input class="text-center bg-transparent" value="@ViewBag.closed" style="height:50px" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-transparent d-flex justify-content-center mt-3">
+                <h4 class="card-header text-center">8D Response Time</h4>
+                <canvas id="tat"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var PieStatus = document.getElementById('status');
+    var data = [@ViewBag.open, @ViewBag.closed];
+    var labels = ['Open', 'Closed'];
+
+    var statChart = new Chart(PieStatus, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    data: data,
+                    backgroundColor: [
+                        '#EDB4B4',
+                        '#BDDEA9'
+                        
+                    ],
+                    borderColor: [
+                        'lightslategray'
+                    ],
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            onClick: function (event, elements) {
+                if (elements.length > 0) {
+                    var dataIndex = elements[0].index;
+                    var selectedItem = labels[dataIndex];
+
+                    // Perform actions based on the selected item
+                    switch (selectedItem) {
+                        case 'Open':
+                            // Action for Open
+                            window.location.href = '@Url.Action("GetOpen", "Dashboard")';
+                            break;
+                        case 'Closed':
+                            // Action for Closed
+                            window.location.href = '@Url.Action("GetClosed", "Dashboard")';
+                            break;
+                        // Add more cases for each label/item in the chart
+
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    var currentDate = new Date();
+    var currentMonth = currentDate.getMonth();
+
+    var months = [];
+    var monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    for (var i = 0; i <= @ViewBag.Month - 1; i++) {
+        months.push(monthNames[i]);
+    }
+</script>
+
+<script>
+    var Tat = document.getElementById('tat');
+
+    var tatChart = new Chart(Tat, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Average 8D Response Time',
+                data: @ViewBag.artData,
+                backgroundColor: 'green',
+                borderColor: 'green'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    suggestedMin: 8,
+                    beginAtZero: true,
+                    grid: {
+                        color: function (context) {
+                            if (context.tick.value === 7) {
+                                return 'red';
+                            }
+                            return 'rgba(0, 0, 0, 0.1)';
+                        }
+                    },
+                    ticks: {
+                        precision: 0
+                    }
+                },
+                x: {
+                    ticks: {}
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {}
+                }
+            }
+        }
+    });
+</script>

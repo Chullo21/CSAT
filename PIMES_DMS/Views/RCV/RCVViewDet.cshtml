@@ -1,196 +1,134 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "View Verification";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var issue = ViewData["Issue"] as IssueModel;
     var action = ViewData["Action"] as ActionModel;
+    var td = ViewBag.td as TargetDateModel;
     var ver = ViewData["Ver"] as IEnumerable<Vermodel>;
+
+    ver = ver!.OrderByDescending(j => j.StatusDate).ToList();
+
+    string? Role = TempData["Role"] as string;
+    TempData.Keep();
+
 }
 
-<style>
-    /* Modal overlay */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        display: none;
-    }
-
-    /* Modal content */
-    .modal-content {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #fff;
-        padding: 20px;
-        width: 75%;
-        max-width: 90%;
-        height: 90%;
-        border-radius: 4px;
-        display: none;
-    }
-
-    /* Close button */
-    .modal-close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-    }
-</style>
-
-<div class="w-100 d-flex justify-content-between">
-    <div>
-        <h1>View Verification > @action!.ControlNo</h1>
-    </div>
-</div>
+<h1 class="text-center">View Verification > @action!.ControlNo</h1>
 <hr />
 
-<table class="table table-bordered table-striped">
-    <thead class="bg-primary">
-        <tr>
-            <th>Control No.</th>
-            <th>Date Found</th>
-            <th>Issue #</th>
-            <th>Product</th>
-            <th>Affected Qty</th>
-            <th>Problem Desc.</th>
-        </tr>
-    </thead>
-    <tbody class="bg-white">
-        <tr>
-            <td>@issue!.ControlNumber</td>
-            <td>@issue!.DateFound</td>
-            <td>@issue!.IssueNo</td>
-            <td>@issue!.Product</td>
-            <td>@issue!.Qty</td>
-            <td>@issue!.ProbDesc</td>
-        </tr>
-    </tbody>
-</table>
-
-<div class="w-100">
-    <table class="table table-bordered">
-        <thead class="bg-primary">
-            <tr>
-
-                <th>Technical/Systemic Cause</th>
-                <th>Escape Cause</th>
-                <th>Action</th>
-                <th>PIC</th>
-                <th>Target Date</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white">
-            <tr>
-                <td style="width:20%">
-                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.TSC</textarea>
-                </td>
-                <td style="width:20%">
-                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.EC</textarea>
-                </td>
-                <td style="width:20%">
-                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.Action</textarea>
-                </td>
-                <td style="width:20%">
-                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.PIC</textarea>
-                </td>
-                <td style="width:20%">
-                    <div>
-                        <div>
-                            <input class="form-control w-100" value="@action!.TargetDate" readonly />
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="w-100">
-    <table class="table table-bordered">
-        <thead class="bg-primary">
-            <tr>
-                <th>Result</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Evidence</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white">
-            @{
-                foreach(var obj in ver!)
-                {
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-bordered text-center">
+                <thead>
                     <tr>
-                        <td style="width:20%"><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@obj.Result</textarea></td>
-                        <td style="width:20%"><input class="form-control" type="text" value="@obj.DateVer" readonly/></td>
-                        @{
-                            if (obj.Status == "o")
-                            {
-                                <td style="background-color:hotpink; width:20%">
-                                    <input class="form-control text-center" type="text" value="OPEN" readonly />
-                                    <button class="btn btn-primary mt-2 w-100" onclick="OpenUpdate('@obj.VerID', '@obj.Result', '@obj.DateVer')">Update Status</button>
-                                </td>
-
-                            }
-                            else if (obj.Status == "g")
-                            {
-                                <td style="background-color:darkorange; width:20%">
-                                    <input class="form-control text-center" type="text" value="ON-GOING" readonly />
-                                    <a class="btn btn-primary mt-2 w-100" onclick="OpenUpdate('@obj.VerID', '@obj.Result', '@obj.DateVer')">Update Status</a>
-                                </td>
-                            }
-                            else if (obj.Status == "c")
-                            {
-                                <td style="background-color:mediumseagreen; width:20%">
-                                    <input class="form-control text-center" type="text" value="CLOSED" readonly />
-                                    <a class="btn btn-primary mt-2 w-100" onclick="OpenUpdate('@obj.VerID', '@obj.Result', '@obj.DateVer')">Update Status</a>
-                                </td>
-                            }                           
-                           }
-                        <td class="w-25">
-                            <div class="w-100 h-100">
-                                <button class="btn btn-primary" onclick="getsrc('@Url.Action("ShowFile", "RCV", new {ID = obj.VerID})')">Open Evidence</button>
-                            </div>
+                        <th class="w-25">PIC</th>
+                        <th class ="w-50">Action</th>
+                        <th class="w-25">Target Date</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    <tr>
+                        <td>
+                            <input class="form-control text-center" value="@action!.PIC" readonly />
                         </td>
-                    </tr>                    
-                }
-              }
-        </tbody>
-    </table>
+                        <td>
+                            <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.Action</textarea>
+                        </td>
+                        <td>
+                            <input class="form-control w-100 text-center" value="@td?.TD.ToShortDateString()" readonly />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="w-25 desktop-only">Report Creator</th>
+                        <th class="w-25">Action Item Status</th>
+                        <th style="width:40%">Remarks</th>
+                        <th style="width:10%"> </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    @{
+                        foreach (var obj in ver!)
+                        {
+                            string? style;
+                            string? stat;
+
+                            if (obj.Status == "Open")
+                            {
+                                style = "background-color:hotpink; width:20%";
+                                stat = "OPEN";
+                            }
+                            else
+                            {
+                                style = "background-color:mediumseagreen; width:20%";
+                                stat = "CLOSED";
+                            }
+
+                            <tr>
+                                <td class="desktop-only"><input class="form-control text-center w-100 h-100" type="text" value="@obj.Verificator" readonly /></td>
+                                <td style="@style">
+                                    <input class="form-control text-center w-100 h-100" type="text" value="@stat" readonly />
+                                    @{
+                                        string print = "Closed Date";
+
+                                        if (obj.Status == "Open")
+                                        {
+                                            print = "Recommit Date";
+                                        }
+                                    }
+                                    <input class="form-control text-center mt-2" type="text" value="@print: @obj.StatusDate.ToShortDateString()" readonly />
+                                </td>
+                                <td><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@obj.Result</textarea></td>
+                                <td>
+                                    <button class="btn btn-secondary mt-2 w-100 mt-1" onclick="getsrc('@Url.Action("ShowFile", "RCV", new {ID = obj.VerID})')">File</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
 
 
     <div id="modalContent" class="modal-content">
         <h2 class="text-center">Evidence</h2>
         <iframe class="w-100" style="height:90%" id="pdfsrc" src=""></iframe>
-        <button class="modal-close btn btn-primary" onclick="closeModal()">Close</button>
+        <button class="modal-close btn btn-danger" onclick="closeModal()">Close</button>
     </div>
 
     <div id="statusModal" class="modal-content w-75 h-75 bg-gradient">
-        <form asp-controller="RCV" asp-action="UpdateVER" method="post">
+        <form asp-controller="RCV" asp-action="UpdateVER" method="post" enctype="multipart/form-data">
             <input id="ver" value="" name="ID" type="text" hidden/>
             <h2 class="text-center">Update/Edit Verification</h2>
             <div>
                 <label class="form-label">Date Verified:</label>
-                <input class="form-control w-25 border-dark" id="date" type="date" name="datever" required/>
+                <input class="form-control w-25 border-dark" id="date" type="date" name="datever" value="" required/>
             </div>
-            <div>
-                <label class="form-label">Status:</label>
-                    <select class="form-select w-25 border-dark" name="status" required>
-                    <option value="o">OPEN</option>
-                    <option value="g">ON-GOING</option>
-                    <option value="c">CLOSED</option>
-                </select>
+            <div class="d-flex w-100 justify-content-start">
+                <div class="w-25">
+                    <label class="form-label">Status:</label>
+                <select class="form-select w-100 border-dark" name="status" id="updatestatus" onchange="statchanged()" required>
+                        <option value="Open">OPEN</option>
+                        <option value="Closed">CLOSED</option>
+                    </select>
+                </div>
+                <div class="w-25 align-self-end" style="margin-left:10px">
+                    <input class="form-control w-100 border-dark" type="date" id="closeddateinupdate" name="statusDate"/>
+                </div>
             </div>
             <div>
                 <label class="form-label">Evidence:</label>
-                <input class="form-control border-dark w-25" type="file" name="file"/>
+                <input class="form-control border-dark w-25" type="file" name="file" accept=".pdf"/>
             </div>
             <div>
                 <label class="form-label">Result:</label>
@@ -200,13 +138,17 @@
                 <input class="btn btn-success" type="submit"/>   
             </div>
         </form>
-    <button class="modal-close btn btn-primary" onclick="CloseUpdate()">Close</button>
+    <button class="modal-close btn btn-danger" onclick="CloseUpdate()">Close</button>
     </div>
 
 <script>
-
+    var stat = document.getElementById('updatestatus');
     var eviModal = document.getElementById('modalContent');
     var modal = document.getElementById('statusModal');
+    var closedStatinUpdate = document.getElementById('closeddateinupdate');
+
+    closedStatinUpdate.style.display = "none";
+    closedStatinUpdate.required = false;
 
     function getsrc(pdfurl)
     {       
@@ -232,8 +174,32 @@
         modal.style.display = "block";
     }
 
-    function CloseUpdate() {
+    function CloseUpdate() 
+    {
         modal.style.display = "none";
     }
-  
+
+    function showclosedDate()
+    {
+        closedStatinUpdate.style.display = "flex";
+        closedStatinUpdate.required = true;
+    }
+
+    function hideclosedDate()
+    {
+        closedStatinUpdate.style.display = "none";
+        closedStatinUpdate.required = false;
+    }
+
+    function statchanged()
+    {
+        if (stat.value == "Closed")
+        {
+            showclosedDate();
+        }
+        else
+        {
+            hideclosedDate();
+        }
+    }
 </script>

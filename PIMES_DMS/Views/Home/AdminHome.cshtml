@@ -1,52 +1,53 @@
 ﻿@{
     ViewData["Title"] = "ATS QA - HOME";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string? Role = TempData["Role"] as string;
+    TempData.Keep();
 }
-<div class="d-flex justify-content-center" style="height:450px">
-    <div class="w-25 homebtns">
-        <div>
-            <button class="btn btn-primary homebtn shadow">
-                <a asp-controller="Issue" asp-action="SubmitIssueView" class="btn w-100 h-100 text-white">Submit Claim</a>
-            </button>
+<div class="row">
+    <div class="col-sm-12 col-md-4 flex-column">
+        @if (Role == "Admin")
+        {
+            <div class="d-flex justify-content-center">
+                <a asp-controller="Issue" asp-action="SubmitIssueView" class="btn btn-primary text-center w-75 mt-4">Submit Claim</a>
+            </div>
+        }
+        <div class="d-flex justify-content-center">
+            <a asp-controller="Issue" asp-action="IssuesList" class="btn btn-primary text-center w-75 mt-4">Claims</a>
         </div>
-        <div>
-            <button class="btn btn-primary homebtn shadow">
-                <a asp-controller="Issue" asp-action="IssuesList" class="btn w-100 h-100 text-white">Issues</a>
-                </button>
+        <div class="d-flex justify-content-center">
+            <a asp-controller="Issue" asp-action="AcknowledgedIssues" class="btn btn-primary text-center w-75 mt-4">On-Process</a>
         </div>
-        <div>
-            <button class="btn btn-primary homebtn shadow">
-                <a asp-controller="Issue" asp-action="AcknowledgedIssues" class="btn w-100 h-100 text-white">On-Process</a>
-            </button>
+        <div class="d-flex justify-content-center">
+            <a asp-controller="Validation" asp-action="ForGERVal" class="btn btn-primary text-center w-75 mt-4">E.R.A</a>
         </div>
-        <div>
-            <button class="btn btn-primary homebtn shadow">
-                <a asp-controller="Validation" asp-action="ForGERVal" class="btn w-100 h-100 text-white">Awaiting Containment Rep.</a>
-            </button>
+        <div class="d-flex justify-content-center">
+            <a asp-controller="ER" asp-action="ERView" class="btn btn-primary text-center w-75 mt-4">Emergency Responses</a>
         </div>
-        <div>
-            <button class="btn btn-primary homebtn shadow">
-                <a asp-controller="ER" asp-action="ERView" class="btn w-100 h-100 text-white">Emergency Responces</a>
-            </button>
+        <div class="d-flex justify-content-center">
+            <a asp-controller="RCV" asp-action="RCVList" class="btn btn-primary text-center w-75 mt-4">RC, CAPA & Ver.</a>
         </div>
-        <div>
-            <button class="btn btn-primary homebtn shadow">
-                <a asp-controller="RCV" asp-action="RCVList" class="btn w-100 h-100 text-white">RC, CAPA & VERIFICATION</a>
-            </button>
-        </div>
+        @*<div class="d-flex justify-content-center">
+            <a asp-controller="Issue" asp-action="NotifyAboutSubmittedIssue" class="btn btn-secondary text-center w-75 mt-4">Send Email</a>
+        </div>*@
+        @*<div class="d-flex justify-content-center">
+            <a asp-controller="Issue" asp-action="GetInvalids" class="btn btn-secondary text-center w-75 mt-4">Invalid Claims</a>
+        </div>*@
     </div>
-    <div class="w-75 h-100 d-flex justify-content-evenly"> 
-        <div class="text-center" style="width:45%">
+
+    <div class="col-6 col-md-4">
+        <div class="text-center">
             <div>
                 <div style="font-weight:bold; font-size:20px">
-                    PENDING ISSUE(S)
+                    PENDING
                 </div>
                 <div class="table-data">
                     <table class="table table-striped">
                         <thead>
-                            <tr style="position: sticky; top: 0; background-color:gray">
+                            <tr>
                                 <th>ISSUE #</th>
-                                <th>Date Submitted</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,7 +73,10 @@
                 </div>
             </div>
         </div>
-        <div class="text-center" style="width:45%">
+    </div>
+
+    <div class="col-6 col-md-4">
+        <div class="text-center">
             <div>
                 <div style="font-weight:bold; font-size:20px">
                     ON PROCESS
@@ -80,7 +84,7 @@
                 <div class="table-data">
                     <table class="table">
                         <thead>
-                            <tr style="position: sticky; top: 0; background-color:gray">
+                            <tr>
                                 <th>ISSUE #</th>
                                 <th>DAYS</th>
                             </tr>
@@ -94,20 +98,23 @@
                                     {
                                         DateTime dateack = Convert.ToDateTime(obj.DateAck);
                                         DateTime today = Convert.ToDateTime(DateTime.Now);
-                                        int res = today.Day - dateack.Day;
+                                        TimeSpan res = today - dateack;
+                                        int resDay = res.Days;
 
-                                        if (res >= 4)
+                                        if (resDay >= 4)
                                         {
                                             <tr class="bg-danger">
                                                 <td>
                                                     @obj.IssueNo
                                                 </td>
-                                                <td>@{
-                                                        Write(res);
-                                                    }</td>
+                                                <td>
+                                                    @{
+                                                        Write(resDay);
+                                                    }
+                                                </td>
                                             </tr>
                                         }
-                                        else if (res == 3 || res == 2)
+                                        else if (resDay == 3 || resDay == 2)
                                         {
                                             <tr class="bg-success">
                                                 <td>
@@ -115,12 +122,12 @@
                                                 </td>
                                                 <td>
                                                     @{
-                                                        Write(res);
+                                                        Write(resDay);
                                                     }
                                                 </td>
                                             </tr>
                                         }
-                                        else if (res <= 1)
+                                        else if (resDay <= 1)
                                         {
                                             <tr class="bg-primary">
                                                 <td>
@@ -128,13 +135,13 @@
                                                 </td>
                                                 <td>
                                                     @{
-                                                        Write(res);
+                                                        Write(resDay);
                                                     }
                                                 </td>
                                             </tr>
                                         }
                                     }
-                                }                               
+                                }
                             }
                         </tbody>
                     </table>
@@ -142,5 +149,4 @@
             </div>
         </div>
     </div>
-    
 </div>

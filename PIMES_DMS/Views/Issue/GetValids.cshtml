@@ -1,0 +1,73 @@
+﻿@model IEnumerable<PIMES_DMS.Models.IssueModel>
+
+@{
+    ViewData["Title"] = "Valid Claims";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                searching: true,
+                lengthChange: false,
+                pageLength: 6,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+}
+
+<h1>Valid Claims</h1>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueCreator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueNo)
+            </th>            
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProbDesc)
+            </th>           
+            <th>
+                @Html.DisplayNameFor(model => model.ControlNumber)
+            </th>            
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.OrderByDescending(j => j.DateFound)) {
+        <tr>
+            <td>
+                @item.IssueCreator
+            </td>
+            <td>
+                @item.IssueNo
+            </td>
+            <td>
+                @item.Product
+            </td>
+            <td>
+                @item.ProbDesc
+            </td>
+            <td>
+                 @item.ControlNumber
+            </td>
+            <td>
+                <a class="btn btn-primary w-100" asp-controller="Validation" asp-action="ValidatedIssueDetail" asp-route-id="@item.IssueID">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -14,28 +14,25 @@ namespace PIMES_DMS.Models
         [DisplayName("PIC"), Required(ErrorMessage = "PIC left blank")]
         public string? PIC { get; set; }
 
-        //public string? Status { get; set; } = "OPEN";
-
-        //[DataType(DataType.Upload)]
-        //public byte[]? Files { get; set; }
-
         public string? Remarks { get; set; }
 
         public string? ControlNo { get; set; }
 
-        public string? TSC { get; set; }
+        public string? TESID { get; set; }
 
-        public string? EC { get; set; }
+        public string? Type { get; set; }
 
         [Required(ErrorMessage = "Please input target date.")]
         public DateTime TargetDate { get; set; }
 
-        //public DateTime DateVer { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.Now;
 
-        //public string Result { get; set; } = string.Empty;
+        public string Dependency { get; set; }
 
         public bool IsDeleted { get; set; }
 
         public bool HasVer { get; set; } = false;
+
+        public string ActionStatus { get; set; } = "Open";
     }
 }

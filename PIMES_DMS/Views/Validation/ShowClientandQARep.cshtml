@@ -4,6 +4,44 @@
     ViewData["Title"] = "Validated Issue With Report";
 }
 
+<style>
+    /* Modal overlay */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
+        z-index:1500;
+    }
+
+    /* Modal content */
+    .modal-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        width: 75%;
+        max-width: 90%;
+        height: 90%;
+        border-radius: 4px;
+        border: 3px solid;
+        display: none;
+        z-index:1500;
+    }
+
+    /* Close button */
+    .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+</style>
+
 <div class="">
     <div>
         <h1>Details > ISSUE @Model.IssueNo</h1>
@@ -93,11 +131,38 @@
             </div>
         </div>
         <div class="d-block">
-            <label style="margin-left:60px; font-weight:bold">Control Number:</label>
+            <label style="margin-left:60px; font-weight:bold">Report Number:</label>
             <input class="text-center" style="margin-left:10px" value="@Model.ControlNumber" readonly />
         </div>
+
+        <div class="mt-3" style="margin-left:60px">
+            <label style="font-weight:bold">Evidence:</label>           
+            @{
+                if (Model.Report != null)
+                {
+                    <button class="btn btn-primary" onclick="openModal()">View</button>
+
+                    <div class="modal-content w-50 h-auto" id="showEvidence">
+                        <button class="modal-close btn btn-danger" onclick="closeModal()">Close</button>
+                        <div>
+                            <div class="d-flex justify-content-center">
+                                <p>View QA Report here</p>
+                            </div>
+                            <div class="w-100" style="height:620px">
+                                <iframe src="@Url.Action("ShowPdf", new { id = Model.IssueID, type = "None"})" style="width:100%; height:100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    Write("No Attachment");
+                }
+            }
+        </div>
+        
         <div class="mt-3 d-flex row">
-            <label style="margin-left:60px; font-weight:bold">Validation Summary Report:</label>
+            <label style="margin-left:60px; font-weight:bold">Summary Report:</label>
             <div class="mt-1 d-flex justify-content-center">
                 <textarea class="w-75 mt-2" style="height:250px; max-height:250px; min-height:250px" readonly>@Model.ValidationRepSum</textarea>
             </div>
@@ -105,42 +170,17 @@
     </div>
 </div>
 
+<script>
+    var eviModal = document.getElementById('showEvidence');
 
+    function openModal()
+    {
+        eviModal.style.display = "block";
+    }
 
-<div class="d-flex justify-content-between w-100">
-    <div class="w-50 h-auto">
-        @{
-            if (Model.ClientRep != null)
-            {
-                <div>
-                    <hr />
-                    <div class="d-flex justify-content-center">
-                        <p>Client Report here</p>
-                    </div>
-                    <div class="w-100" style="height:620px">
-                        <iframe src="@Url.Action("ShowPdf", new { id = Model.IssueID, type = "Client"})" style="width:100%; height:100%"></iframe>
-                    </div>
-                </div>
-            }
-        }
-    </div>
-    <div class="w-50 h-auto">
-        @{
-            if (Model.Report != null)
-            {
-                <div>
-                    <hr />
-                    <div class="d-flex justify-content-center">
-                        <p>View QA Report here</p>
-                    </div>
-                    <div class="w-100" style="height:620px">
-                        <iframe src="@Url.Action("ShowPdf", new { id = Model.IssueID, type = "None"})" style="width:100%; height:100%"></iframe>
-                    </div>
-                </div>
-            }
-        }
-    </div>
-</div>
-
-
+    function closeModal()
+    {
+        eviModal.style.display = "none";
+    }
+</script>
 

@@ -22,6 +22,29 @@ namespace PIMES_DMS.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PIMES_DMS.Models.ART_8DModel", b =>
+                {
+                    b.Property<int>("ARTID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ARTID"));
+
+                    b.Property<string>("ControlNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateClosed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateValidated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ARTID");
+
+                    b.ToTable("ART_8D");
+                });
+
             modelBuilder.Entity("PIMES_DMS.Models.AccountsModel", b =>
                 {
                     b.Property<int>("AccID")
@@ -38,8 +61,7 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompName")
-                        .IsRequired()
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -47,6 +69,10 @@ namespace PIMES_DMS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -74,10 +100,18 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ActionStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ControlNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EC")
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Dependency")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("HasVer")
@@ -93,11 +127,14 @@ namespace PIMES_DMS.Migrations
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TSC")
+                    b.Property<string>("TESID")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TargetDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ActionID");
 
@@ -113,7 +150,6 @@ namespace PIMES_DMS.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ERID"));
 
                     b.Property<string>("ControlNo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreated")
@@ -145,6 +181,10 @@ namespace PIMES_DMS.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("IssueNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RMAno")
                         .HasColumnType("nvarchar(max)");
@@ -199,10 +239,6 @@ namespace PIMES_DMS.Migrations
                     b.Property<byte[]>("ClientRep")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("CoD")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ControlNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -213,9 +249,8 @@ namespace PIMES_DMS.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DateFound")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DateFound")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateVdal")
                         .HasColumnType("datetime2");
@@ -224,10 +259,10 @@ namespace PIMES_DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("HasAction")
+                    b.Property<bool>("HasCR")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasCR")
+                    b.Property<bool>("HasTES")
                         .HasColumnType("bit");
 
                     b.Property<string>("IssueCreator")
@@ -236,6 +271,12 @@ namespace PIMES_DMS.Migrations
 
                     b.Property<string>("IssueNo")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NRMA")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NeedRMA")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProbDesc")
@@ -252,13 +293,23 @@ namespace PIMES_DMS.Migrations
                     b.Property<byte[]>("Report")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("SerialNo")
-                        .HasColumnType("int");
+                    b.Property<string>("SerialNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ValNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ValRes")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ValidatedStatus")
                         .HasColumnType("bit");
 
                     b.Property<string>("ValidationRepSum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Validator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -270,35 +321,193 @@ namespace PIMES_DMS.Migrations
                     b.ToTable("IssueDb");
                 });
 
-            modelBuilder.Entity("PIMES_DMS.Models.SumRepModel", b =>
+            modelBuilder.Entity("PIMES_DMS.Models.NotifModel", b =>
                 {
-                    b.Property<int>("SumRepID")
+                    b.Property<int>("NotifID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SumRepID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotifID"));
 
-                    b.Property<int>("AffectedQty")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateFound")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DefCat")
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("NotifID");
+
+                    b.ToTable("NotifDb");
+                });
+
+            modelBuilder.Entity("PIMES_DMS.Models.RMAModel", b =>
+                {
+                    b.Property<int>("RMAID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RMAID"));
+
+                    b.Property<string>("AffectedPN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IssueNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProblemDesc")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Product")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SumRepID");
+                    b.Property<int>("QTY")
+                        .HasColumnType("int");
 
-                    b.ToTable("SRDb");
+                    b.Property<string>("RMANo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RMAID");
+
+                    b.ToTable("RMADb");
+                });
+
+            modelBuilder.Entity("PIMES_DMS.Models.SmtpEmailsModel", b =>
+                {
+                    b.Property<int>("SMTPID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SMTPID"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Port")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SmtpServer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SMTPID");
+
+                    b.ToTable("SEDb");
+                });
+
+            modelBuilder.Entity("PIMES_DMS.Models.TESModel", b =>
+                {
+                    b.Property<int>("TESID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TESID"));
+
+                    b.Property<string>("ControlNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ECWhy1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ECWhy2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ECWhy3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ECWhy4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ECWhy5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ERC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SCWhy1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SCWhy2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SCWhy3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SCWhy4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SCWhy5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SRC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TCWhy1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TCWhy2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TCWhy3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TCWhy4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TCWhy5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TRC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TESID");
+
+                    b.ToTable("TESDb");
+                });
+
+            modelBuilder.Entity("PIMES_DMS.Models.TargetDateModel", b =>
+                {
+                    b.Property<int>("TDID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TDID"));
+
+                    b.Property<int>("ActionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TD")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("TDID");
+
+                    b.ToTable("TDDb");
                 });
 
             modelBuilder.Entity("PIMES_DMS.Models.Vermodel", b =>
@@ -325,13 +534,21 @@ namespace PIMES_DMS.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsVer")
-                        .HasColumnType("bit");
+                    b.Property<string>("RCType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Result")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StatusDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Verificator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

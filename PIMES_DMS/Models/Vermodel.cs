@@ -4,29 +4,32 @@ namespace PIMES_DMS.Models
 {
     public class Vermodel
     {
-
         [Key]
         public int VerID { get; set; }
+
+        [Required]
+        public string? Verificator { get; set; }
 
         [Required]
         public int ActionID { get; set; }
 
         [Required]
+        public string? RCType { get; set; }
+
+        [Required]
         public string ControlNo { get; set; } = string.Empty;
 
         [Required]
-        public string Status { get; set; } = "o";
-
+        public string Status { get; set; } = "Open";
 
         [DataType(DataType.Upload)]
         public byte[]? Files { get; set; }
 
+        public DateTime DateVer { get; set; } = DateTime.Now;
 
-        public DateTime DateVer { get; set; }
+        public DateTime StatusDate { get; set; }
 
         public string? Result { get; set; } = string.Empty;
-
-        public bool IsVer { get; set; } = false;
 
         public bool IsDeleted { get; set; } = false;
     }

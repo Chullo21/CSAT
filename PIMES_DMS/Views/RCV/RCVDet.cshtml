@@ -1,24 +1,26 @@
-﻿@{
+﻿@model IEnumerable<ActionModel> 
+@{
     ViewData["Title"] = "RCV Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var issue = ViewData["Issue"] as IssueModel;
     var action = ViewData["Action"] as IEnumerable<ActionModel>;
+    var vers = ViewData["Vers"] as IEnumerable<Vermodel>;
 
     string? role = TempData["Role"] as string;    
     TempData.Keep();
 }
 
-<div class="w-100 d-flex justify-content-between">
+<div class="w-100 d-flex justify-content-center">
     <div>
-        <h1>@issue!.ControlNumber > Details</h1>
+        <h1>@issue!.ControlNumber</h1>
     </div>
 </div>
 <hr />
 
 <table class="table table-bordered table-striped">
     <thead>
-        <tr>
+        <tr style="background-color:blue">
             <td>Control No.</td>
             <th>Date Found</th>
             <th>Issue #</th>
@@ -28,7 +30,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <tr style="background-color:white">
             <td>@issue!.ControlNumber</td>
             <td>@issue!.DateFound</td>
             <td>@issue!.IssueNo</td>
@@ -42,25 +44,27 @@
 <div class="w-100">
     <table class="table table-bordered table-striped">
         <thead>
-            <tr>
+            <tr style="background-color:blue">
 
                 <th>Technical/Systemic Cause</th>
                 <th>Escape Cause</th>
                 <th>Action</th>
                 <th>PIC</th>
                 <th>Target Date</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @{
-                foreach(var obj in action!)
-                {
-                    <tr>
+                foreach(var obj in Model)
+                {                
+                    <tr style="background-color:white">
                         <td style="width:20%">
-                            <textarea style="max-height:150px; max-width:100%; min-height:150px; min-width:100%; background-color:transparent; border-color:transparent" readonly>@obj.TSC</textarea>
+                            <textarea style="max-height:150px; max-width:100%; min-height:150px; min-width:100%; background-color:transparent; border-color:transparent" readonly></textarea>
                         </td>
                         <td style="width:20%">
-                            <textarea style="max-height:150px; max-width:100%; min-height:150px; min-width:100%; background-color:transparent; border-color:transparent" readonly>@obj.EC</textarea>
+                            <textarea style="max-height:150px; max-width:100%; min-height:150px; min-width:100%; background-color:transparent; border-color:transparent" readonly></textarea>
                         </td>
                         <td style="width:20%">
                             <textarea style="max-height:150px; max-width:100%; min-height:150px; min-width:100%; background-color:transparent; border-color:transparent" readonly>@obj.Action</textarea>
@@ -75,18 +79,41 @@
                                 </div>
                             </div>
                         </td>
+                        @{
+                            if (vers.Any(j => j.ActionID == obj.ActionID))
+                            {
+                                string stat = vers.FirstOrDefault(j => j.ActionID == obj.ActionID).Status;
+                                if (stat == "o")
+                                {
+                                    <td style="background-color:lightpink">
+                                        OPEN
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="background-color:limegreen">
+                                        CLOSED
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                <td style="background-color:lightpink">
+                                    OPEN
+                                </td>
+                            }
+                        }
                         <td>                           
                             @{                               
-                                if (role == "ADMIN" || role == "EMPLOYEE")
+                                if (role == "Admin" || role == "Verificator")
                                 {
                                     <a class="btn btn-success w-100" asp-controller="RCV" asp-action="VerRCVView" asp-route-id="@obj.ActionID">Verify</a>
                                 }
-
                                 if (obj.HasVer)
                                 {
                                     <a class="btn btn-primary mt-2 h-75 w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@obj.ActionID">View Verification</a>
                                 }
-                                if (role == "ADMIN")
+                                if (role == "Admin")
                                 {
                                     <a class="btn btn-danger mt-2 h-75 w-100" asp-controller="RCV" asp-action="RCVDelete" asp-route-id="@obj.ActionID">Delete</a>
                                 }

@@ -17,30 +17,40 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mt-2">
                 <label asp-for="AccName" class="control-label"></label>
-                <input asp-for="AccName" class="form-control" name="accname"/>
+                <input asp-for="AccName" class="form-control" name="accname" required />
                 <span asp-validation-for="AccName" class="text-danger"></span>
             </div>
             <div class="form-group mt-2">
-                <label asp-for="CompName" class="control-label"></label>
-                <input asp-for="CompName" class="form-control" name="compname"/>
-                <span asp-validation-for="CompName" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-2">
-                <label asp-for="Role" class="control-label"></label>
-                <select class="form-select" name="role">
-                    <option value="CLIENT">CLIENT</option>
-                    <option value="EMPLOYEE">EMPLOYEE</option>
-                    <option value="ADMIN">ADMIN</option>
+                <label asp-for="Section" class="control-label"></label>
+                <select asp-for="Section" class="form-select" name="compname">
+                    @foreach (var sect in Enum.GetValues(typeof(Sections)))
+                    {
+                        <option value="@sect.ToString()">@sect.ToString()</option>
+                    }
                 </select>
             </div>
             <div class="form-group mt-2">
+                <label asp-for="Role" class="control-label"></label>
+                <select asp-for="Role" class="form-select" name="role">
+                    @foreach (var role in Enum.GetValues(typeof(Roles)))
+                    {
+                        <option value="@role.ToString()">@role.ToString()</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group mt-2">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" name="email" required/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
                 <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" name="username"/>
+                <input asp-for="UserName" class="form-control" name="username" required />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group mt-2">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" name="password"/>
+                <input asp-for="Password" class="form-control" name="password" required />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group mt-3 d-flex justify-content-between">
@@ -50,8 +60,4 @@
         </form>
     </div>
 </div>
-
-@*<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
 

@@ -37,28 +37,54 @@
                     <td><input value="@Model.WHSESOH" class="form-control w-auto" type="number"  name="whsoh"/></td>
                     <td><input value="@Model.WHSEGOOD" class="form-control w-auto" type="number" name="whgood" /></td>
                     <td><input value="@Model.WHSENOGOOD" class="form-control w-auto" type="number" name="whnogood" /></td>
-                    <td><input value="@Model.WHSEDis" class="form-control w-auto" name="whdis" /></td>
+                    <td><select asp-for="@Model.WHSEDis" class="form-select w-auto" name="whdis">
+                        <option value="Use as-is">Use as-is</option>
+                        <option value="Scrap">Scrap</option>
+                        <option value="Rework">Rework</option>
+                    </select></td>
+                    @*<td><input value="@Model.WHSEDis" class="form-control w-auto" name="whdis" /></td>*@
                 </tr>
                 <tr>
                     <th>IQA</th>
                     <td><input value="@Model.IQASOH" class="form-control w-auto" type="number" name="iqsoh" /></td>
                     <td><input value="@Model.IQASOH" class="form-control w-auto" type="number" name="iqgood" /></td>
                     <td><input value="@Model.IQANOGOOD" class="form-control w-auto" type="number" name="iqnogood" /></td>
-                    <td><input value="@Model.IQADis" class="form-control w-auto" name="iqdis" /></td>
+                    <td>
+                        <select asp-for="@Model.IQADis" class="form-select w-auto" name="iqdis">
+                            <option value="Use as-is">Use as-is</option>
+                            <option value="Scrap">Scrap</option>
+                            <option value="Rework">Rework</option>
+                        </select>
+                    </td>
+                    @*<td><input value="@Model.IQADis" class="form-control w-auto" name="iqdis" /></td>*@
                 </tr>
                 <tr>
                     <th>WIP</th>
                     <td><input value="@Model.WIPSOH" class="form-control w-auto" type="number" name="wisoh" /></td>
                     <td><input value="@Model.WIPGOOD" class="form-control w-auto" type="number" name="wigood" /></td>
                     <td><input value="@Model.WIPNOGOOD" class="form-control w-auto" type="number" name="winogood" /></td>
-                    <td><input value="@Model.WIPDis" class="form-control w-auto" name="widis"></td>
+                    <td>
+                        <select asp-for="@Model.WIPDis" class="form-select w-auto" name="widis">
+                            <option value="Use as-is">Use as-is</option>
+                            <option value="Scrap">Scrap</option>
+                            <option value="Rework">Rework</option>
+                        </select>
+                    </td>
+                    @*<td><input value="@Model.WIPDis" class="form-control w-auto" name="widis"></td>*@
                 </tr>
                 <tr>
                     <th>FG</th>
                     <td><input value="@Model.FGSOH" class="form-control w-auto" type="number" name="fgsoh" /></td>
                     <td><input value="@Model.FGGOOD" class="form-control w-auto" type="number" name="fggood" /></td>
                     <td><input value="@Model.FGNOGOOD" class="form-control w-auto" type="number" name="fgnogood" /></td>
-                    <td><input value="@Model.FGDis" class="form-control w-auto" name="fgdis" /></td>
+                    <td>
+                        <select asp-for="@Model.FGDis" class="form-select w-auto" name="fgdis">
+                            <option value="Use as-is">Use as-is</option>
+                            <option value="Scrap">Scrap</option>
+                            <option value="Rework">Rework</option>
+                        </select>
+                    </td>
+                    @*<td><input value="@Model.FGDis" class="form-control w-auto" name="fgdis" /></td>*@
                 </tr>
             </tbody>
         </table>

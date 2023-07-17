@@ -2,6 +2,7 @@
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 
+
 namespace PIMES_DMS.Controllers
 {
     public class AdminController : Controller
@@ -11,6 +12,26 @@ namespace PIMES_DMS.Controllers
         public AdminController(AppDbContext db)
         {
             _Db = db;
+        }
+
+        public void UpdateNotif(DateTime time, string message, string t)
+        {
+            string EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            NotifModel nm = new NotifModel();
+            {
+                nm.Message = EN + message;
+                nm.DateCreated = time;
+                nm.Type = t;
+            }
+           
+
+            if (ModelState.IsValid)
+            {
+                _Db.NotifDb.Add(nm);
+                _Db.SaveChangesAsync();
+            }
         }
 
         [HttpGet]
@@ -27,7 +48,7 @@ namespace PIMES_DMS.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult CreateUser(string username, string password, string accname, string compname, string role)
+        public IActionResult CreateUser(string username, string password, string accname, string compname, string role, string email)
         {
 
             if (username != null || password != null || accname != null || compname != null || role != null)
@@ -36,18 +57,21 @@ namespace PIMES_DMS.Controllers
 
                 AccountsModel acc = new();
                 {
-                    acc.AccUCode = role + "-" + compname + "-" + guid;
+                    acc.AccUCode = role + "-" + compname + "-" + guid.ToString().Substring(0,4);
                     acc.AccName = accname!;
                     acc.Role = role;
-                    acc.CompName = compname!;
+                    acc.Section = compname!;
                     acc.UserName = username!;
                     acc.Password = password!;
+                    acc.Email = email;
                 }
 
                 if (ModelState.IsValid)
                 {
                     _Db.AccountsDb.Add(acc);
                     _Db.SaveChanges();
+
+                    UpdateNotif(DateTime.Now, ", have created a new account.", "Admin");
                 }
             }
            
@@ -84,6 +108,8 @@ namespace PIMES_DMS.Controllers
             {
                 _Db.AccountsDb.Update(obj);
                 _Db.SaveChanges();
+
+                UpdateNotif(DateTime.Now, ", have edited an account.", "Admin");
             }
 
             return RedirectToAction("AdminView");
@@ -118,8 +144,10 @@ namespace PIMES_DMS.Controllers
 
             var del = _Db.AccountsDb.FirstOrDefault(j => j.AccID == ID);
 
-            _Db.AccountsDb.Remove(del);
+            _Db.AccountsDb.Remove(del!);
             _Db.SaveChanges();
+
+            UpdateNotif(DateTime.Now, ", have deleted an account.", "Admin");
 
             return RedirectToAction("AdminView");
         }

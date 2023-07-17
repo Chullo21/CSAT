@@ -1,10 +1,14 @@
 ﻿@model PIMES_DMS.Models.IssueModel
 
 @{
-    ViewData["Title"] = "Validate Issue";
+    ViewData["Title"] = "Validate Claim";
 }
 
-<h1>Validation and Verification</h1>
+<div class="d-flex justify-content-center">
+    <div>
+        <h1>Validation</h1>
+    </div>
+</div>
 
 <hr />
 <div class="d-flex" style="height:500px">
@@ -102,7 +106,7 @@
                         </option>
                     </select>                    
                 </div>
-                <div class="form-group  mt-1">
+                <div class="form-group mt-1">
                     <label class="form-label" style="font-weight:bold">Attachment: </label>
                     <input class="form-control" style="width:50%; height:100%" type="file" name="valrep" accept=".pdf"/>
                 </div>

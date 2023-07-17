@@ -2,120 +2,143 @@
 
 @{
     ViewData["Title"] = "Validated Issue With Report";
+    string setColor;
+    if (Model.ValRes == "Valid") setColor = "color:red"; else setColor = "color:green";
 }
 
-<h1>Details > ISSUE @Model.IssueNo</h1>
+<div class="d-flex justify-content-center mt-5">
+    <div>
+        <h1 style="@setColor">@Model.ValRes Claim</h1>
+    </div>
+</div>
 
 <hr />
-<div class="d-flex" style="height:500px">
-    <div class="w-50 h-100">
-
-        <table class="table">
-            <tr>
-                <th>
-                    Issue Creator:
-                </th>
-                <td>
-                    @Model.IssueCreator
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Issue #:
-                </th>
-                <td>
-                    @Model.IssueNo
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Date Found:
-                </th>
-                <td>
-                    @Model.DateFound
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Product:
-                </th>
-                <td>
-                    @Model.Product
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Serial #:
-                </th>
-                <td>
-                    @Model.SerialNo
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Affected P/N:
-                </th>
-                <td>
-                    @Model.AffectedPN
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Description:
-                </th>
-                <td>
-                    @Model.Desc
-                </td>
-            </tr>
-            <tr style="height:auto">
-                <th>
-                    Problem Description:
-                </th>
-                <td>
-                    @Model.ProbDesc
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="w-50 h-100 d-block justify-content-center" style="background-color:grey; border:3px solid">
-        <div class="d-block w-100 mt-3 align-self-center" style="height:10%">
-            <div class="w-100 d-flex justify-content-center">
-                <p style="font-weight:bold">
-                    VALIDATION FORM RESULT
-                </p>
-            </div>          
+<div class="col-12">
+    <div class="row" style="height:500px">
+        <div class="col-12 col-md-6">
+            <table class="table table-responsive">
+                <tr>
+                    <th>
+                        Issue Creator:
+                    </th>
+                    <td>
+                        @Model.IssueCreator
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Issue #:
+                    </th>
+                    <td>
+                        @Model.IssueNo
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Date Found:
+                    </th>
+                    <td>
+                        @Model.DateFound
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Product:
+                    </th>
+                    <td>
+                        @Model.Product
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Serial #:
+                    </th>
+                    <td>
+                        @Model.SerialNo
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Affected P/N:
+                    </th>
+                    <td>
+                        @Model.AffectedPN
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Description:
+                    </th>
+                    <td>
+                        @Model.Desc
+                    </td>
+                </tr>
+                <tr style="height:auto">
+                    <th>
+                        Problem Description:
+                    </th>
+                    <td>
+                        @Model.ProbDesc
+                    </td>
+                </tr>
+            </table>
         </div>
-       <div class="d-block">
-                <label style="margin-left:60px; font-weight:bold">Control Number:</label>
-            <input class="text-center" style="margin-left:10px" value="@Model.ControlNumber" readonly />
-            </div>
-            <div class="mt-3 d-flex row">
-                <label style="margin-left:60px; font-weight:bold">Validation Summary Report:</label>
-                <div class="mt-1 d-flex justify-content-center">
-                    <textarea class="w-75 mt-2" style="height:250px; max-height:250px; min-height:250px" readonly>@Model.ValidationRepSum</textarea>
+        <div class="col-12 col-md-6 d-block justify-content-center" style="background-color:grey; border:3px solid">
+            <div class="d-block w-100 mt-3 align-self-center" style="height:10%">
+                <div class="w-100 d-flex justify-content-center">
+                    <p style="font-weight:bold">
+                        VALIDATION FORM RESULT
+                    </p>
                 </div>
             </div>
+            <div class="d-block">
+                <label style="margin-left:60px; font-weight:bold">Report Number:</label>
+                <input class="text-center" style="margin-left:10px" value="@Model.ValNo" readonly />
+            </div>
+
+            <div class="mt-3" style="margin-left:60px">
+                <label style="font-weight:bold">Evidence:</label>
+                @{
+                    if (Model.Report != null)
+                    {
+                        <button class="btn btn-primary" onclick="openModal()">View</button>
+
+                        
+                    }
+                    else
+                    {
+                        Write("No Attachment");
+                    }
+                }
+            </div>
+
+            <div class="mt-3 d-flex row">
+                <label style="margin-left:60px; font-weight:bold">Summary Report:</label>
+                <div class="mt-1 d-flex justify-content-center">
+                    <textarea class="w-75 h-75 mt-2" style="max-height:250px; min-height:250px" readonly>@Model.ValidationRepSum</textarea>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+<div class="modal-content w-100 h-100" style="z-index: 2100;" id="showEvidence">
+    <button class="modal-close btn btn-danger" onclick="closeModal()">Close</button>
+    <h4 class="modal-title text-center">Attachment</h4>
+    <iframe class="w-100" style="height:90%" src="@Url.Action("ShowPdf", new { id = Model.IssueID, type = "None"})"></iframe>
 </div>
 
 
 
-@{
-    if (Model.Report != null)
-    {
+<script>
+    var eviModal = document.getElementById('showEvidence');
 
-       <div>
-       <hr />
-
-            <div class="d-flex justify-content-center">
-                <p>View Report here</p>
-            </div>
-            <div class="w-100" style="height:620px">
-                <iframe src="@Url.Action("ShowPdf", new { id = Model.IssueID})" style="width:100%; height:100%"></iframe>
-            </div>
-       </div>
+    function openModal() {
+        eviModal.style.display = "block";
     }
-}
 
-
+    function closeModal() {
+        eviModal.style.display = "none";
+    }
+</script>
 

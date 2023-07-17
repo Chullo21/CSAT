@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PIMES_DMS.Models.IssueModel>
+@using PIMES_DMS.Controllers;
+
+@{
+    ViewData["Title"] = "Valid Claims";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var gaps = ViewBag.ActionPercents as List<GetActionPercent>;
+}
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                searching: true,
+                lengthChange: false,
+                pageLength: 7,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+}
+
+<h1 class="mt-2 text-center">CAPA Status</h1>
+
+<table class="table table-bordered table-striped table-responsive-mobile text-center" id="myTable">
+    <thead>
+        <tr>
+            <th style="width:10%">
+                @Html.DisplayNameFor(model => model.IssueNo)
+            </th>
+            <th style="width:20%">
+                @Html.DisplayNameFor(model => model.Desc)
+            </th>
+            <th style="width:10%" class="desktop-only">
+                @Html.DisplayNameFor(model => model.DateFound)
+            </th>
+            <th style="width:35%" class="desktop-only">
+                @Html.DisplayNameFor(model => model.ValidationRepSum)
+            </th>
+            <th style="width:10%" class="desktop-only">
+                Validator
+            </th>
+            <th style="width:15%">
+                View
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderByDescending(j => j.DateFound))
+        {
+            int percent = (int)(gaps.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Percent * 100);
+            if (percent < 0)
+            {
+                percent = 0;
+            }
+            string per = percent + "%";
+
+            <tr>
+            <td>
+                @item.IssueNo
+            </td>
+            <td>
+                @item.Desc
+            </td>
+            <td class="desktop-only">
+                @item.DateFound.ToShortDateString()
+            </td>
+            <td class="desktop-only">
+                @item.ValidationRepSum
+            </td>
+            <td class="desktop-only">
+                @item.Validator
+            </td>
+            <td>              
+                <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">@per Closed</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
