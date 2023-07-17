@@ -26,7 +26,7 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult LoginAcc(string user, string pass)
         {
-            int loginTimes = (int)TempData["loginTimes"];
+            int loginTimes = (int)TempData["loginTimes"]!;
 
             if (user == null || pass == null || (user == null && pass == null))
             {

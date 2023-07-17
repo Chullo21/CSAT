@@ -31,7 +31,7 @@ namespace PIMES_DMS.Controllers
                 worksheet.Cells[1, 7].Value = "Problem Statement";
                 worksheet.Cells[1, 8].Value = "Quantity";
 
-                worksheet.Cells[2, 1].Value = item.DateCreated.ToShortDateString();
+                worksheet.Cells[2, 1].Value = item!.DateCreated.ToShortDateString();
                 worksheet.Cells[2, 2].Value = item.RMANo;
                 worksheet.Cells[2, 3].Value = item.IssueNo;
                 worksheet.Cells[2, 4].Value = item.Product;

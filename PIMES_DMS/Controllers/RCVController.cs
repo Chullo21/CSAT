@@ -233,7 +233,7 @@ namespace PIMES_DMS.Controllers
             {
                 TargetDateModel targetDateModel = new TargetDateModel();
                 {
-                    targetDateModel.ActionID = am.ActionID;
+                    targetDateModel.ActionID = am!.ActionID!;
                     targetDateModel.ControlNo = controlno;
                     targetDateModel.TD = statusDate;
                     targetDateModel.Status = status;
@@ -264,7 +264,7 @@ namespace PIMES_DMS.Controllers
                 ART_8DModel art = new ART_8DModel();
                 {
                     art.ControlNo = contno;
-                    art.DateValidated = issue.DateVdal;
+                    art.DateValidated = issue!.DateVdal!;
                     art.DateClosed = DateTime.Now;
                 }
 
@@ -326,10 +326,6 @@ namespace PIMES_DMS.Controllers
                 edit!.Status = status!;
                 edit.Result = Uresult;
                 edit.DateVer = datever;
-            }
-
-            if (statusDate != null)
-            {
                 edit.StatusDate = statusDate;
             }
 
@@ -419,8 +415,8 @@ namespace PIMES_DMS.Controllers
 
             IssueModel updateIssue = new IssueModel();
             {
-                updateIssue = issue;
-                updateIssue.HasTES = true;
+                updateIssue = issue!;
+                updateIssue!.HasTES = true;
             }
 
             if (ModelState.IsValid)
@@ -497,7 +493,7 @@ namespace PIMES_DMS.Controllers
 
             TargetDateModel targetDateModel = new TargetDateModel();
             {
-                targetDateModel.ActionID = setTd.ActionID;
+                targetDateModel.ActionID = setTd!.ActionID;
                 targetDateModel.ControlNo = ID;
                 targetDateModel.TD = td;
                 targetDateModel.Status = "Open";
@@ -590,10 +586,10 @@ namespace PIMES_DMS.Controllers
 
     class ShowVerification
     {
-        public string ControlNo { get; set; }
-        public string Result { get; set; }
+        public string? ControlNo { get; set; }
+        public string? Result { get; set; }
         public DateTime DateVerified { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
         public DateTime? DateClosed { get; set; }
         public string? Verificator { get; set; }
     }

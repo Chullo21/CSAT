@@ -18,7 +18,7 @@ namespace PIMES_DMS.Controllers
 
         public void UpdateNotif(string message, string t)
         {
-            string EN = TempData["EN"] as string;
+            string? EN = TempData["EN"] as string;
             TempData.Keep();
 
             NotifModel nm = new NotifModel();
@@ -86,13 +86,13 @@ namespace PIMES_DMS.Controllers
 
            if (rep)
             {
-                IssueModel issue = _Db.IssueDb.FirstOrDefault(j => j.IssueNo == issueno);
+                IssueModel? issue = _Db.IssueDb.FirstOrDefault(j => j.IssueNo == issueno);
 
                 var createRMA = new RMAModel();
                 {
                     createRMA.DateCreated = DateTime.Now;
                     createRMA.RMANo = obj.RMAno!;
-                    createRMA.IssueNo = issue.IssueNo;
+                    createRMA.IssueNo = issue!.IssueNo;
                     createRMA.Product = issue.Product;                    
                     createRMA.AffectedPN = issue.AffectedPN;
                     createRMA.Description = issue.Desc;
@@ -122,7 +122,7 @@ namespace PIMES_DMS.Controllers
 
         private string SetRMA(string issueno)
         {
-            DateTime dateFound = _Db.IssueDb.FirstOrDefault(j => j.IssueNo == issueno).DateFound;
+            DateTime dateFound = _Db.IssueDb.FirstOrDefault(j => j.IssueNo == issueno)!.DateFound;
 
             List<ERModel> er = _Db.ERDb.Where(j => !string.IsNullOrEmpty(j.RMAno) && j.DateCreated.Year.ToString().Substring(2,2) == dateFound.Year.ToString().Substring(2,2)).ToList();
             er = er.OrderByDescending(j => j.DateCreated).ToList();
@@ -131,7 +131,7 @@ namespace PIMES_DMS.Controllers
 
             if (er.Count > 0)
             {
-                series = int.Parse(er.First().RMAno.Substring(12, 3)) + 1;
+                series = int.Parse(er.First().RMAno!.Substring(12, 3)) + 1;
             }
 
             return "PATS-RMA-" + dateFound.Year.ToString().Substring(2, 2) + "-" + series.ToString("000");
@@ -278,7 +278,7 @@ namespace PIMES_DMS.Controllers
                 message.From = new MailAddress(randtobeused.Email);
                 foreach (var to in sendTo)
                 {
-                    message.To.Add(to);
+                    message.To.Add(to!);
                 }
                 message.Subject = "New RMA Generated";
                 message.Body = body;

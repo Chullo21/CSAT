@@ -69,7 +69,7 @@ namespace PIMES_DMS.Controllers
                     smtpServer.EnableSsl = true;
                     smtpServer.Timeout = 10000;           
 
-                    message.From = new MailAddress(mod.Email);
+                    message.From = new MailAddress(mod.Email!);
                     message.To.Add(sendTo);
                     message.Subject = subject;
                     message.Body = body;

@@ -16,7 +16,7 @@ namespace PIMES_DMS.Controllers
 
         public void UpdateNotif(DateTime time, string message, string t)
         {
-            string EN = TempData["EN"] as string;
+            string? EN = TempData["EN"] as string;
             TempData.Keep();
 
             NotifModel nm = new NotifModel();

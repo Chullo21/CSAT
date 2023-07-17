@@ -15,7 +15,7 @@ namespace PIMES_DMS.Controllers
 
         public void UpdateNotif(string message, string t)
         {
-            string EN = TempData["EN"] as string;
+            string? EN = TempData["EN"] as string;
             TempData.Keep();
 
             NotifModel nm = new NotifModel();
@@ -106,7 +106,7 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult SubmitValidation(int id, string validation, string? valsumrep, IFormFile? valrep, string? nrma, DateTime dateval)
         {
-            string EN = TempData["EN"] as string;
+            string? EN = TempData["EN"] as string;
             TempData.Keep();
 
             var fromDb = _Db.IssueDb.FirstOrDefault(j => j.IssueID == id);
@@ -127,7 +127,7 @@ namespace PIMES_DMS.Controllers
                 val.ValidationRepSum = valsumrep!;
                 val.DateVdal = dateval;
                 val.NeedRMA = nrma;
-                val.Validator = EN;
+                val.Validator = EN!;
             }
 
             if (validation == "Valid")
@@ -166,7 +166,7 @@ namespace PIMES_DMS.Controllers
 
             if (issues.Count > 0)
             {
-                series = int.Parse(issues.First().ValNo.Substring(6, 3)) + 1;
+                series = int.Parse(issues.First().ValNo!.Substring(6, 3)) + 1;
             }
 
             return "VR-" + issue.DateFound.Year.ToString().Substring(2, 2) + "-" + series.ToString("000");
@@ -182,7 +182,7 @@ namespace PIMES_DMS.Controllers
 
             if (issues.Count > 0)
             {
-                series = int.Parse(issues.First().ValNo.Substring(6, 3)) + 1;
+                series = int.Parse(issues.First().ValNo!.Substring(6, 3)) + 1;
             }
 
             return "8D-" + issue.DateFound.Year.ToString().Substring(2, 2) + "-" + series.ToString("000");

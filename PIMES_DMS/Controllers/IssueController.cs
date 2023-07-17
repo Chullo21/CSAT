@@ -18,7 +18,7 @@ namespace PIMES_DMS.Controllers
 
         public void UpdateNotif(DateTime time, string message, string t)
         {
-            string EN = TempData["EN"] as string;
+            string? EN = TempData["EN"] as string;
             TempData.Keep();
 
             NotifModel nm = new NotifModel();
@@ -134,7 +134,7 @@ namespace PIMES_DMS.Controllers
                 _context.IssueDb.Update(ackissue);
                 _context.SaveChanges();
 
-                UpdateNotif(DateTime.Now, ", have acknowledged a claim. " + issue.IssueNo, "All");
+                UpdateNotif(DateTime.Now, ", have acknowledged a claim. " + issue!.IssueNo, "All");
 
                 return View("IssueDetails", ackissue);
             }
@@ -160,16 +160,14 @@ namespace PIMES_DMS.Controllers
                 TempData.Keep();
                 
                 IEnumerable<IssueModel> obj = _context.IssueDb.Where(m => (!m.Acknowledged && !m.ValidatedStatus && m.IssueCreator == EN) && (m.IssueNo.Contains(ss) || 
-                                                m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) ||
-                                                m.SerialNo.ToString().Contains(ss)));
+                                                m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) || m.SerialNo!.ToString().Contains(ss)));
 
                 return View("IssuesList", obj);
             }
             else
             {
                 IEnumerable<IssueModel> obj = _context.IssueDb.Where(m => (!m.Acknowledged && !m.ValidatedStatus) && (m.IssueCreator.Contains(ss)
-                                              || m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) ||
-                                              m.SerialNo.ToString().Contains(ss) ));
+                                              || m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) || m.SerialNo!.ToString().Contains(ss) ));
 
                 return View("IssuesList", obj);
             }
@@ -186,13 +184,13 @@ namespace PIMES_DMS.Controllers
 
             IssueModel model = new IssueModel();
             {
-                model = issue;
-                model.IssueNo = issueno;
+                model = issue!;
+                model.IssueNo = issueno!;
                 model.SerialNo = serial;
-                model.AffectedPN = affected;
+                model.AffectedPN = affected!;
                 model.Qty = qty;
-                model.Desc = desc;
-                model.ProbDesc = probdesc;
+                model.Desc = desc!;
+                model.ProbDesc = probdesc!;
             }
 
             if (doc != null)
@@ -209,7 +207,7 @@ namespace PIMES_DMS.Controllers
                 _context.IssueDb.Update(model);
                 _context.SaveChanges();
 
-                UpdateNotif(DateTime.Now, ", have edited a claim. " + issue.IssueNo, "All");
+                UpdateNotif(DateTime.Now, ", have edited a claim. " + issue!.IssueNo, "All");
             }
 
             return RedirectToAction("IssuesList");
@@ -286,7 +284,7 @@ namespace PIMES_DMS.Controllers
                 message.From = new MailAddress(randtobeused.Email);
                 foreach (var to in sendTo)
                 {
-                    message.To.Add(to);
+                    message.To.Add(to!);
                 }
                 message.Subject = "New Quality Issue Claim";
                 message.Body = body;
@@ -310,8 +308,8 @@ namespace PIMES_DMS.Controllers
 
     public class UserAndPass
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
     }
 
 }

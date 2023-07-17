@@ -279,7 +279,7 @@ namespace PIMES_DMS.Controllers
 
         public void GetDataforValidandInv()
         {
-            int year = (int)TempData["selectedYear"];
+            int year = (int)TempData["selectedYear"]!;
             TempData.Keep();
 
             IEnumerable<IssueModel> issues = _Db.IssueDb.Where(j => !j.isDeleted && j.ValidatedStatus && j.DateFound.Year == year);
@@ -473,15 +473,14 @@ namespace PIMES_DMS.Controllers
 
     public class GetActionPercent
     {
-        public string ControlNo { get; set; }
+        public string? ControlNo { get; set; }
         public float Percent { get; set; }
     }
 
     class ResData
     {
-        public int[] Days { get; set; }
-
-        public string Validation { get; set; }
+        public int[]? Days { get; set; }
+        public string? Validation { get; set; }
     }
 
 }
