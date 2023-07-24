@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Notification";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string Role = TempData["Role"] as string;
+    TempData.Keep();
 }
 
 @section scripts {
@@ -23,27 +26,40 @@
 
 <h1 class="text-center">Notification</h1>
 
-<table class="table table-striped" id="myTable">
-    <thead>
-        <tr>
-            <th class="text-center">
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th class="text-center">
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-                <td class="text-center">
-                @item.DateCreated.ToShortDateString()
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div>
+    <div>
+        @if (Role == "Admin")
+        {
+            <a class="btn btn-primary" asp-controller="Notif" asp-action="ClearNotificationBtn">Clear Notification</a>
+        }
+    </div>
+    <div>
+        <table class="table table-striped" id="myTable">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.DateCreated)
+                    </th>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.Message)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @item.DateCreated.ToShortDateString()
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Message)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

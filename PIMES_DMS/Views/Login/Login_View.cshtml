@@ -1,9 +1,7 @@
 ﻿@{
     Layout = null;
     int times = (int)TempData["loginTimes"];
-    TempData.Keep();
-
-    
+    TempData.Keep();    
 }
 
 <!DOCTYPE html>
@@ -18,7 +16,7 @@
     <link rel="stylesheet" href="~/PIMES_DMS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="loginbg" style="max-height:600px">    
+<body class="loginbg vh-100">
     <header class="header-nav">
         <div class="d-flex justify-content-between w-100" style="border-bottom:2px solid; height:55px; background-color:#2706F0">
             <div class="align-self-center">
@@ -33,36 +31,53 @@
         </div>
     </header>
 
-    <div class="d-flex justify-content-center" style="margin-top:250px">
-        <div class="card bg-primary border-3 text-white border-primary col-10 col-sm-8 col-md-6 col-lg-3" style="background-color:dimgray">
-            <form asp-controller="Login" asp-action="LoginAcc" method="post">
-                <h3 class="text-center card-header">Welcome to CSat Portal</h3>
-                @{
-                    if (times > 0)
-                    {
-                        <div class="alert alert-danger text-center" role="alert">
-                            @TempData["message"]
+    <div class="container-fluid row mx-0" style="height:100%">
+        <div class="col-sm-12 col-md-4 d-flex justify-content-center align-items-center">
+            <div class="card border-3 text-white h-75 w-75" style="background-color:blue;">
+                <p class="card-header text-center bg-primary">Customer Satisfaction</p>
+               <div class="m-2">                   
+                    <p>Customer Satisfaction or CSat is a chuchuchahachuchuahahahahcuahcuahuaauhauchauchaucaucha</p>
+               </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="d-flex justify-content-center" style="margin-top:250px">    
+                <div class="card border-3 text-white" style="background-color:blue; border-color:blue">
+                    <form asp-controller="Login" asp-action="LoginAcc" method="post">
+                        <h3 class="text-center card-header bg-primary">Welcome to CSat Portal</h3>
+                        @{
+                            if (times > 0)
+                            {
+                                <div class="alert alert-danger text-center" role="alert">
+                                    @TempData["message"]
+                                </div>
+                            }
+                        }
+                        <div class="input-group mt-3 mb-3 mx-auto w-75">
+                            <span class="input-group-text" id="basic-addon1">&#64;</span>
+                            <input class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="user">
                         </div>
-                    }
-                }
-                <div class="input-group mt-3 mb-3 mx-auto w-75">
-                    <span class="input-group-text" id="basic-addon1">&#64;</span>
-                    <input class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="user">
+                        <div class="input-group mx-auto w-75">
+                            <span class="input-group-text" id="basic-addon1"><i style="font-size:24px" class="fa">&#xf023;</i></span>
+                            <input class="form-control" placeholder="Password" type="password" name="pass" />
+                        </div>
+                        <div class="text-center mt-3">
+                            <input type="submit" class="btn btn-info w-75" value="Login" />
+                        </div>
+                        <div class="mt-3"></div>
+                    </form>
                 </div>
-                <div class="input-group mx-auto w-75">
-                    <span class="input-group-text" id="basic-addon1"><i style="font-size:24px" class="fa">&#xf023;</i></span>
-                    <input class="form-control" placeholder="Password" type="password" name="pass" />
-                </div>
-                <div class="text-center mt-3">
-                    <input type="submit" class ="btn btn-info w-75" value="Login"/>
-                </div>
-                <div class="mt-3"></div>
-            </form>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 d-flex justify-content-center align-items-center">
+            <div class="card border-3 text-white h-75 w-75" style="background-color:blue;">
+                <p class="card-header text-center bg-primary">Announcements:</p>
+                <p> chuchu chacha</p>
+            </div>
         </div>
     </div>
-
     <footer class="loginfooter">
-        <p class="mx-5 text-white">
+        <p class="mx-0 text-white">
             &copy; 2023 - P. IMES - ATS QA
         </p>
     </footer>

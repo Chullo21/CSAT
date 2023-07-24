@@ -6,6 +6,7 @@
 
     var vers = ViewData["Vers"] as List<ShowVerification>;
 }
+
 <form asp-controller="RCV" asp-action="VerRCV" enctype="multipart/form-data" method="post">
     <input value="@Model.ActionID" name="id" hidden />
     <input value="@Model.Type" name="type" hidden/>
@@ -132,9 +133,10 @@
     }
 
     function CheckDate(selectedDate) {
-        const currentDate = new Date().toISOString().split('T')[0];
+        const currentDate = new Date();
+        const inputDate = new Date(selectedDate);
 
-        if (selectedDate < currentDate) {
+        if (inputDate < currentDate && inputDate.getDate() !== currentDate.getDate()) {
             ShowWrongDate();
             document.getElementsByName("statusDate")[0].value = '';
         }

@@ -2,8 +2,11 @@
 
 @{
     ViewData["Title"] = "Validated Issue With Report";
+
     string setColor;
     if (Model.ValRes == "Valid") setColor = "color:red"; else setColor = "color:green";
+
+    string? emailSnip = ViewBag.EmailSnip as string;
 }
 
 <div class="d-flex justify-content-center mt-5">
@@ -38,7 +41,7 @@
                         Date Found:
                     </th>
                     <td>
-                        @Model.DateFound
+                        @Model.DateFound.ToShortDateString()
                     </td>
                 </tr>
                 <tr>
@@ -83,39 +86,54 @@
                 </tr>
             </table>
         </div>
-        <div class="col-12 col-md-6 d-block justify-content-center" style="background-color:grey; border:3px solid">
-            <div class="d-block w-100 mt-3 align-self-center" style="height:10%">
-                <div class="w-100 d-flex justify-content-center">
-                    <p style="font-weight:bold">
-                        VALIDATION FORM RESULT
-                    </p>
+        <div class="col-12 col-md-6 d-block justify-content-center" style="background-color:steelblue; border:3px solid">
+            <div >
+                <p class="fw-bold text-center mt-3">
+                    VALIDATION FORM RESULT
+                </p>
+            </div>
+            <div class="flex-column">
+                <div class="d-flex align-items-center mt-3 mx-5 mb-2">
+                    <label class="form-label fw-bold align-self-center">Report Number:</label>
+                    <input class="text-center form-control w-50" style="margin-left:5px" value="@Model.ValNo" readonly />
                 </div>
-            </div>
-            <div class="d-block">
-                <label style="margin-left:60px; font-weight:bold">Report Number:</label>
-                <input class="text-center" style="margin-left:10px" value="@Model.ValNo" readonly />
-            </div>
+                <div class="mt-3 w-50 mb-2 mx-5">
+                    <div class="d-flex justify-content-between">
+                        @{
+                            if (Model.Report != null)
+                            {
+                                <div>
+                                    <label style="font-weight:bold">Evidence:</label>
+                                    <button class="btn btn-primary" onclick="openModal()">View</button>
+                                </div>
+                            }
+                            else
+                            {
+                                Write("No Attachment");
+                            }
 
-            <div class="mt-3" style="margin-left:60px">
-                <label style="font-weight:bold">Evidence:</label>
-                @{
-                    if (Model.Report != null)
-                    {
-                        <button class="btn btn-primary" onclick="openModal()">View</button>
-
-                        
-                    }
-                    else
-                    {
-                        Write("No Attachment");
-                    }
-                }
-            </div>
-
-            <div class="mt-3 d-flex row">
-                <label style="margin-left:60px; font-weight:bold">Summary Report:</label>
-                <div class="mt-1 d-flex justify-content-center">
-                    <textarea class="w-75 h-75 mt-2" style="max-height:250px; min-height:250px" readonly>@Model.ValidationRepSum</textarea>
+                            if (Model.ValRes == "Invalid" && Model.EmailSnip != null)
+                            {
+                                <div>
+                                    <label style="font-weight:bold">Email Snip:</label>
+                                    <button class="btn btn-primary" onclick="OpenEmailSnip()">View</button>
+                                </div>
+                            }
+                            else if (Model.ValRes == "Invalid" && Model.EmailSnip == null)
+                            {
+                                <div style="margin-left:5px">
+                                    <label style="font-weight:bold">Add Email Snip:</label>
+                                    <button class="btn btn-primary" onclick="openAddEmailSnip()">Add</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="mx-5 mb-2">
+                    <label class="form-label fw-bold">Summary Report:</label>
+                    <div>
+                        <textarea class="w-100 h-75 mt-2" style="max-height:250px; min-height:250px" readonly>@Model.ValidationRepSum</textarea>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,21 +142,70 @@
 
 <div class="modal-content w-100 h-100" style="z-index: 2100;" id="showEvidence">
     <button class="modal-close btn btn-danger" onclick="closeModal()">Close</button>
-    <h4 class="modal-title text-center">Attachment</h4>
+    <div class="modal-header justify-content-center">
+        <h4 class="modal-title text-center">Report</h4>
+    </div>
     <iframe class="w-100" style="height:90%" src="@Url.Action("ShowPdf", new { id = Model.IssueID, type = "None"})"></iframe>
 </div>
 
+<div class="modal-content w-50 h-50" style="z-index: 2100" id="addEmail">
+    <button class="btn btn-danger modal-close" onclick="closeAddEmailSnip()">Close</button>
+    <h4 class="modal-header text-center">Add Email Snip</h4>
+    <form asp-controller="Validation" asp-action="SaveEmailSnip" enctype="multipart/form-data">
+        <input value="@Model.IssueID" name="ID" hidden/>
+       <div class="align-self-center">
+            <label>Upload Email Snip here:</label>
+            <input class="form-control" type="file" accept="image/*" name="img" required />
+            <input class="btn btn-primary mt-3" type="submit" value="Save" />
+       </div>
+    </form>
+</div>
 
+<div class="modal-content w-75 h-75" style="z-index: 2100" id="openEmail">
+    <button class="modal-close btn btn-danger" onclick="CloseEmailSnip()">Close</button>
+    <div class="modal-header justify-content-center">
+        <h4 class="modal-title text-center ">Email Snip</h4>
+    </div>
+    <br />
+    <div class="w-100 h-100 mt-2">
+        <img class="w-100 h-75" id="modalImage" src="@emailSnip" alt="Image">
+    </div>
+</div>
 
 <script>
-    var eviModal = document.getElementById('showEvidence');
+    function OpenEmailSnip()
+    {
+        var emailSnip = document.getElementById('openEmail');
+
+        emailSnip.style.display = "block";
+    }
+
+    function CloseEmailSnip()
+    {
+        var emailSnip = document.getElementById('openEmail');
+
+        emailSnip.style.display = "none";
+    }
 
     function openModal() {
+        var eviModal = document.getElementById('showEvidence');
         eviModal.style.display = "block";
     }
 
     function closeModal() {
+        var eviModal = document.getElementById('showEvidence');
         eviModal.style.display = "none";
+    }
+
+    function openAddEmailSnip()
+    {
+        var AddEmailSnip = document.getElementById('addEmail');
+        AddEmailSnip.style.display = "block";
+    }
+
+    function closeAddEmailSnip() {
+        var AddEmailSnip = document.getElementById('addEmail');
+        AddEmailSnip.style.display = "none";
     }
 </script>
 

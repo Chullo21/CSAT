@@ -4,6 +4,7 @@ using PIMES_DMS.Models;
 using System.Net.Mail;
 using System.Net;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace PIMES_DMS.Controllers
 {
@@ -45,9 +46,20 @@ namespace PIMES_DMS.Controllers
             //CheckIssuesForTES();
             HasCRChecker();
 
-            IEnumerable<IssueModel> issueModels = _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus && j.HasCR && !j.isDeleted && j.ValRes == "Valid");
+            IEnumerable<IssueModel> issues = _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus && j.HasCR && !j.isDeleted && j.ValRes == "Valid");
+            List<IssueModel> issuestoshow = new List<IssueModel>();
 
-            return View(issueModels.OrderByDescending(j => j.DateCreated).ToList());
+            foreach (var issue in issues)
+            {
+                List<ActionModel> actions = _Db.ActionDb.Where(j => j.ControlNo == issue.ControlNumber).ToList();
+
+                if (!actions.All(j => j.ActionStatus == "Closed"))
+                {
+                    issuestoshow.Add(issue);
+                }
+            }
+
+            return View(issuestoshow.OrderByDescending(j => j.DateFound).ToList());
         }
 
         //public void CheckIssuesForTES()
@@ -187,7 +199,7 @@ namespace PIMES_DMS.Controllers
         public IActionResult VerRCV(int id, string? result, DateTime date, IFormFile? evidence, string status, DateTime statusDate, string type, string controlno)
         {
 
-            if (statusDate <= DateTime.Now.Date)
+            if (statusDate < DateTime.Now.Date)
             {
                 TempData["WrongDate"] = "WrongDate";
 

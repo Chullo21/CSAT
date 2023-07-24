@@ -185,6 +185,10 @@
                             <option value="Yes">Yes</option>
                         </select>
                     </div>
+                    <div style ="margin-left:30px" id="emailupload">
+                        <label class="fw-bold form-label">Email Snip</label>
+                        <input class="form-control" type="file" accept="image/*" name="emailimg">
+                    </div>
                 </div>
                 <div>
                     <label class="form-label fw-bold">
@@ -219,23 +223,18 @@
     {
         <iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" class="w-100 h-100"></iframe>
     }
-
 </div>
 
 <script>
-    //var nrmadiv = document.getElementById('nrmadiv');
-    //nrmadiv.style.display = "none";
+    function invorv(str) {
+        var emailImgDiv = document.getElementById('emailupload');
+        var Nrmadiv = document.getElementById('nrmadiv');
 
-    function invorv(str)
-    {
-        if (str === "Valid")
-        {            
-            var Nrmadiv = document.getElementById('nrmadiv');
+        if (str === "Valid") {
+            emailImgDiv.style.display = "none";
             Nrmadiv.style.display = "none";
-        }
-        else
-        {
-            var Nrmadiv = document.getElementById('nrmadiv');
+        } else {
+            emailImgDiv.style.display = "block";
             Nrmadiv.style.display = "block";
         }
     }

@@ -48,6 +48,8 @@ namespace PIMES_DMS.Models
         [DisplayName("Attachment")]
         public byte[]? ClientRep { get; set; }
 
+        public string FFFS { get; set; } = string.Empty;
+
         [DisplayName("Validation Number")]
         public string? ValNo { get; set; }
 
@@ -71,6 +73,8 @@ namespace PIMES_DMS.Models
 
         [DisplayName("Control No.")]
         public string ControlNumber { get; set; } = string.Empty;
+
+        public byte[]? EmailSnip { get; set; }
 
         [DisplayName("Date Validated")]
         public DateTime DateVdal { get; set; }

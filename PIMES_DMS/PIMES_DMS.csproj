@@ -133,6 +133,7 @@
     <Compile Remove="Models\ECVersModel.cs" />
     <Compile Remove="Models\SCActionModel.cs" />
     <Compile Remove="Models\SCVersModel.cs" />
+    <Compile Remove="Models\SumRepModel.cs" />
     <Compile Remove="Models\TCActionModel.cs" />
     <Compile Remove="Models\TCVersModel.cs" />
   </ItemGroup>
@@ -151,7 +152,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.15" />
   </ItemGroup>
 
   <ItemGroup>

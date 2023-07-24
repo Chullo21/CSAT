@@ -1,12 +1,22 @@
 ﻿@using System.Globalization
 @{
     ViewData["Title"] = "Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 
     List<IssueModel>? DataForTat = ViewData["DataForTat"] as List<IssueModel>;
 
     var m = @Html.Raw(TempData["Months"]);
     TempData.Keep();
+
+    string? EN = TempData["EN"] as string;
+    string? Role = TempData["Role"] as string;
+    TempData.Keep();
+
+    if (EN!.ToString() == "" || Role!.ToString() == "")
+    {
+        Url.Action("Login", "Login");
+    }
 }
 
 @functions
@@ -31,102 +41,161 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="container-fluid">
-    <div class="row d-flex justify-content-center">
-        <div class="col-sm-6 col-md-5">
-            <div class="bg-transparent h-100">
-                <div class="w-100">
-                    <form asp-controller="Dashboard" asp-action="RecentYear" id="dashForm">
-                        <div class="d-flex justify-content-end">
-                            <select class="form-select border-primary w-100" id="dateSelect" onchange="Submit()" name="year">
-                                <option>Select Year</option>
-                            </select>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ATS QA - Dashboard</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/PIMES_DMS.styles.css" asp-append-version="true" />
+        <link rel="icon" href="~/favicon.ico" type="image/x-icon" sizes="32x32">
+        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        </head>
+    <body>
+        <form class="align-content-center" asp-controller="Issue" asp-action="ArchiveFunct" id="myForm">
+            <header class="mb-3">
+                <nav class="navbar navbar-expand-lg navbar-light" style="background-color:blue">
+                    <div class="container-fluid">
+                        <div class="navbar-brand d-flex">
+                            <div class="d-flex align-items-center">
+                                <img style="height:30px; margin-right:10px" src="~/photos/pimeslogo.png" />
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <a class="text-white billsfont text-decoration-none overflow-hidden" asp-controller="Home" asp-action="AdminHome">P. IMES Corp.</a>
+                            </div>
                         </div>
-                    </form>
-                </div>
-               <div class="d-flex justify-content-center mt-2">
-                    <div class="card border-0 bg-transparent h-75 w-100">
-                        <h4 class="card-header text-center">Validation Status</h4>
-                        <canvas id="pieChartValid" class="w-100 h-100"></canvas>
-                    </div>
-               </div>
-            </div>          
-        </div>
-        <div class="col-sm-6 col-md-5">
-            <div class="card bg-transparent">
-                <h4 class="card-header text-center">CSat Performance</h4>
-                <canvas id="bar" class="w-100"></canvas>
-            </div>
-            <div class="card bg-transparent">
-                <h4 class="card-header text-center">Turn Around Time</h4>
-                <div class="legend-item d-flex justify-content-center justify-content-evenly">
-                    <div class="d-flex">
-                        <div class="legend-color align-self-center" style="background-color:#F3D0B9; border: 1px solid black"></div>
-                        <div class="legend-label align-self-center">Valid</div>
-                    </div>
-                     <div class="d-flex">
-                        <div class="legend-color align-self-center" style="background-color:#AED6C5; border: 1px solid black"></div>
-                        <div class="legend-label align-self-center">Invalid</div>
-                    </div>
-                     <div class="d-flex">
-                        <div class="legend-color align-self-center" style="background-color:orangered; border: 1px solid black"></div>
-                        <div class="legend-label align-self-center">Overdue Invalid</div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="legend-color align-self-center" style="background-color:maroon; border: 1px solid black"></div>
-                        <div class="legend-label align-self-center">Deadline</div>
-                    </div>
-                </div>
-                <canvas id="responsive" class="w-100"></canvas>
-                @*<div style="max-height: 200px; overflow-y: scroll;">
-                    <table class="table table-bordered">
-                        <thead class="sticky-top">
-                            <tr>
-                                <th>Issue#</th>
-                                <th>Description</th>
-                                <th>Days</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var issue in DataForTat)
-                            {
-                                DateTime startDate = issue.DateFound;
-                                DateTime endDate = issue.DateVdal;
-
-                                TimeSpan duration = GetBusinessDays(startDate, endDate);
-                                int days = duration.Days - 1;
-                                string style = "background-color:green";
-
-                                if (days >= 3)
-                                {
-                                    style = "background-color:red";
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+                            <div class="navbar-nav">
+                                <a class="nav-link active text-white" aria-current="page" asp-controller="Home" asp-action="AdminHome">Home</a>
+                                <a class="nav-link active text-white" aria-current="page" asp-controller="Dashboard" asp-action="DashView">Dashboard</a>
+                                @{
+                                    if (Role == "Admin")
+                                    {
+                                        <a class="nav-link active text-white" asp-controller="Admin" asp-action="AdminView">Accounts</a>
+                                        <a class="nav-link active text-white" asp-controller="Notif" asp-action="ShowNotif"> Notification</a>
+                                    }
                                 }
+                                <select class="bg-transparent text-white bg-primary border-0 text-start" style="width:100px" onchange="submitForm()" name="aval">
+                                    <option class="bg-primary border-primary">More</option>
+                                    <option class="bg-primary border-primary" value="Invalid">Invalid Claims</option>
+                                    <option class="bg-primary border-primary" value="Valid">Valid Claims</option>
+                                    <option class="bg-primary border-primary" value="8D">8D Reps.</option>
+                                    <option class="bg-primary border-primary" value="RMA">RMA</option>
+                                </select>
+                            </div>
+                            <div class="d-flex float-end">
+                                <div class="billsfont text-white text-center d-flex">
+                                    <div class="align-self-center">
+                                        @EN
+                                    </div>
+                                    <div class="align-self-center mx-1">
+                                        @*&#x267F;*@
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16">
+                                            <path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H4Zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                                            <path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.373 5.373 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2H2Z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="align-items-center text-white d-flex justify-content-center" style="margin-left:15px">
+                                    <a class="btn btn-danger" asp-controller="Login" asp-action="Logout">Logout</a>
+                                    <img style="height:30px; margin-inline:10px" src="~/photos/ats wbg.png" />
+                                </div>
+                            </div>
+                        </div>
 
-                                <tr class="text-white" style="@style">
-                                    <td>@issue.IssueNo</td>
-                                    <td>@issue.Desc</td>
-                                    <td>@days</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>*@
+                    </div>
+                </nav>
+            </header>
+        </form>
 
+    <div class="container-fluid row mx-0">
+        <div class="flex-column col-sm-12 col-md-8 mb-2">
+            <div class="">
+                <form asp-controller="Dashboard" asp-action="RecentYear" id="dashForm">
+                    <div class="">
+                        <select class="form-select border-primary w-100" id="dateSelect" onchange="Submit()" name="year">
+                            <option>Select Year</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="card border-0 h-100" style="background-color:#E9E4E9">
+                        <h4 class="card-header text-center" style="background-color:#D2D2D2">Validation Status</h4>
+                        <div class="pb-2">
+                            <canvas id="pieChartValid" class=""></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="card border-0 h-100" style="background-color:#E9E4E9">
+                        <h4 class="card-header text-center" style="background-color:#D2D2D2">3F1S</h4>
+                        <div class="pb-2">
+                            <canvas id="fs" class=""></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex-column col-sm-12 col-md-4">
+            <div class="w-100 mb-2">
+                <div class="card w-100" style="background-color:#E9E4E9">
+                    <h4 class="card-header text-center" style="background-color:#D2D2D2">CSat Performance</h4>
+                    <div>
+                        <canvas id="bar" class="w-100"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="w-100">
+                <div class="card w-100" style="background-color:#E9E4E9">
+                    <h4 class="card-header text-center" style="background-color:#D2D2D2">VR Turn Around Time</h4>
+                    <div class="legend-item d-flex justify-content-center justify-content-evenly">
+                        <div class="d-flex">
+                            <div class="legend-color align-self-center" style="background-color:#2F852B; border: 1px solid black"></div>
+                            <div class="legend-label align-self-center">Valid</div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="legend-color align-self-center" style="background-color:#E83800; border: 1px solid black"></div>
+                            <div class="legend-label align-self-center">Invalid</div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="legend-color align-self-center" style="background-color:yellow; border: 1px solid black"></div>
+                            <div class="legend-label align-self-center">Overdue Invalid</div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="legend-color align-self-center" style="background-color:maroon; border: 1px solid black"></div>
+                            <div class="legend-label align-self-center">Deadline</div>
+                        </div>
+                    </div>
+
+                    <canvas id="responsive" class=""></canvas>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <footer class="loginfooter">
+        <p class="mx-5 text-white">
+            &copy; 2023 - P. IMES - ATS QA
+        </p>
+    </footer>
+</body>
+</html>
 
 <script>
-    var bgiv = '#AED6C5';
-    var bciv = '#8097BA';
-    var bgv = '#F3D0B9';
-    var bcv = '#E09B94';
+    var bgiv = '#77DD76';
+    var bciv = '#77DD76';
+    var bgv = '#EB472F';
+    var bcv = '#EB472F';
 </script>
 
 <script>
-    function Submit()
-    {
+    function Submit() {
         document.getElementById('dashForm').submit();
     }
 </script>
@@ -137,8 +206,7 @@
 
     var currentYear = new Date().getFullYear();
 
-    for (var year = currentYear; year >= 2022; year--) 
-    {
+    for (var year = currentYear; year >= 2022; year--) {
         var option = document.createElement("option");
 
         option.text = year;
@@ -172,24 +240,20 @@
     for (var i = 0; i < dataForTat.length; i++) {
         var bg = bgiv;
         var bc = bciv;
-        //var lastVal = dataForTat[i].length - 1;
 
-        if (dataForTat[i].Validation === 'Valid') 
-        {          
+        if (dataForTat[i].Validation === 'Valid') {
             bg = bgv;
             bc = bcv;
         }
-        else if (dataForTat[i].Validation === 'Invalid' && dataForTat[i].Days[dataForTat[i].Days.length - 1] > 2) 
-        {
-            bg = 'orange';
+        else if (dataForTat[i].Validation === 'Invalid' && dataForTat[i].Days[dataForTat[i].Days.length - 1] > 2) {
+            bg = 'yellow';
             bc = '#D43B1B';
         }
 
-        //console.log(dataForTat[i].Days[dataForTat[i].Days.length - 1]);
         var data = {
             label: dataForTat[i].Validation,
             backgroundColor: bg,
-            borderColor: bc,
+            borderColor: 'black',
             borderWidth: 1,
             data: dataForTat[i].Days,
         };
@@ -222,15 +286,19 @@
                         }
                     },
                     ticks: {
+                        color: 'black',
                         precision: 0,
                     },
                     title: {
                         display: true,
-                        text: 'Days'
+                        text: 'Days',
+                        color: 'black',
                     }
                 },
                 x: {
-                    ticks: {},
+                    ticks: {
+                        color: 'black',
+                    },
                     barPercentage: 1, // Set barPercentage to 1
                     categoryPercentage: 1, // Set categoryPercentage to 1
                 }
@@ -256,8 +324,8 @@
                         label: 'Trend Invalid',
                         data: @Html.Raw(ViewBag.LineInvalid),
                         backgroundColor: bgiv,
-                        borderColor: bciv,
-                        borderWidth: 2,
+                        borderColor: 'black',
+                        borderWidth: 1,
                         pointStyle: 'circle'
                     },
                     {
@@ -265,8 +333,8 @@
                         label: 'Trend Valid',
                         data: @Html.Raw(ViewBag.LineValid),
                         backgroundColor: bgv,
-                        borderColor: bcv,
-                        borderWidth: 2,
+                        borderColor: 'black',
+                        borderWidth: 1,
                         pointStyle: 'circle'
                     },
                     {
@@ -274,7 +342,7 @@
                         label: 'Valid',
                         data: @ViewBag.valid,
                         backgroundColor: bgv,
-                        borderColor: bcv,
+                        borderColor: 'black',
                         borderWidth: 1,
                         stack: 'stack1',
                         pointStyle: 'rect'
@@ -284,7 +352,7 @@
                         label: 'Invalid',
                         data: @ViewBag.invalid,
                         backgroundColor: bgiv,
-                        borderColor: bciv,
+                        borderColor: 'black',
                         borderWidth: 1,
                         stack: 'stack1',
                         pointStyle: 'rect'
@@ -300,9 +368,11 @@
                         grid: {
                         },
                         ticks: {
+                            color: 'black',
                             precision: 0
                         },
                         title: {
+                            color: 'black',
                             display: true,
                             text: 'QI Count'
                         },
@@ -310,7 +380,7 @@
                     x: {
 
                         ticks: {
-
+                            color: 'black',
                         }
                     }
                 },
@@ -322,7 +392,7 @@
                     }
                 }
             }
-           
+
         });
     });
 </script>
@@ -330,8 +400,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var data = [@ViewBag.invalidforpie, @ViewBag.validforpie];
-        var invalid = 'Invalid = ' + @ViewBag.invalidforpie;
-        var valid = 'Valid = ' + @ViewBag.validforpie;
+        var invalid = 'Invalid';
+        var valid = 'Valid';
         var labels = [invalid, valid];
 
         var pp = document.getElementById('pieChartValid').getContext('2d');
@@ -347,8 +417,7 @@
                             bgv,
                         ],
                         borderColor: [
-                            bciv,
-                            bcv
+                            'black'
                         ],
                         borderWidth: 2,
                         pointStyle: 'circle'
@@ -385,6 +454,78 @@
                     }
                 },
 
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var data = @ViewBag.fffs;
+        var labels = ['Function', 'Form', 'Fit', 'Safety'];
+
+        var fs = document.getElementById('fs').getContext('2d');
+        var fsChart = new Chart(fs, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: data,
+                        backgroundColor: [
+                            '#E83800',
+                            '#3BD1B8',
+                            '#ACEB63',
+                            '#FFF85E'
+                        ],
+                        borderColor: [
+                            'black'
+                        ],
+                        borderWidth: 2,
+                        pointStyle: 'circle'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true,
+                        }
+                    }
+                },
+                onClick: function (event, elements) {
+                    if (elements.length > 0) {
+                        var dataIndex = elements[0].index;
+                        var selectedItem = labels[dataIndex];
+
+                        switch (selectedItem) {
+                            case 'Form':
+
+                                window.location.href = '@Url.Action("GetInvalids", "Dashboard")';
+                                break;
+
+                            case 'Function':
+
+                                window.location.href = '@Url.Action("GetValids", "Dashboard")';
+                                break;
+
+                            case 'Fit':
+
+                                window.location.href = '@Url.Action("GetValids", "Dashboard")';
+                                break;
+
+                            case 'Safety':
+
+                                window.location.href = '@Url.Action("GetValids", "Dashboard")';
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                },
             }
         });
     });

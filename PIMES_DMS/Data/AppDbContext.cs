@@ -31,17 +31,5 @@ namespace PIMES_DMS.Data
         public DbSet<RMAModel> RMADb { get; set; }
 
         public DbSet<TargetDateModel> TDDb { get; set; }
-
-        //new
-
-        //public DbSet<TCActionModel> TCDb { get; set; }
-
-        //public DbSet<ECActionModel> ECDb { get; set; }
-
-        //public DbSet<SCActionModel> SCDb { get; set; }
-
-        //public DbSet<TCVersModel> TCVerDb { get; set; }
-        //public DbSet<ECVersModel> ECVerDb { get; set; }
-        //public DbSet<SCVersModel> SCVerDb { get; set; }
     }
 }

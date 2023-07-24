@@ -30,6 +30,11 @@
             }
         }
 
+        if (businessDays > 0)
+        {
+            businessDays--;
+        }
+
         return TimeSpan.FromDays(businessDays);
     }
 }
@@ -96,14 +101,14 @@
                                     }
                                     <tr>
                                         <td>
-                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%">@tc.Action</textarea>
+                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%" readonly>@tc.Action</textarea>
                                         </td>
                                         <td class="desktop-only">
                                             @tc.PIC
                                         </td>
                                         <td class="desktop-only">
                                             @{
-                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList();
+                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList().OrderBy(j => j.TDID);
                                                 int index = 0;
 
                                                 foreach (var td in tdss)
@@ -164,7 +169,7 @@
 
                                             @if (tc.ActionStatus == "Closed")
                                             {
-                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.First().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD,tc.TargetDate).TotalDays Day/s" readonly />
                                             }
 
                                         </td>
@@ -232,14 +237,14 @@
 
                                     <tr>
                                         <td>
-                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%">@tc.Action</textarea>
+                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%" readonly>@tc.Action</textarea>
                                         </td>
                                         <td class="desktop-only">
                                             @tc.PIC
                                         </td>
                                         <td class="desktop-only">
                                             @{
-                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList();
+                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList().OrderBy(j => j.TDID);
                                                 int index = 0;
 
                                                 foreach (var td in tdss)
@@ -299,7 +304,7 @@
 
                                             @if (tc.ActionStatus == "Closed")
                                             {
-                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.First().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD,tc.TargetDate).TotalDays Day/s" readonly />
                                             }
 
                                         </td>
@@ -367,14 +372,14 @@
 
                                     <tr>
                                         <td>
-                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%">@tc.Action</textarea>
+                                            <textarea class="bg-transparent" style="max-width:100%; max-height:100%; min-width:100%; min-height: 100%" readonly>@tc.Action</textarea>
                                         </td>
                                         <td class="desktop-only">
                                             @tc.PIC
                                         </td>
                                         <td class="desktop-only">
                                             @{
-                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList();
+                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList().OrderBy(j => j.TDID);
                                                 int index = 0;
 
                                                 foreach (var td in tdss)
@@ -434,7 +439,7 @@
 
                                             @if (tc.ActionStatus == "Closed")
                                             {
-                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.First().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD,tc.TargetDate).TotalDays Day/s" readonly />
                                             }
 
                                         </td>

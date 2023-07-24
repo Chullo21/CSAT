@@ -6,7 +6,7 @@
     var td = ViewBag.td as TargetDateModel;
     var ver = ViewData["Ver"] as IEnumerable<Vermodel>;
 
-    ver = ver!.OrderByDescending(j => j.StatusDate).ToList();
+    ver = ver!.OrderByDescending(j => j.DateVer).ToList();
 
     string? Role = TempData["Role"] as string;
     TempData.Keep();

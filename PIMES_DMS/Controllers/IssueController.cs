@@ -44,10 +44,17 @@ namespace PIMES_DMS.Controllers
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult SubmitIssue(string issueno, DateTime datefound, string product, string serialno,
-            string affectedpn, string description, string problemdescription, IFormFile? cp, int qty)
+            string affectedpn, string description, string problemdescription, IFormFile? cp, int qty, string fffs)
         {
             string? creator = TempData["EN"] as string;
             TempData.Keep();
+            var catchIssue = _context.IssueDb.FirstOrDefault(j => j.IssueNo == issueno);
+
+            if (catchIssue != null)
+            {
+                TempData["ExistingIssue"] = "Existing";
+                return View("SubmitIssueView");
+            }
 
             IssueModel issue = new();
             {
@@ -61,6 +68,7 @@ namespace PIMES_DMS.Controllers
                 issue.ProbDesc = problemdescription;
                 issue.Qty = qty;
                 issue.Validator = "";
+                issue.FFFS = fffs;
             }
 
             if (cp != null)
@@ -230,22 +238,48 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult ArchiveFunct(string aval)
         {
-            if (aval == "Invalid")
+            switch (aval)
             {
-                return RedirectToAction("GetInvalids");
+                case "Invalid":
+                    {
+                        return RedirectToAction("GetInvalids");
+                    }
+                case "Valid":
+                    {
+                        return RedirectToAction("GetValids");
+                    }
+                case "8D":
+                    {
+                        return RedirectToAction("Completed8D");
+                    }
+                case "RMA":
+                    {
+                        return RedirectToAction("GetRMA");
+                    }
+                default:
+                    {
+                        return NoContent();
+                    }
             }
-            else if (aval == "Valid")
+        }
+
+        public IActionResult Completed8D()
+        {
+            List<IssueModel> issuestoshow = new List<IssueModel>();
+
+            List<IssueModel> issues = _context.IssueDb.Where(j => j.HasTES).ToList();
+            
+            foreach (var issue in issues)
             {
-                return RedirectToAction("GetValids");
+                List<ActionModel> actions = _context.ActionDb.Where(j => j.ControlNo == issue.ControlNumber).ToList();
+
+                if (actions.All(j => j.ActionStatus == "Closed"))
+                {
+                    issuestoshow.Add(issue);
+                }
             }
-            else if (aval == "RMA")
-            {
-                return RedirectToAction("GetRMA");
-            }
-            else
-            {
-                return Ok();
-            }
+
+            return View(issuestoshow);
         }
 
         public void NotifyAboutSubmittedIssue()

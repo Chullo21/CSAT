@@ -2,25 +2,35 @@
 
 @{
     ViewData["Title"] = "Submit Claim";
+    var times = TempData["ExistingIssue"] as string;
+    TempData.Remove("ExistingIssue");
 }
 
-<div class="d-flex justify-content-center">
-    <div>
+<div class="justify-content-center">
+    <div class="text-center">
         <h1>Submit Claim</h1>
     </div>
+    @{
+        if (!string.IsNullOrEmpty(times))
+        {
+            <div class="alert alert-danger text-center" role="alert">
+                Existing Issue No
+            </div>
+        }
+    }
 </div>
 <hr />
 
 <div id="loading-icon" class="loading-icon"></div>
 
 <div class="col-12 col-md-12 row">
-     <form asp-controller="Issue" asp-action="SubmitIssue" enctype="multipart/form-data" method="post">
+    <form asp-controller="Issue" asp-action="SubmitIssue" enctype="multipart/form-data" method="post" onsubmit="showLoadingIcon()">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="col-12 col-md-12 row justify-content-center">
             <div class="col-12 col-md-4">
                 <div class="form-group">
                     <label asp-for="IssueNo" class="control-label"></label>
-                    <input asp-for="IssueNo" class="form-control" name="issueno" placeholder="Issue Number" required/>
+                    <input asp-for="IssueNo" class="form-control" name="issueno" placeholder="Issue Number" autofocus required/>
                     <span asp-validation-for="IssueNo" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -69,6 +79,18 @@
                     <span asp-validation-for="ClientRep" class="text-danger"></span>
                 </div>               
             </div>
+            <div class="col-12 col-md-4">
+                <div class="form-group">
+                    <label class="control-label">3F1S</label>
+                    <select class="form-select" name="fffs" required>
+                        <option value="Function">Function</option>
+                        <option value="Fit">Fit</option>
+                        <option value="Form">Form</option>
+                        <option value="Safety">Safety</option>
+                    </select>
+                    <span asp-validation-for="ProbDesc" class="text-danger"></span>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-md-12">
             <div class="mt-5 d-flex justify-content-between w-100">              
@@ -76,7 +98,7 @@
                     <a class="btn btn-danger w-50" asp-controller="Home" asp-action="AdminHome">Discard</a>
                 </div>
                 <div class="w-50 d-flex justify-content-end">
-                    <input type="submit" value="Submit" onclick="showLoadingIcon()" class="btn btn-primary w-50" />
+                    <input type="submit" value="Submit" class="btn btn-primary w-50" />
                 </div>
             </div>
         </div>
@@ -84,8 +106,8 @@
 </div>
 
 <script>
-    $('#loading-icon').removeClass('loading');
-    $('#loading-icon').hide();
+    //$('#loading-icon').removeClass('loading');
+    //$('#loading-icon').hide();
 
     function showLoadingIcon() {
         $('#loading-icon').addClass('loading');

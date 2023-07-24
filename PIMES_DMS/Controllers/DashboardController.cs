@@ -25,6 +25,7 @@ namespace PIMES_DMS.Controllers
             GetResValues(DateTime.Now.Month, yearNow);
             GetValdataforBar(yearNow, DateTime.Now.Month);
             GetDataforValidandInv();
+            GetFFFS(yearNow);
 
             return View();
         }
@@ -50,11 +51,23 @@ namespace PIMES_DMS.Controllers
             GetDataforLineChart(year, currentMonths);
             GetDataforValidandInv();
             GetValdataforBar(year, currentMonths);
-
+            GetFFFS(year);
 
             GetDataforLineChart(year, currentMonths);            
 
             return View("DashView");
+        }
+
+        private void GetFFFS(int year)
+        {
+            int[] data = new int[4];
+
+            data[0] = _Db.IssueDb.Count(j => j.FFFS == "Function" && j.DateCreated.Year == year);
+            data[1] = _Db.IssueDb.Count(j => j.FFFS == "Form" && j.DateCreated.Year == year);
+            data[2] = _Db.IssueDb.Count(j => j.FFFS == "Fit" && j.DateCreated.Year == year);
+            data[3] = _Db.IssueDb.Count(j => j.FFFS == "Safety" && j.DateCreated.Year == year);
+
+            ViewBag.fffs = JsonConvert.SerializeObject(data);
         }
 
         public IActionResult GetVerSummary(int year)
@@ -236,6 +249,8 @@ namespace PIMES_DMS.Controllers
             }
 
             totalDays += totalSpan.Days;
+
+            if (totalDays > 0) totalDays--;
 
             return totalDays;
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
+using System.Drawing;
 
 namespace PIMES_DMS.Controllers
 {
@@ -30,6 +31,26 @@ namespace PIMES_DMS.Controllers
                 _Db.NotifDb.Add(nm);
                 _Db.SaveChangesAsync();
             }
+        }
+
+        public IActionResult SaveEmailSnip(int ID, IFormFile img)
+        {
+            var issue = _Db.IssueDb.FirstOrDefault(j => j.IssueID == ID);
+            IssueModel model = new IssueModel();
+            {
+                model = issue;
+
+            }
+            using(MemoryStream ms =  new MemoryStream())
+            {
+                img.CopyTo(ms);
+                model.EmailSnip = ms.ToArray();
+            }
+
+            _Db.IssueDb.Update(model);
+            _Db.SaveChanges();
+
+            return RedirectToAction("ValidatedIssueDetail", ID);
         }
 
         [HttpGet]
@@ -71,6 +92,12 @@ namespace PIMES_DMS.Controllers
         {
             IssueModel? det = _Db.IssueDb.Find(id);
 
+            if (det.EmailSnip != null)
+            {
+                string stringforEmail = Convert.ToBase64String(det.EmailSnip);
+                ViewBag.EmailSnip = "data:image/jpeg;base64," + stringforEmail;
+            }
+
             return View(det);
         }
 
@@ -104,7 +131,7 @@ namespace PIMES_DMS.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult SubmitValidation(int id, string validation, string? valsumrep, IFormFile? valrep, string? nrma, DateTime dateval)
+        public IActionResult SubmitValidation(int id, string validation, string? valsumrep, IFormFile? valrep, string? nrma, DateTime dateval, IFormFile? emailimg)
         {
             string? EN = TempData["EN"] as string;
             TempData.Keep();
@@ -141,6 +168,13 @@ namespace PIMES_DMS.Controllers
                 using MemoryStream ms = new();
                 valrep.CopyTo(ms);
                 val.Report = ms.ToArray();
+            }
+
+            if (emailimg != null)
+            {
+                using MemoryStream ms = new();
+                emailimg.CopyTo(ms);
+                val.EmailSnip = ms.ToArray();
             }
 
             if (ModelState.IsValid)
@@ -187,40 +221,6 @@ namespace PIMES_DMS.Controllers
 
             return "8D-" + issue.DateFound.Year.ToString().Substring(2, 2) + "-" + series.ToString("000");
         }
-
-        //private void NotifyAboutSubmittedIssue()
-        //{
-        //    List<string> sendTo = _Db.AccountsDb.Where(j => !string.IsNullOrEmpty(j.Email)).Select(j => j.Email).ToList();
-
-        //    List<SmtpEmailsModel> SE = _Db.SEDb.ToList();
-
-        //    Random rand = new Random();
-
-        //    SmtpEmailsModel tobeused = SE[rand.Next(0, SE.Count - 1)];
-
-        //    string link = "http://192.168.3.39"; // Replace with your actual link
-
-        //    string body = "Good day,\r\n\r\nWe have received a new quality issue from our customer.\r\n\r\n";
-        //    body += $"Please click <a href=\"{link}\">here</a> for your reference.";
-
-        //    foreach (var to in sendTo)
-        //    {
-        //        using (MailMessage message = new MailMessage())
-        //        {
-        //            SmtpClient smtpServer = new SmtpClient(tobeused.SmtpServer);
-        //            smtpServer.Port = tobeused.Port;
-        //            smtpServer.Credentials = new NetworkCredential(tobeused.Email, tobeused.Password);
-        //            smtpServer.EnableSsl = true;
-        //            smtpServer.Timeout = 10000;
-
-        //            message.From = new MailAddress(tobeused.Email);
-        //            message.To.Add(to);
-        //            message.Subject = "New Quality Issue Claim";
-        //            message.Body = body;
-        //            smtpServer.Send(message);
-        //        }
-        //    }
-        //}
 
     }
 }
