@@ -43,17 +43,16 @@ namespace PIMES_DMS.Controllers
         {
             GetDataForVerification();
             GetOpenAndCloseDataForTable();
-            //CheckIssuesForTES();
             HasCRChecker();
 
-            IEnumerable<IssueModel> issues = _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus && j.HasCR && !j.isDeleted && j.ValRes == "Valid");
+            List<IssueModel> issues = _Db.IssueDb.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
             List<IssueModel> issuestoshow = new List<IssueModel>();
 
             foreach (var issue in issues)
             {
                 List<ActionModel> actions = _Db.ActionDb.Where(j => j.ControlNo == issue.ControlNumber).ToList();
 
-                if (!actions.All(j => j.ActionStatus == "Closed"))
+                if (!actions.All(j => j.ActionStatus == "Closed") || actions.Count == 0)
                 {
                     issuestoshow.Add(issue);
                 }
@@ -61,29 +60,6 @@ namespace PIMES_DMS.Controllers
 
             return View(issuestoshow.OrderByDescending(j => j.DateFound).ToList());
         }
-
-        //public void CheckIssuesForTES()
-        //{
-        //    foreach (var issue in _Db.IssueDb)
-        //    {
-        //        var action = _Db.TESDb.Where(j => j.ControlNo == issue.ControlNumber);
-
-        //        if (action.Any())
-        //        {
-        //            issue.HasTES = true;
-
-        //            _Db.IssueDb.Update(issue);
-        //            _Db.SaveChanges();
-        //        }
-        //        else
-        //        {
-        //            issue.HasTES = false;
-
-        //            _Db.IssueDb.Update(issue);
-        //            _Db.SaveChanges();
-        //        }
-        //    }
-        //}
 
         public void GetOpenAndCloseDataForTable()
         {

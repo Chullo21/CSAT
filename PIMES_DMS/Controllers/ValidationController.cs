@@ -90,15 +90,16 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ValidatedIssueDetail(int id)
         {
-            IssueModel? det = _Db.IssueDb.Find(id);
+            IssueModel? det = _Db.IssueDb.FirstOrDefault(j => j.IssueID == id);
 
-            if (det.EmailSnip != null)
+            if (det.ValRes == "Invalid")
             {
                 string stringforEmail = Convert.ToBase64String(det.EmailSnip);
                 ViewBag.EmailSnip = "data:image/jpeg;base64," + stringforEmail;
             }
 
             return View(det);
+
         }
 
         [HttpGet]

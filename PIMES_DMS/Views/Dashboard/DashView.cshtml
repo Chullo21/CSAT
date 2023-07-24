@@ -494,39 +494,14 @@
                             usePointStyle: true,
                         }
                     }
-                },
-                onClick: function (event, elements) {
-                    if (elements.length > 0) {
-                        var dataIndex = elements[0].index;
-                        var selectedItem = labels[dataIndex];
-
-                        switch (selectedItem) {
-                            case 'Form':
-
-                                window.location.href = '@Url.Action("GetInvalids", "Dashboard")';
-                                break;
-
-                            case 'Function':
-
-                                window.location.href = '@Url.Action("GetValids", "Dashboard")';
-                                break;
-
-                            case 'Fit':
-
-                                window.location.href = '@Url.Action("GetValids", "Dashboard")';
-                                break;
-
-                            case 'Safety':
-
-                                window.location.href = '@Url.Action("GetValids", "Dashboard")';
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                },
+                }
             }
         });
     });
+</script>
+
+<script>
+    function submitForm() {
+        document.getElementById("myForm").submit();
+    }
 </script>

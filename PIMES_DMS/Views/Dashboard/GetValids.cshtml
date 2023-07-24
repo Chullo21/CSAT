@@ -24,7 +24,7 @@
     </script>
 }
 
-<h1 class="mt-2 text-center">CAPA Status</h1>
+<h1 class="mt-2 text-center">Valid Claims</h1>
 
 <table class="table table-bordered table-striped table-responsive-mobile text-center" id="myTable">
     <thead>
@@ -32,17 +32,11 @@
             <th style="width:10%">
                 @Html.DisplayNameFor(model => model.IssueNo)
             </th>
-            <th style="width:20%">
-                @Html.DisplayNameFor(model => model.Desc)
-            </th>
             <th style="width:10%" class="desktop-only">
-                @Html.DisplayNameFor(model => model.DateFound)
+                 Claim Date
             </th>
             <th style="width:35%" class="desktop-only">
-                @Html.DisplayNameFor(model => model.ValidationRepSum)
-            </th>
-            <th style="width:10%" class="desktop-only">
-                Validator
+                Remarks
             </th>
             <th style="width:15%">
                 View
@@ -63,20 +57,26 @@
             <td>
                 @item.IssueNo
             </td>
-            <td>
-                @item.Desc
-            </td>
             <td class="desktop-only">
                 @item.DateFound.ToShortDateString()
             </td>
             <td class="desktop-only">
                 @item.ValidationRepSum
             </td>
-            <td class="desktop-only">
-                @item.Validator
-            </td>
-            <td>              
-                <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">@per Closed</a>
+@*            <td>
+                    @{
+                        if (item.HasTES)
+                        {
+                            <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">@per</a>
+                        }
+                        else
+                        {
+                            <input class="form-control" value="@per" readonly/>
+                        }
+                    }
+            </td>*@
+            <td>
+                <a class="btn btn-primary w-100" asp-controller="Validation" asp-action="ValidatedIssueDetail" asp-route-id="@item.IssueID">Details</a>
             </td>
         </tr>
 }

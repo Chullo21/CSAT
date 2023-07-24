@@ -126,6 +126,14 @@
                                     <button class="btn btn-primary" onclick="openAddEmailSnip()">Add</button>
                                 </div>
                             }
+
+                            if (Model.ValRes == "Valid" && Model.HasTES)
+                            {
+                                <div style="margin-left:5px">
+                                    <label style="font-weight:bold">View Action Items:</label>
+                                    <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@Model.ControlNumber">Action Items</a>
+                                </div>
+                            }
                         }
                     </div>
                 </div>
