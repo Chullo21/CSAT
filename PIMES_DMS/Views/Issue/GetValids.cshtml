@@ -21,53 +21,57 @@
     </script>
 }
 
-<h1>Valid Claims</h1>
+<div class="container">
+    <h1>Valid Claims</h1>
 
-<table class="table table-bordered table-striped" id="myTable">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IssueCreator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IssueNo)
-            </th>            
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProbDesc)
-            </th>           
-            <th>
-                @Html.DisplayNameFor(model => model.ControlNumber)
-            </th>            
-            <th>
+    <table class="table table-bordered table-striped" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IssueCreator)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IssueNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProbDesc)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ControlNumber)
+                </th>
+                <th>
 
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.OrderByDescending(j => j.DateFound)) {
-        <tr>
-            <td>
-                @item.IssueCreator
-            </td>
-            <td>
-                @item.IssueNo
-            </td>
-            <td>
-                @item.Product
-            </td>
-            <td>
-                @item.ProbDesc
-            </td>
-            <td>
-                 @item.ControlNumber
-            </td>
-            <td>
-                <a class="btn btn-primary w-100" asp-controller="Validation" asp-action="ValIssueDet" asp-route-id="@item.IssueID">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderByDescending(j => j.DateFound))
+            {
+                <tr>
+                    <td>
+                        @item.IssueCreator
+                    </td>
+                    <td>
+                        @item.IssueNo
+                    </td>
+                    <td>
+                        @item.Product
+                    </td>
+                    <td>
+                        @item.ProbDesc
+                    </td>
+                    <td>
+                        @item.ControlNumber
+                    </td>
+                    <td>
+                        <a class="btn btn-primary w-100" asp-controller="Validation" asp-action="ValIssueDet" asp-route-id="@item.IssueID">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

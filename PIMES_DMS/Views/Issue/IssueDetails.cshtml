@@ -7,147 +7,149 @@
     TempData.Keep();
 }
 
-<div>
-    <div class="d-flex justify-content-between">
-        <div class="d-flex">
-            <div>
-                <h1>Claim Details</h1>
-            </div>
-            <div class="align-self-center mx-2" style="margin-left:30px">
-                <a class="btn btn-secondary" style="width:90px" asp-controller="Issue" asp-action="IssuesList">Back</a>
-            </div>
-            @{
-                if (Role == "Admin" && !Model.ValidatedStatus)
-                {
-                    if (!Model.Acknowledged)
+<div class="container">
+    <div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex">
+                <div>
+                    <h1>Claim Details</h1>
+                </div>
+                <div class="align-self-center mx-2" style="margin-left:30px">
+                    <a class="btn btn-secondary" style="width:90px" asp-controller="Issue" asp-action="IssuesList">Back</a>
+                </div>
+                @{
+                    if (Role == "Admin" && !Model.ValidatedStatus)
                     {
-                        <div class="align-self-center mx-2">
-                            <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
-                        </div>
-                    }
-                    else if (Model.Acknowledged)
-                    {
-                        <div class="mx-2 align-self-center">
-                            <button class="btn btn-primary" onclick="openValModal()">Validate</button>
-                        </div>
+                        if (!Model.Acknowledged)
+                        {
+                            <div class="align-self-center mx-2">
+                                <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
+                            </div>
+                        }
+                        else if (Model.Acknowledged)
+                        {
+                            <div class="mx-2 align-self-center">
+                                <button class="btn btn-primary" onclick="openValModal()">Validate</button>
+                            </div>
+                        }
                     }
                 }
-            }
+            </div>
         </div>
     </div>
-</div>
-<hr />
+    <hr />
 
-<div class="w-100 row mt-2">
-    <div>
-        <div style="margin-left:10px">
-            Creator: @Model.IssueCreator
-        </div>
+    <div class="w-100 row mt-2">
         <div>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr class="text-center align-content-center">
-                        <th>
-                            Issue#
-                        </th>
-                        <th class="desktop-only">
-                            Date Found
-                        </th>
-                        <th>
-                            Product
-                        </th>
-                        <th class="desktop-only">
-                            Serial
-                        </th>
-                        <th class="desktop-only">
-                            Affected P/N
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th class ="desktop-only">
-                            Ack. Stat.
-                        </th>
-                        <th class="desktop-only">
-                            Date Ack.
-                        </th>
-                        <th>
-                            Attachment
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    <tr>
-                        <td>
-                            @Model.IssueNo
-                        </td>
-                        <td class="desktop-only">
-                            @Model.DateFound.ToShortDateString()
-                        </td>
-                        <td>
-                            @Model.Product
-                        </td>
-                        <td class="desktop-only">
-                            @Model.SerialNo
-                        </td>
-                        <td class="desktop-only">
-                            @Model.AffectedPN
-                        </td>
-                        <td>
-                            @Model.Desc
-                        </td>
-                        @{
-                            if (Model.Acknowledged)
-                            {
-                                <td style="background-color:green" class="desktop-only">
-                                    YES
-                                </td>
-                            }
-                            else
-                            {
-                                <td style="background-color:red" class="desktop-only">
-                                    NO
-                                </td>
-                            }
-                        }
-                        <td class="desktop-only">
+            <div style="margin-left:10px">
+                Creator: @Model.IssueCreator
+            </div>
+            <div>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr class="text-center align-content-center">
+                            <th>
+                                Issue#
+                            </th>
+                            <th class="desktop-only">
+                                Date Found
+                            </th>
+                            <th>
+                                Product
+                            </th>
+                            <th class="desktop-only">
+                                Serial
+                            </th>
+                            <th class="desktop-only">
+                                Affected P/N
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th class="desktop-only">
+                                Ack. Stat.
+                            </th>
+                            <th class="desktop-only">
+                                Date Ack.
+                            </th>
+                            <th>
+                                Attachment
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <tr>
+                            <td>
+                                @Model.IssueNo
+                            </td>
+                            <td class="desktop-only">
+                                @Model.DateFound.ToShortDateString()
+                            </td>
+                            <td>
+                                @Model.Product
+                            </td>
+                            <td class="desktop-only">
+                                @Model.SerialNo
+                            </td>
+                            <td class="desktop-only">
+                                @Model.AffectedPN
+                            </td>
+                            <td>
+                                @Model.Desc
+                            </td>
                             @{
                                 if (Model.Acknowledged)
                                 {
-                                    Write(Model.DateAck.ToShortDateString());
+                                    <td style="background-color:green" class="desktop-only">
+                                        YES
+                                    </td>
                                 }
                                 else
                                 {
-                                    Write("Not acknowledged yet");
+                                    <td style="background-color:red" class="desktop-only">
+                                        NO
+                                    </td>
                                 }
                             }
-                        </td>
-                        <td>
-                            <div class="align-self-center">
+                            <td class="desktop-only">
                                 @{
-                                    if (Model.ClientRep != null)
+                                    if (Model.Acknowledged)
                                     {
-                                    //<iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" style="width:100%; height:500px"></iframe>
-                                        <button class="btn btn-primary" onclick="openAttachModal()">Show Attachment</button>
+                                        Write(Model.DateAck.ToShortDateString());
                                     }
                                     else
                                     {
-                                        Write("No Attachment");
+                                        Write("Not acknowledged yet");
                                     }
                                 }
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <dl>
-                <dt>
-                    Problem Description:
-                </dt>
-                <dd>
-                    @Model.ProbDesc
-                </dd>
-            </dl>
+                            </td>
+                            <td>
+                                <div class="align-self-center">
+                                    @{
+                                        if (Model.ClientRep != null)
+                                        {
+                //<iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" style="width:100%; height:500px"></iframe>
+                                            <button class="btn btn-primary" onclick="openAttachModal()">Show Attachment</button>
+                                        }
+                                        else
+                                        {
+                                            Write("No Attachment");
+                                        }
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <dl>
+                    <dt>
+                        Problem Description:
+                    </dt>
+                    <dd>
+                        @Model.ProbDesc
+                    </dd>
+                </dl>
+            </div>
         </div>
     </div>
 </div>

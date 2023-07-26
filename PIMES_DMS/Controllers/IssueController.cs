@@ -256,11 +256,20 @@ namespace PIMES_DMS.Controllers
                     {
                         return RedirectToAction("GetRMA");
                     }
+                case "Definition":
+                    {
+                        return RedirectToAction("DefinitionsView");
+                    }
                 default:
                     {
                         return NoContent();
                     }
             }
+        }
+
+        public IActionResult DefinitionsView()
+        {
+            return View(_context.DefDb.ToList());
         }
 
         public IActionResult Completed8D()
@@ -273,7 +282,7 @@ namespace PIMES_DMS.Controllers
             {
                 List<ActionModel> actions = _context.ActionDb.Where(j => j.ControlNo == issue.ControlNumber).ToList();
 
-                if (actions.All(j => j.ActionStatus == "Closed"))
+                if (actions.All(j => j.ActionStatus == "Closed") && actions.Count > 0)
                 {
                     issuestoshow.Add(issue);
                 }

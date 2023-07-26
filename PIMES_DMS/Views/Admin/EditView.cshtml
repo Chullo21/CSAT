@@ -4,58 +4,58 @@
     ViewData["Title"] = "Edit > " + Model.AccName;
 }
 
-<h1>Edit Account</h1>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Admin" asp-action="EditUser" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AccID" name="accid"/>
-            <div class="form-group">
-                <label asp-for="AccUCode" class="control-label"></label>
-                <input asp-for="AccUCode" class="form-control" readonly name="accucode"/>
-                <span asp-validation-for="AccUCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AccName" class="control-label"></label>
-                <input asp-for="AccName" class="form-control" name="accname" required/>
-                <span asp-validation-for="AccName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Section" class="control-label"></label>
-                <input asp-for="Section" class="form-control" name="section" required />
-                <span asp-validation-for="Section" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <input asp-for="Role" class="form-control" readonly name="role" required />
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" name="email" required />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" name="username" required />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" name="password" required />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group d-flex justify-content-between mt-3">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a class="btn btn-danger" asp-action="AdminView">Back to List</a>
-            </div>
-        </form>
+
+<div class="container">
+    <h1>Edit Account</h1>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-controller="Admin" asp-action="EditUser" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="AccID" name="accid" />
+                <div class="form-group">
+                    <label asp-for="AccUCode" class="control-label"></label>
+                    <input asp-for="AccUCode" class="form-control" readonly name="accucode" />
+                    <span asp-validation-for="AccUCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AccName" class="control-label"></label>
+                    <input asp-for="AccName" class="form-control" name="accname" required />
+                    <span asp-validation-for="AccName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Section" class="control-label"></label>
+                    <input asp-for="Section" class="form-control" name="section" required />
+                    <span asp-validation-for="Section" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Role" class="control-label"></label>
+                    <input asp-for="Role" class="form-control" readonly name="role" required />
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" name="email" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" name="username" required />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" name="password" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex justify-content-between mt-3">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a class="btn btn-danger" asp-action="AdminView">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-@*<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
 

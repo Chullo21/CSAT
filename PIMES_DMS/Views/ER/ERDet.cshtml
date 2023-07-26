@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="container">
     <div class="d-flex justify-content-between">
         <div>
             <h1>Containment Report</h1>
@@ -11,7 +12,7 @@
         <div class="align-self-center">
             <div>
                 <label>Control No.</label>
-                <input value="@Model.ControlNo" readonly/>
+                <input value="@Model.ControlNo" readonly />
             </div>
         </div>
     </div>
@@ -32,7 +33,7 @@
             <tbody>
                 <tr>
                     <th>WHSE</th>
-                    <td><input value="@Model.WHSESOH" class="form-control w-auto" type="number" readonly/></td>
+                    <td><input value="@Model.WHSESOH" class="form-control w-auto" type="number" readonly /></td>
                     <td><input value="@Model.WHSEGOOD" class="form-control w-auto" type="number" readonly /></td>
                     <td><input value="@Model.WHSENOGOOD" class="form-control w-auto" type="number" readonly /></td>
                     <td><input value="@Model.WHSEDis" class="form-control w-auto" readonly /></td>
@@ -81,7 +82,7 @@
                     }
                 }
                 <label class="form-label mt-3">Need Replacement?</label>
-                <input class="form-control" value="@rep" readonly/>               
+                <input class="form-control" value="@rep" readonly />
             </div>
             <div class="mt-1 form-group">
                 @{
@@ -96,8 +97,9 @@
                     }
                 }
                 <label class="form-label">RMA #</label>
-                <input class="form-control w-50" value="@rma" readonly/>
+                <input class="form-control w-50" value="@rma" readonly />
             </div>
         </div>
     </div>
+</div>
 

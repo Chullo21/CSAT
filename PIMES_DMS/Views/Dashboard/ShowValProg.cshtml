@@ -21,52 +21,54 @@
     </script>
 }
 
-<h1>@TempData["svp"]</h1>
+<div class="container">
+    <h1>@TempData["svp"]</h1>
 
-<table class="table table-striped table-bordered text-center" id="myTable">
-    <thead>
-        <tr>
+    <table class="table table-striped table-bordered text-center" id="myTable">
+        <thead>
+            <tr>
 
-            <th>
-                @Html.DisplayNameFor(model => model.IssueNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
-            </th>
-            <th class="desktop-only">
-                @Html.DisplayNameFor(model => model.Desc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ControlNumber)
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.OrderByDescending(j => j.DateVdal))
-{
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IssueNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product)
-            </td>
-            <td class="desktop-only">
-                @Html.DisplayFor(modelItem => item.Desc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ControlNumber)
-            </td>
-            <td>
-                @if (item.HasTES)
-                {
-                    <a class="btn btn-primary" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">Details</a>
-                }
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                <th>
+                    @Html.DisplayNameFor(model => model.IssueNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product)
+                </th>
+                <th class="desktop-only">
+                    @Html.DisplayNameFor(model => model.Desc)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ControlNumber)
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderByDescending(j => j.DateVdal))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IssueNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product)
+                    </td>
+                    <td class="desktop-only">
+                        @Html.DisplayFor(modelItem => item.Desc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ControlNumber)
+                    </td>
+                    <td>
+                        @if (item.HasTES)
+                        {
+                            <a class="btn btn-primary" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">Details</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

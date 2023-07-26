@@ -24,41 +24,43 @@
     </script>
 }
 
-<h1 class="text-center">Notification</h1>
+<div class="container">
+    <h1 class="text-center">Notification</h1>
 
-<div>
     <div>
-        @if (Role == "Admin")
-        {
-            <a class="btn btn-primary" asp-controller="Notif" asp-action="ClearNotificationBtn">Clear Notification</a>
-        }
-    </div>
-    <div>
-        <table class="table table-striped" id="myTable">
-            <thead>
-                <tr>
-                    <th class="text-center">
-                        @Html.DisplayNameFor(model => model.DateCreated)
-                    </th>
-                    <th class="text-center">
-                        @Html.DisplayNameFor(model => model.Message)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div>
+            @if (Role == "Admin")
+            {
+                <a class="btn btn-primary" asp-controller="Notif" asp-action="ClearNotificationBtn">Clear Notification</a>
+            }
+        </div>
+        <div>
+            <table class="table table-striped" id="myTable">
+                <thead>
                     <tr>
-                        <td class="text-center">
-                            @item.DateCreated.ToShortDateString()
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Message)
-                        </td>
+                        <th class="text-center">
+                            @Html.DisplayNameFor(model => model.DateCreated)
+                        </th>
+                        <th class="text-center">
+                            @Html.DisplayNameFor(model => model.Message)
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @item.DateCreated.ToShortDateString()
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Message)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

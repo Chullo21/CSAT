@@ -1,0 +1,203 @@
+﻿@model List<DefinitionsModel>
+
+@{
+    ViewData["Title"] = "Definitions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string Role = TempData["Role"] as string;
+    TempData.Keep();
+}
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                searching: true,
+                lengthChange: false,
+                pageLength: 6,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+}
+
+<div class="container">
+    <hr />
+    <div class="w-100 text-center">
+        <h1>Definition of Terms</h1>
+    </div>
+    <hr />
+    <div>
+        @{
+            if (Role == "Admin")
+            {
+                <div class="w-100">
+                    <button class="btn btn-primary w-25" onclick="OpenAddTerm()">Add Term</button>
+                </div>
+            }
+        }
+        <table class="table text-center" id="myTable">
+            <thead>
+                <tr>
+                    <td class="w-25">
+                        Subject
+                    </td>
+                    <td class="w-50">
+                        Definition
+                    </td>
+                    <td class="w-25">
+
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var def in Model)
+                {
+                    <tr>
+                        <td>
+                            @def.Subject
+                        </td>
+                        <td>
+                            @def.Definition
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-between">
+                                @{
+                                    if (Role == "Admin")
+                                    {
+                                        <button class="btn btn-success w-100" onclick="OpenEditTerm(@def.DefID, '@def.Subject', '@def.Definition')">Edit</button>
+                                        <button class="btn btn-danger w-100" onclick="OpenDeleteTerm(@def.DefID, '@def.Subject', '@def.Definition')">Delete</button>
+                                    }
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal-content w-50 h-50" id="addterm">
+    <button class="btn btn-danger modal-close" onclick="CloseAddTerm()">Close</button>
+    <form asp-controller="Dictionary" asp-action="AddTerm" method="post">        
+        <h4 class="modal-title text-center">ADD TERM</h4>
+        <hr />
+        <div class="w-100 flex-column justify-content-center">
+            <div class="w-75 input-group flex-column justify-content-center">
+                <label class="form-label">Subject</label>
+                <input class="form-control w-50" value="" name="subj" required />
+            </div>
+            <div class="w-75 input-group flex-column justify-content-center">
+                <label class="form-label">Definition</label>
+                <input class="form-control w-100" value="" name="def" required />
+            </div>
+        </div>
+        <div class="w-100 d-flex justify-content-end">
+            <input type="submit" class="btn btn-primary mt-5 w-25" />
+        </div>
+    </form>
+</div>
+
+<div class="modal-content w-50 h-50" id="editterm">
+    <button class="btn btn-danger modal-close" onclick="CloseEditTerm()">Close</button>
+    <form asp-controller="Dictionary" asp-action="EditTerm" method="post">
+        <input value="" id="editid" name="defid" hidden/>        
+        <h4 class="modal-title text-center">EDIT TERM</h4>
+        <hr />
+        <div class="w-100 flex-column justify-content-center">
+            <div class="w-75 input-group flex-column justify-content-center">
+                <label class="form-label">Subject</label>
+                <input class="form-control w-50" value="" id="editsubj" name="subj" required />
+            </div>
+            <div class="w-75 input-group flex-column justify-content-center">
+                <label class="form-label">Definition</label>
+                <input class="form-control w-100" value="" id="editdef" name="def" required />
+            </div>
+        </div>
+        <div class="w-100 d-flex justify-content-end">
+            <input type="submit" class="btn btn-primary mt-5 w-25" />
+        </div>
+    </form>
+</div>
+
+<div class="modal-content w-50 h-50" id="deleteterm">
+    <button class="btn btn-danger modal-close" onclick="CloseDeleteTerm()">Close</button>
+    <form asp-controller="Dictionary" asp-action="DeleteTerm" method="post">
+        <input value="" id="deleteid" name="defid" hidden />
+        <h4 class="modal-title text-center">Are you sure you want to delete this term?</h4>
+        <hr />
+        <div class="w-100 flex-column justify-content-center">
+            <div class="w-75 input-group flex-column justify-content-center">
+                <label class="form-label">Subject</label>
+                <input class="form-control w-50" value="" id="deletesubj" name="subj" required />
+            </div>
+            <div class="w-75 input-group flex-column justify-content-center">
+                <label class="form-label">Definition</label>
+                <input class="form-control w-100" value="" id="deletedef" name="def" required />
+            </div>
+        </div>
+        <div class="w-100 d-flex justify-content-end">
+            <input type="submit" class="btn btn-primary mt-5 w-25" />
+        </div>
+    </form>
+</div>
+
+<script>
+
+    function OpenDeleteTerm(id, subj, def) {
+        var DeleteTerm = document.getElementById('deleteterm');
+        var DeleteID = document.getElementById('deleteid');
+        var DeleteSubj = document.getElementById('deletesubj');
+        var DeleteDef = document.getElementById('deletedef');
+
+        DeleteID.value = id;
+        DeleteSubj.value = subj;
+        DeleteDef.value = def;
+        DeleteTerm.style.display = "block";
+    }
+
+    function CloseDeleteTerm() {
+
+        var DeleteTerm = document.getElementById('deleteterm');
+
+        DeleteTerm.style.display = "none";
+    }
+
+    function OpenEditTerm(id, subj, def)
+    {
+        var EditTerm = document.getElementById('editterm');
+        var EditID = document.getElementById('editid');
+        var EditSubj = document.getElementById('editsubj');
+        var EditDef = document.getElementById('editdef');
+
+        EditID.value = id;
+        EditSubj.value = subj;
+        EditDef.value = def;
+        EditTerm.style.display = "block";
+    }
+
+    function CloseEditTerm()
+    {
+        var EditTerm = document.getElementById('editterm');
+
+        EditTerm.style.display = "none";
+    }
+
+    function OpenAddTerm()
+    {
+        var AddTerm = document.getElementById('addterm');
+
+        AddTerm.style.display = "block";
+    }
+
+    function CloseAddTerm()
+    {
+        var AddTerm = document.getElementById('addterm');
+
+        AddTerm.style.display = "none";
+    }
+</script>

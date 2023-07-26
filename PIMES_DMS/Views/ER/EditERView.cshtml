@@ -4,117 +4,121 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-controller="ER" asp-action="EditER" method="post">
-    <input value="@Model.ERID" name="erid" hidden/>
-    <div class="d-flex justify-content-between">
+<div class="container">
+    <form asp-controller="ER" asp-action="EditER" method="post">
+        <input value="@Model.ERID" name="erid" hidden />
+        <div class="d-flex justify-content-between">
+            <div>
+                <h1>Edit > @Model.ControlNo</h1>
+            </div>
+            <div class="align-self-center">
+                <div>
+                    <label>Control No.</label>
+                    <input value="@Model.ControlNo" name="controlno" readonly />
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
         <div>
-            <h1>Edit > @Model.ControlNo</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:15%">PHASE</th>
+                        <th style="width:25%">SOH</th>
+                        <th style="width:25%">GOOD</th>
+                        <th style="width:25%">NO GOOD</th>
+                        <th style="width:25%">DISPOSITION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>WSHE</th>
+                        <td><input value="@Model.WHSESOH" class="form-control w-auto" type="number" name="whsoh" /></td>
+                        <td><input value="@Model.WHSEGOOD" class="form-control w-auto" type="number" name="whgood" /></td>
+                        <td><input value="@Model.WHSENOGOOD" class="form-control w-auto" type="number" name="whnogood" /></td>
+                        <td>
+                            <select asp-for="@Model.WHSEDis" class="form-select w-auto" name="whdis">
+                                <option value="Use as-is">Use as-is</option>
+                                <option value="Scrap">Scrap</option>
+                                <option value="Rework">Rework</option>
+                            </select>
+                        </td>
+                        @*<td><input value="@Model.WHSEDis" class="form-control w-auto" name="whdis" /></td>*@
+                    </tr>
+                    <tr>
+                        <th>IQA</th>
+                        <td><input value="@Model.IQASOH" class="form-control w-auto" type="number" name="iqsoh" /></td>
+                        <td><input value="@Model.IQASOH" class="form-control w-auto" type="number" name="iqgood" /></td>
+                        <td><input value="@Model.IQANOGOOD" class="form-control w-auto" type="number" name="iqnogood" /></td>
+                        <td>
+                            <select asp-for="@Model.IQADis" class="form-select w-auto" name="iqdis">
+                                <option value="Use as-is">Use as-is</option>
+                                <option value="Scrap">Scrap</option>
+                                <option value="Rework">Rework</option>
+                            </select>
+                        </td>
+                        @*<td><input value="@Model.IQADis" class="form-control w-auto" name="iqdis" /></td>*@
+                    </tr>
+                    <tr>
+                        <th>WIP</th>
+                        <td><input value="@Model.WIPSOH" class="form-control w-auto" type="number" name="wisoh" /></td>
+                        <td><input value="@Model.WIPGOOD" class="form-control w-auto" type="number" name="wigood" /></td>
+                        <td><input value="@Model.WIPNOGOOD" class="form-control w-auto" type="number" name="winogood" /></td>
+                        <td>
+                            <select asp-for="@Model.WIPDis" class="form-select w-auto" name="widis">
+                                <option value="Use as-is">Use as-is</option>
+                                <option value="Scrap">Scrap</option>
+                                <option value="Rework">Rework</option>
+                            </select>
+                        </td>
+                        @*<td><input value="@Model.WIPDis" class="form-control w-auto" name="widis"></td>*@
+                    </tr>
+                    <tr>
+                        <th>FG</th>
+                        <td><input value="@Model.FGSOH" class="form-control w-auto" type="number" name="fgsoh" /></td>
+                        <td><input value="@Model.FGGOOD" class="form-control w-auto" type="number" name="fggood" /></td>
+                        <td><input value="@Model.FGNOGOOD" class="form-control w-auto" type="number" name="fgnogood" /></td>
+                        <td>
+                            <select asp-for="@Model.FGDis" class="form-select w-auto" name="fgdis">
+                                <option value="Use as-is">Use as-is</option>
+                                <option value="Scrap">Scrap</option>
+                                <option value="Rework">Rework</option>
+                            </select>
+                        </td>
+                        @*<td><input value="@Model.FGDis" class="form-control w-auto" name="fgdis" /></td>*@
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="align-self-center">
-            <div>
-                <label>Control No.</label>
-                <input value="@Model.ControlNo" name="controlno" readonly />
-            </div>
-        </div>
-    </div>
-
-    <hr />
-
-    <div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th style="width:15%">PHASE</th>
-                    <th style="width:25%">SOH</th>
-                    <th style="width:25%">GOOD</th>
-                    <th style="width:25%">NO GOOD</th>
-                    <th style="width:25%">DISPOSITION</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>WSHE</th>
-                    <td><input value="@Model.WHSESOH" class="form-control w-auto" type="number"  name="whsoh"/></td>
-                    <td><input value="@Model.WHSEGOOD" class="form-control w-auto" type="number" name="whgood" /></td>
-                    <td><input value="@Model.WHSENOGOOD" class="form-control w-auto" type="number" name="whnogood" /></td>
-                    <td><select asp-for="@Model.WHSEDis" class="form-select w-auto" name="whdis">
-                        <option value="Use as-is">Use as-is</option>
-                        <option value="Scrap">Scrap</option>
-                        <option value="Rework">Rework</option>
-                    </select></td>
-                    @*<td><input value="@Model.WHSEDis" class="form-control w-auto" name="whdis" /></td>*@
-                </tr>
-                <tr>
-                    <th>IQA</th>
-                    <td><input value="@Model.IQASOH" class="form-control w-auto" type="number" name="iqsoh" /></td>
-                    <td><input value="@Model.IQASOH" class="form-control w-auto" type="number" name="iqgood" /></td>
-                    <td><input value="@Model.IQANOGOOD" class="form-control w-auto" type="number" name="iqnogood" /></td>
-                    <td>
-                        <select asp-for="@Model.IQADis" class="form-select w-auto" name="iqdis">
-                            <option value="Use as-is">Use as-is</option>
-                            <option value="Scrap">Scrap</option>
-                            <option value="Rework">Rework</option>
-                        </select>
-                    </td>
-                    @*<td><input value="@Model.IQADis" class="form-control w-auto" name="iqdis" /></td>*@
-                </tr>
-                <tr>
-                    <th>WIP</th>
-                    <td><input value="@Model.WIPSOH" class="form-control w-auto" type="number" name="wisoh" /></td>
-                    <td><input value="@Model.WIPGOOD" class="form-control w-auto" type="number" name="wigood" /></td>
-                    <td><input value="@Model.WIPNOGOOD" class="form-control w-auto" type="number" name="winogood" /></td>
-                    <td>
-                        <select asp-for="@Model.WIPDis" class="form-select w-auto" name="widis">
-                            <option value="Use as-is">Use as-is</option>
-                            <option value="Scrap">Scrap</option>
-                            <option value="Rework">Rework</option>
-                        </select>
-                    </td>
-                    @*<td><input value="@Model.WIPDis" class="form-control w-auto" name="widis"></td>*@
-                </tr>
-                <tr>
-                    <th>FG</th>
-                    <td><input value="@Model.FGSOH" class="form-control w-auto" type="number" name="fgsoh" /></td>
-                    <td><input value="@Model.FGGOOD" class="form-control w-auto" type="number" name="fggood" /></td>
-                    <td><input value="@Model.FGNOGOOD" class="form-control w-auto" type="number" name="fgnogood" /></td>
-                    <td>
-                        <select asp-for="@Model.FGDis" class="form-select w-auto" name="fgdis">
-                            <option value="Use as-is">Use as-is</option>
-                            <option value="Scrap">Scrap</option>
-                            <option value="Rework">Rework</option>
-                        </select>
-                    </td>
-                    @*<td><input value="@Model.FGDis" class="form-control w-auto" name="fgdis" /></td>*@
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
 
-    <div class="d-flex justify-content-evenly" style="height:200px">
-        <div class="w-50 h-100">
-            <div>
-                <label class="fw-bold">Emergency Response</label>
+        <div class="d-flex justify-content-evenly" style="height:200px">
+            <div class="w-50 h-100">
+                <div>
+                    <label class="fw-bold">Emergency Response</label>
+                </div>
+                <div>
+                    <label class="form-label mt-3">Need Replacement?</label>
+                    <select class="form-select w-50" name="rep" asp-for="@Model.Rep">
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="mt-1 form-group">
+                    <label class="form-label">RMA #</label>
+                    <input class="form-control w-50" name="rma" value="@Model.RMAno" />
+                </div>
             </div>
-            <div>
-                <label class="form-label mt-3">Need Replacement?</label>
-                <select class="form-select w-50" name="rep" asp-for="@Model.Rep">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
-                </select>
-            </div>
-            <div class="mt-1 form-group">
-                <label class="form-label">RMA #</label>
-                <input class="form-control w-50" name="rma"  value="@Model.RMAno"/>
+            <div class="w-50 d-flex justify-content-evenly">
+                <div class="w-25 align-self-end">
+                    <input class="btn btn-danger w-100" value="Discard" />
+                </div>
+                <div class="w-75 d-flex align-self-end justify-content-end">
+                    <input class="btn btn-primary w-75" type="submit" />
+                </div>
             </div>
         </div>
-        <div class="w-50 d-flex justify-content-evenly">
-            <div class="w-25 align-self-end">
-                <input class="btn btn-danger w-100" value="Discard" />
-            </div>
-            <div class="w-75 d-flex align-self-end justify-content-end">
-                <input class="btn btn-primary w-75" type="submit" />
-            </div>
-        </div>
-    </div>
-</form>
+    </form>
+</div>

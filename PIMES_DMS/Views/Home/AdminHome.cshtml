@@ -5,191 +5,193 @@
     string? Role = TempData["Role"] as string;
     TempData.Keep();
 }
-<div class="row">
-    <div class="col-sm-12 col-md-4 flex-column">
-        @if (Role == "Admin")
-        {
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-12 col-md-4 flex-column">
+            @if (Role == "Admin")
+            {
+                <div class="d-flex justify-content-center">
+                    <a asp-controller="Issue" asp-action="SubmitIssueView" class="btn btn-primary text-center w-75 mt-4">
+                        <div class="d-flex justify-content-start">
+                            Submit Claim
+                        </div>
+                    </a>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-primary text-center w-75 mt-4" onclick="Open8DModal()">
+                        <div class="d-flex justify-content-start">
+                            Submit 8D
+                        </div>
+                    </button>
+                </div>
+            }
             <div class="d-flex justify-content-center">
-                <a asp-controller="Issue" asp-action="SubmitIssueView" class="btn btn-primary text-center w-75 mt-4">
-                    <div class="d-flex justify-content-start">
-                        Submit Claim
+                <a asp-controller="Issue" asp-action="IssuesList" class="btn btn-primary text-center w-75 mt-4">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            Claims
+                        </div>
+                        <div>
+                            <span class="badge text-bg-secondary bg-danger">@ViewBag.Claims</span>
+                        </div>
                     </div>
                 </a>
             </div>
             <div class="d-flex justify-content-center">
-                <button class="btn btn-primary text-center w-75 mt-4" onclick="Open8DModal()">
+                <a asp-controller="Issue" asp-action="AcknowledgedIssues" class="btn btn-primary text-center w-75 mt-4">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            On-Process
+                        </div>
+                        <div>
+                            <span class="badge text-bg-secondary bg-danger">@ViewBag.OnProcess</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="d-flex justify-content-center">
+                <a asp-controller="Validation" asp-action="ForGERVal" class="btn btn-primary text-center w-75 mt-4">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            E.R.A
+                        </div>
+                        <div>
+                            <span class="badge text-bg-secondary bg-danger">@ViewBag.ERA</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="d-flex justify-content-center">
+                <a asp-controller="ER" asp-action="ERView" class="btn btn-primary text-center w-75 mt-4">
                     <div class="d-flex justify-content-start">
-                        Submit 8D
+                        Emergency Responses
                     </div>
-                </button>
+                </a>
             </div>
-        }
-        <div class="d-flex justify-content-center">
-            <a asp-controller="Issue" asp-action="IssuesList" class="btn btn-primary text-center w-75 mt-4">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        Claims
+            <div class="d-flex justify-content-center">
+                <a asp-controller="RCV" asp-action="RCVList" class="btn btn-primary text-center w-75 mt-4">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            RC, CAPA & Ver.
+                        </div>
+                        <div>
+                            <span class="badge text-bg-secondary bg-danger">@ViewBag.RC</span>
+                        </div>
                     </div>
-                    <div>
-                        <span class="badge text-bg-secondary bg-danger">@ViewBag.Claims</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="d-flex justify-content-center">
-            <a asp-controller="Issue" asp-action="AcknowledgedIssues" class="btn btn-primary text-center w-75 mt-4">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        On-Process
-                    </div>
-                    <div>
-                        <span class="badge text-bg-secondary bg-danger">@ViewBag.OnProcess</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="d-flex justify-content-center">
-            <a asp-controller="Validation" asp-action="ForGERVal" class="btn btn-primary text-center w-75 mt-4">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        E.R.A
-                    </div>
-                    <div>
-                        <span class="badge text-bg-secondary bg-danger">@ViewBag.ERA</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="d-flex justify-content-center">
-            <a asp-controller="ER" asp-action="ERView" class="btn btn-primary text-center w-75 mt-4">
-                <div class="d-flex justify-content-start">
-                    Emergency Responses
-                </div>
-            </a>
-        </div>
-        <div class="d-flex justify-content-center">
-            <a asp-controller="RCV" asp-action="RCVList" class="btn btn-primary text-center w-75 mt-4">
-               <div class="d-flex justify-content-between">
-                    <div>
-                        RC, CAPA & Ver.
-                    </div>
-                    <div>
-                        <span class="badge text-bg-secondary bg-danger">@ViewBag.RC</span>
-                    </div>
-               </div>
-            </a>
-        </div>
-    </div>
-
-    <div class="col-6 col-md-4">
-        <div class="text-center">
-            <div>
-                <div style="font-weight:bold; font-size:20px">
-                    PENDING
-                </div>
-                <div class="table-data">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ISSUE #</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                IEnumerable<IssueModel>? InComingIssue = ViewData["InComingIssue"] as IEnumerable<IssueModel>;
-                                if (InComingIssue != null)
-                                {
-                                    foreach (var obj in InComingIssue!)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @obj.IssueNo
-                                            </td>
-                                            <td>
-                                                @obj.DateCreated.ToString("MM/dd/yyy")
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                </a>
             </div>
         </div>
-    </div>
 
-    <div class="col-6 col-md-4">
-        <div class="text-center">
-            <div>
-                <div style="font-weight:bold; font-size:20px">
-                    ON PROCESS
-                </div>
-                <div class="table-data">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ISSUE #</th>
-                                <th>DAYS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                IEnumerable<IssueModel>? Progress = ViewData["OnProgressIssue"] as IEnumerable<IssueModel>;
-                                if (Progress != null)
-                                {
-                                    foreach (var obj in Progress!)
+        <div class="col-6 col-md-4">
+            <div class="text-center">
+                <div>
+                    <div style="font-weight:bold; font-size:20px">
+                        PENDING
+                    </div>
+                    <div class="table-data">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ISSUE #</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    IEnumerable<IssueModel>? InComingIssue = ViewData["InComingIssue"] as IEnumerable<IssueModel>;
+                                    if (InComingIssue != null)
                                     {
-                                        DateTime dateack = Convert.ToDateTime(obj.DateAck);
-                                        DateTime today = Convert.ToDateTime(DateTime.Now);
-                                        TimeSpan res = today - dateack;
-                                        int resDay = res.Days;
-
-                                        if (resDay >= 4)
+                                        foreach (var obj in InComingIssue!)
                                         {
-                                            <tr class="bg-danger">
+                                            <tr>
                                                 <td>
                                                     @obj.IssueNo
                                                 </td>
                                                 <td>
-                                                    @{
-                                                        Write(resDay);
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
-                                        else if (resDay == 3 || resDay == 2)
-                                        {
-                                            <tr class="bg-success">
-                                                <td>
-                                                    @obj.IssueNo
-                                                </td>
-                                                <td>
-                                                    @{
-                                                        Write(resDay);
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
-                                        else if (resDay <= 1)
-                                        {
-                                            <tr class="bg-primary">
-                                                <td>
-                                                    @obj.IssueNo
-                                                </td>
-                                                <td>
-                                                    @{
-                                                        Write(resDay);
-                                                    }
+                                                    @obj.DateCreated.ToString("MM/dd/yyy")
                                                 </td>
                                             </tr>
                                         }
                                     }
                                 }
-                            }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4">
+            <div class="text-center">
+                <div>
+                    <div style="font-weight:bold; font-size:20px">
+                        ON PROCESS
+                    </div>
+                    <div class="table-data">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ISSUE #</th>
+                                    <th>DAYS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    IEnumerable<IssueModel>? Progress = ViewData["OnProgressIssue"] as IEnumerable<IssueModel>;
+                                    if (Progress != null)
+                                    {
+                                        foreach (var obj in Progress!)
+                                        {
+                                            DateTime dateack = Convert.ToDateTime(obj.DateAck);
+                                            DateTime today = Convert.ToDateTime(DateTime.Now);
+                                            TimeSpan res = today - dateack;
+                                            int resDay = res.Days;
+
+                                            if (resDay >= 4)
+                                            {
+                                                <tr class="bg-danger">
+                                                    <td>
+                                                        @obj.IssueNo
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            Write(resDay);
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                            else if (resDay == 3 || resDay == 2)
+                                            {
+                                                <tr class="bg-success">
+                                                    <td>
+                                                        @obj.IssueNo
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            Write(resDay);
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                            else if (resDay <= 1)
+                                            {
+                                                <tr class="bg-primary">
+                                                    <td>
+                                                        @obj.IssueNo
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            Write(resDay);
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

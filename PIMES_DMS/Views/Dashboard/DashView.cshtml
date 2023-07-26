@@ -1,8 +1,8 @@
 ﻿@using System.Globalization
 @{
     ViewData["Title"] = "Dashboard";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = null;
 
     List<IssueModel>? DataForTat = ViewData["DataForTat"] as List<IssueModel>;
 
@@ -41,151 +41,77 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>ATS QA - Dashboard</title>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/PIMES_DMS.styles.css" asp-append-version="true" />
-        <link rel="icon" href="~/favicon.ico" type="image/x-icon" sizes="32x32">
-        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-        </head>
-    <body>
-        <form class="align-content-center" asp-controller="Issue" asp-action="ArchiveFunct" id="myForm">
-            <header class="mb-3">
-                <nav class="navbar navbar-expand-lg navbar-light" style="background-color:blue">
-                    <div class="container-fluid">
-                        <div class="navbar-brand d-flex">
-                            <div class="d-flex align-items-center">
-                                <img style="height:30px; margin-right:10px" src="~/photos/pimeslogo.png" />
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <a class="text-white billsfont text-decoration-none overflow-hidden" asp-controller="Home" asp-action="AdminHome">P. IMES Corp.</a>
-                            </div>
-                        </div>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
-                            <div class="navbar-nav">
-                                <a class="nav-link active text-white" aria-current="page" asp-controller="Home" asp-action="AdminHome">Home</a>
-                                <a class="nav-link active text-white" aria-current="page" asp-controller="Dashboard" asp-action="DashView">Dashboard</a>
-                                @{
-                                    if (Role == "Admin")
-                                    {
-                                        <a class="nav-link active text-white" asp-controller="Admin" asp-action="AdminView">Accounts</a>
-                                        <a class="nav-link active text-white" asp-controller="Notif" asp-action="ShowNotif"> Notification</a>
-                                    }
-                                }
-                                <select class="bg-transparent text-white bg-primary border-0 text-start" style="width:100px" onchange="submitForm()" name="aval">
-                                    <option class="bg-primary border-primary">More</option>
-                                    <option class="bg-primary border-primary" value="Invalid">Invalid Claims</option>
-                                    <option class="bg-primary border-primary" value="Valid">Valid Claims</option>
-                                    <option class="bg-primary border-primary" value="8D">8D Reps.</option>
-                                    <option class="bg-primary border-primary" value="RMA">RMA</option>
-                                </select>
-                            </div>
-                            <div class="d-flex float-end">
-                                <div class="billsfont text-white text-center d-flex">
-                                    <div class="align-self-center">
-                                        @EN
-                                    </div>
-                                    <div class="align-self-center mx-1">
-                                        @*&#x267F;*@
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16">
-                                            <path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H4Zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-                                            <path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.373 5.373 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2H2Z" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="align-items-center text-white d-flex justify-content-center" style="margin-left:15px">
-                                    <a class="btn btn-danger" asp-controller="Login" asp-action="Logout">Logout</a>
-                                    <img style="height:30px; margin-inline:10px" src="~/photos/ats wbg.png" />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </nav>
-            </header>
-        </form>
-
-    <div class="container-fluid row mx-0">
-        <div class="flex-column col-sm-12 col-md-8 mb-2">
-            <div class="">
-                <form asp-controller="Dashboard" asp-action="RecentYear" id="dashForm">
-                    <div class="">
-                        <select class="form-select border-primary w-100" id="dateSelect" onchange="Submit()" name="year">
-                            <option>Select Year</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <div class="card border-0 h-100" style="background-color:#E9E4E9">
-                        <h4 class="card-header text-center" style="background-color:#D2D2D2">Validation Status</h4>
-                        <div class="pb-2">
-                            <canvas id="pieChartValid" class=""></canvas>
-                        </div>
-                    </div>
+<div class="container-fluid row mx-0">
+    <div class="flex-column col-sm-12 col-md-8 mb-2">
+        <div class="">
+            <form asp-controller="Dashboard" asp-action="RecentYear" id="dashForm">
+                <div class="d-flex justify-content-between">
+                    <marquee class="align-self-center w-50 text-white bg-dark">
+                        Welcome to the CSat Portal - Dashboard. Please contact ATS-QA for feedback or suggestion for improvements. Have a great day!!
+                    </marquee>
+                    <select class="form-select border-primary w-50" id="dateSelect" onchange="Submit()" name="year">
+                        <option>Select Year</option>
+                    </select>
                 </div>
-                <div class="col-sm-12 col-md-6">
-                    <div class="card border-0 h-100" style="background-color:#E9E4E9">
-                        <h4 class="card-header text-center" style="background-color:#D2D2D2">3F1S</h4>
-                        <div class="pb-2">
-                            <canvas id="fs" class=""></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
-        <div class="flex-column col-sm-12 col-md-4">
-            <div class="w-100 mb-2">
-                <div class="card w-100" style="background-color:#E9E4E9">
-                    <h4 class="card-header text-center" style="background-color:#D2D2D2">CSat Performance</h4>
-                    <div>
-                        <canvas id="bar" class="w-100"></canvas>
+        <div class="row mt-4">
+            <div class="col-sm-12 col-md-6">
+                <div class="card border-0 h-100" style="background-color:#E9E4E9">
+                    <h4 class="card-header text-center" style="background-color:#B5AD9A">Validation Status</h4>
+                    <div class="pb-2">
+                        <canvas id="pieChartValid" class=""></canvas>
                     </div>
                 </div>
             </div>
-            <div class="w-100">
-                <div class="card w-100" style="background-color:#E9E4E9">
-                    <h4 class="card-header text-center" style="background-color:#D2D2D2">VR Turn Around Time</h4>
-                    <div class="legend-item d-flex justify-content-center justify-content-evenly">
-                        <div class="d-flex">
-                            <div class="legend-color align-self-center" style="background-color:#2F852B; border: 1px solid black"></div>
-                            <div class="legend-label align-self-center">Valid</div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="legend-color align-self-center" style="background-color:#E83800; border: 1px solid black"></div>
-                            <div class="legend-label align-self-center">Invalid</div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="legend-color align-self-center" style="background-color:yellow; border: 1px solid black"></div>
-                            <div class="legend-label align-self-center">Overdue Invalid</div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="legend-color align-self-center" style="background-color:maroon; border: 1px solid black"></div>
-                            <div class="legend-label align-self-center">Deadline</div>
-                        </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="card border-0 h-100" style="background-color:#E9E4E9">
+                    <h4 class="card-header text-center" style="background-color:#B5AD9A">3F1S</h4>
+                    <div class="pb-2">
+                        <canvas id="fs" class=""></canvas>
                     </div>
-
-                    <canvas id="responsive" class=""></canvas>
                 </div>
             </div>
         </div>
     </div>
+    <div class="flex-column col-sm-12 col-md-4">
+        <div class="w-100 mb-2">
+            <div class="card w-100" style="background-color:#E9E4E9">
+                <h4 class="card-header text-center" style="background-color:#B5AD9A">CSat Performance</h4>
+                <div>
+                    <canvas id="bar" class="w-100 h-100"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="w-100">
+            <div class="card w-100" style="background-color:#E9E4E9">
+                <h4 class="card-header text-center" style="background-color:#B5AD9A">VR Turn Around Time</h4>
+                <div class="legend-item d-flex justify-content-center justify-content-evenly">
+                    <div class="d-flex">
+                        <div class="legend-color align-self-center" style="background-color:#2F852B; border: 1px solid black"></div>
+                        <div class="legend-label align-self-center">Valid</div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="legend-color align-self-center" style="background-color:#E83800; border: 1px solid black"></div>
+                        <div class="legend-label align-self-center">Invalid</div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="legend-color align-self-center" style="background-color:yellow; border: 1px solid black"></div>
+                        <div class="legend-label align-self-center">Overdue Invalid</div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="legend-color align-self-center" style="background-color:maroon; border: 1px solid black"></div>
+                        <div class="legend-label align-self-center">Deadline</div>
+                    </div>
+                </div>
 
-    <footer class="loginfooter">
-        <p class="mx-5 text-white">
-            &copy; 2023 - P. IMES - ATS QA
-        </p>
-    </footer>
-</body>
-</html>
+                <div>
+                    <canvas id="responsive" class="w-100 h-100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var bgiv = '#77DD76';

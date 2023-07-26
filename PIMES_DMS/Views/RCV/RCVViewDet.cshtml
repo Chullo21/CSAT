@@ -13,87 +13,89 @@
 
 }
 
-<h1 class="text-center">View Verification > @action!.ControlNo</h1>
-<hr />
-
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <table class="table table-bordered text-center">
-                <thead>
-                    <tr>
-                        <th class="w-25">PIC</th>
-                        <th class ="w-50">Action</th>
-                        <th class="w-25">Target Date</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    <tr>
-                        <td>
-                            <input class="form-control text-center" value="@action!.PIC" readonly />
-                        </td>
-                        <td>
-                            <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.Action</textarea>
-                        </td>
-                        <td>
-                            <input class="form-control w-100 text-center" value="@td?.TD.ToShortDateString()" readonly />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <h1 class="text-center">View Verification > @action!.ControlNo</h1>
+    <hr />
 
-        <div class="col-sm-12 col-md-12">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="w-25 desktop-only">Report Creator</th>
-                        <th class="w-25">Action Item Status</th>
-                        <th style="width:40%">Remarks</th>
-                        <th style="width:10%"> </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @{
-                        foreach (var obj in ver!)
-                        {
-                            string? style;
-                            string? stat;
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th class="w-25">PIC</th>
+                            <th class="w-50">Action</th>
+                            <th class="w-25">Target Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        <tr>
+                            <td>
+                                <input class="form-control text-center" value="@action!.PIC" readonly />
+                            </td>
+                            <td>
+                                <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.Action</textarea>
+                            </td>
+                            <td>
+                                <input class="form-control w-100 text-center" value="@td?.TD.ToShortDateString()" readonly />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                            if (obj.Status == "Open")
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="w-25 desktop-only">Report Creator</th>
+                            <th class="w-25">Action Item Status</th>
+                            <th style="width:40%">Remarks</th>
+                            <th style="width:10%"> </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        @{
+                            foreach (var obj in ver!)
                             {
-                                style = "background-color:hotpink; width:20%";
-                                stat = "OPEN";
-                            }
-                            else
-                            {
-                                style = "background-color:mediumseagreen; width:20%";
-                                stat = "CLOSED";
-                            }
+                                string? style;
+                                string? stat;
 
-                            <tr>
-                                <td class="desktop-only"><input class="form-control text-center w-100 h-100" type="text" value="@obj.Verificator" readonly /></td>
-                                <td style="@style">
-                                    <input class="form-control text-center w-100 h-100" type="text" value="@stat" readonly />
-                                    @{
-                                        string print = "Closed Date";
+                                if (obj.Status == "Open")
+                                {
+                                    style = "background-color:hotpink; width:20%";
+                                    stat = "OPEN";
+                                }
+                                else
+                                {
+                                    style = "background-color:mediumseagreen; width:20%";
+                                    stat = "CLOSED";
+                                }
 
-                                        if (obj.Status == "Open")
-                                        {
-                                            print = "Recommit Date";
+                                <tr>
+                                    <td class="desktop-only"><input class="form-control text-center w-100 h-100" type="text" value="@obj.Verificator" readonly /></td>
+                                    <td style="@style">
+                                        <input class="form-control text-center w-100 h-100" type="text" value="@stat" readonly />
+                                        @{
+                                            string print = "Closed Date";
+
+                                            if (obj.Status == "Open")
+                                            {
+                                                print = "Recommit Date";
+                                            }
                                         }
-                                    }
-                                    <input class="form-control text-center mt-2" type="text" value="@print: @obj.StatusDate.ToShortDateString()" readonly />
-                                </td>
-                                <td><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@obj.Result</textarea></td>
-                                <td>
-                                    <button class="btn btn-secondary mt-2 w-100 mt-1" onclick="getsrc('@Url.Action("ShowFile", "RCV", new {ID = obj.VerID})')">File</button>
-                                </td>
-                            </tr>
+                                        <input class="form-control text-center mt-2" type="text" value="@print: @obj.StatusDate.ToShortDateString()" readonly />
+                                    </td>
+                                    <td><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@obj.Result</textarea></td>
+                                    <td>
+                                        <button class="btn btn-secondary mt-2 w-100 mt-1" onclick="getsrc('@Url.Action("ShowFile", "RCV", new {ID = obj.VerID})')">File</button>
+                                    </td>
+                                </tr>
+                            }
                         }
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

@@ -4,60 +4,62 @@
     ViewData["Title"] = "Create User";
 }
 
-<div class="d-flex justify-content-center">
-    <div>
-        <h1>Create User</h1>
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div>
+            <h1>Create User</h1>
+        </div>
     </div>
-</div>
 
-<hr />
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <form asp-controller="Admin" asp-action="CreateUser" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mt-2">
-                <label asp-for="AccName" class="control-label"></label>
-                <input asp-for="AccName" class="form-control" name="accname" required />
-                <span asp-validation-for="AccName" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-2">
-                <label asp-for="Section" class="control-label"></label>
-                <select asp-for="Section" class="form-select" name="compname">
-                    @foreach (var sect in Enum.GetValues(typeof(Sections)))
-                    {
-                        <option value="@sect.ToString()">@sect.ToString()</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group mt-2">
-                <label asp-for="Role" class="control-label"></label>
-                <select asp-for="Role" class="form-select" name="role">
-                    @foreach (var role in Enum.GetValues(typeof(Roles)))
-                    {
-                        <option value="@role.ToString()">@role.ToString()</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group mt-2">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" name="email" required/>
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-2">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" name="username" required />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-2">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" name="password" required />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-3 d-flex justify-content-between">
-                <input type="submit" value="Create" class="btn btn-primary w-50" />
-                <a class="btn btn-danger" asp-action="Index">Back to List</a>
-            </div>
-        </form>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <form asp-controller="Admin" asp-action="CreateUser" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group mt-2">
+                    <label asp-for="AccName" class="control-label"></label>
+                    <input asp-for="AccName" class="form-control" name="accname" required />
+                    <span asp-validation-for="AccName" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-2">
+                    <label asp-for="Section" class="control-label"></label>
+                    <select asp-for="Section" class="form-select" name="compname">
+                        @foreach (var sect in Enum.GetValues(typeof(Sections)))
+                        {
+                            <option value="@sect.ToString()">@sect.ToString()</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group mt-2">
+                    <label asp-for="Role" class="control-label"></label>
+                    <select asp-for="Role" class="form-select" name="role">
+                        @foreach (var role in Enum.GetValues(typeof(Roles)))
+                        {
+                            <option value="@role.ToString()">@role.ToString()</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group mt-2">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" name="email" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-2">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" name="username" required />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-2">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" name="password" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3 d-flex justify-content-between">
+                    <input type="submit" value="Create" class="btn btn-primary w-50" />
+                    <a class="btn btn-danger" asp-action="Index">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

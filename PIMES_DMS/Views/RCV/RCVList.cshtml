@@ -29,88 +29,91 @@
     </script>
 }
 
-<h1 class="text-center">RC, CAPA & VERIFICATION</h1>
+<div class="container">
+    <h1 class="text-center">RC, CAPA & VERIFICATION</h1>
 
-<table class="table text-center" id="myTable">
-    <thead>
-        <tr>
-            <th class="desktop-only">
-                @Html.DisplayNameFor(model => model.IssueCreator)
-            </th>
-            <th class="desktop-only">
-                @Html.DisplayNameFor(model => model.IssueNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ControlNumber)
-            </th>
-            <th style="width:10%" class="desktop-only">
-                For Verification
-            </th>
-            <th style="width:10%">
-                Open
-            </th>
-            <th style="width:10%">
-                Closed
-            </th>
-            <th style="width:20%">
-                Action
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in mod)
-        {
-            int fv;
-            int open = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Open;
-            int close = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Closed;
-            if (fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber) != null) fv = fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber).ForVer; else fv = 0;
-
+    <table class="table text-center" id="myTable">
+        <thead>
             <tr>
-                <td class="desktop-only">
-                    @Html.DisplayFor(modelItem => item.IssueCreator)
-                </td>
-                <td class="desktop-only">
-                    @Html.DisplayFor(modelItem => item.IssueNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ControlNumber)
-                </td>
-                <td class="desktop-only">
-                    @{
-                        Write(fv.ToString());
-                    }
-                </td>                    
-                <td>
-                    @{
-                        Write(open.ToString());
-                    }
-                </td>
-                <td>
-                    @{
-                        Write(close.ToString());
-                    }
-                </td>
-                <td>
-                    @{
-                        if (item.HasTES)
-                        {
-                            <div>
-                                <a class="btn btn-success w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">View</a>
-                            </div>
+                <th class="desktop-only">
+                    @Html.DisplayNameFor(model => model.IssueCreator)
+                </th>
+                <th class="desktop-only">
+                    @Html.DisplayNameFor(model => model.IssueNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ControlNumber)
+                </th>
+                <th style="width:10%" class="desktop-only">
+                    For Verification
+                </th>
+                <th style="width:10%">
+                    Open
+                </th>
+                <th style="width:10%">
+                    Closed
+                </th>
+                <th style="width:20%">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in mod)
+            {
+                int fv;
+                int open = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Open;
+                int close = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Closed;
+                if (fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber) != null) fv = fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber).ForVer; else fv = 0;
+
+                <tr>
+                    <td class="desktop-only">
+                        @Html.DisplayFor(modelItem => item.IssueCreator)
+                    </td>
+                    <td class="desktop-only">
+                        @Html.DisplayFor(modelItem => item.IssueNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ControlNumber)
+                    </td>
+                    <td class="desktop-only">
+                        @{
+                            Write(fv.ToString());
                         }
-                        else
-                        {
-                            if (role == "Admin")
+                    </td>
+                    <td>
+                        @{
+                            Write(open.ToString());
+                        }
+                    </td>
+                    <td>
+                        @{
+                            Write(close.ToString());
+                        }
+                    </td>
+                    <td>
+                        @{
+                            if (item.HasTES)
                             {
-                                <div class="d-flex">
-                                    <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="CreateTESView" asp-route-id="@item.IssueID">Create 3x5Whys</a>
+                                <div>
+                                    <a class="btn btn-success w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">View</a>
                                 </div>
                             }
+                            else
+                            {
+                                if (role == "Admin")
+                                {
+                                    <div class="d-flex">
+                                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="CreateTESView" asp-route-id="@item.IssueID">Create 3x5Whys</a>
+                                    </div>
+                                }
+                            }
                         }
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
+
+</div>

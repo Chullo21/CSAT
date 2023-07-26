@@ -21,85 +21,87 @@
     </script>
 }
 
-<h1 class="text-center">RMA Monitoring</h1>
-<form asp-controller="RMA" asp-action="SelectedDate" method="get">
-    <div class="w-100 d-flex justify-content-center mt-3 align-items-center">
-        <div class="mx-2 d-flex">
-            <select class="form-select" id="yearSelect" name="year">
-                <option value="0">Year</option>
-            </select>
+<div class="container">
+    <h1 class="text-center">RMA Monitoring</h1>
+    <form asp-controller="RMA" asp-action="SelectedDate" method="get">
+        <div class="w-100 d-flex justify-content-center mt-3 align-items-center">
+            <div class="mx-2 d-flex">
+                <select class="form-select" id="yearSelect" name="year">
+                    <option value="0">Year</option>
+                </select>
+            </div>
+            <div class="mx-2 align-items-center">
+                <select class="form-select" id="monthSelect" name="month">
+                    <option value="0">Month</option>
+                </select>
+            </div>
+            <div class="mx-2 align-items-center">
+                <input class="btn btn-primary" type="submit" value="Download" />
+            </div>
         </div>
-        <div class="mx-2 align-items-center">
-            <select class="form-select" id="monthSelect" name="month">
-                <option value="0">Month</option>
-            </select>
-        </div>
-        <div class="mx-2 align-items-center">
-            <input class="btn btn-primary" type="submit" value="Download"/>
-        </div>
-    </div>
-</form>
+    </form>
 
-<div class="table-responsive">
-    <table class="table" id="myTable">
-        <thead>
-            <tr>
-                <th>
-                    RMA#
-                </th>
-                <th>
-                    Issue#
-                </th>
-                <th>
-                    Product
-                </th>
-                <th>
-                    Aff. P/N
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Problem Description
-                </th>
-                <th>
-                    Quantity
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="table-responsive">
+        <table class="table" id="myTable">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RMANo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IssueNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Product)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AffectedPN)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProblemDesc)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QTY)
-                    </td>
-                    <td>
-                        <a class="btn btn-primary" asp-controller="RMA" asp-action="GenerateExcelFile" asp-route-id="@item.RMAID">Download</a>
-                    </td>
+                    <th>
+                        RMA#
+                    </th>
+                    <th>
+                        Issue#
+                    </th>
+                    <th>
+                        Product
+                    </th>
+                    <th>
+                        Aff. P/N
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Problem Description
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RMANo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IssueNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Product)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AffectedPN)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProblemDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.QTY)
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" asp-controller="RMA" asp-action="GenerateExcelFile" asp-route-id="@item.RMAID">Download</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>

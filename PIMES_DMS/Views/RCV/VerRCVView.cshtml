@@ -7,78 +7,80 @@
     var vers = ViewData["Vers"] as List<ShowVerification>;
 }
 
-<form asp-controller="RCV" asp-action="VerRCV" enctype="multipart/form-data" method="post">
-    <input value="@Model.ActionID" name="id" hidden />
-    <input value="@Model.Type" name="type" hidden/>
-    <input value="@Model.ControlNo" name="controlno" hidden />
-<div class="w-100 d-flex justify-content-between">
-    <div>
-        <h1> Verify Action Item</h1>
-    </div>
-    <div>
-        <input class="btn btn-primary" type="submit"/>
-    </div>
+<div class="container">
+    <form asp-controller="RCV" asp-action="VerRCV" enctype="multipart/form-data" method="post">
+        <input value="@Model.ActionID" name="id" hidden />
+        <input value="@Model.Type" name="type" hidden />
+        <input value="@Model.ControlNo" name="controlno" hidden />
+        <div class="w-100 d-flex justify-content-between">
+            <div>
+                <h1> Verify Action Item</h1>
+            </div>
+            <div>
+                <input class="btn btn-primary" type="submit" />
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="w-100">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Action Item</th>
+                        <th>PIC</th>
+                        <th>Target Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="width:20%">
+                            <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@Model!.Action</textarea>
+                        </td>
+                        <td style="width:20%">
+                            @Model.PIC
+                        </td>
+                        <td style="width:20%">
+                            <div>
+                                <input class="form-control w-100" value="@Model.TargetDate" readonly />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="w-100">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th class="w-25">Status</th>
+
+                        <th style="width:15%" id="statustext"> Date</th>
+
+                        <th class="w-25">Evidence</th>
+
+                        <th style="width:35%">Result</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="form-select" name="status" onchange="DateHandler(this.value)" id="closeoropen" required>
+                                <option value="Open">OPEN</option>
+                                <option value="Closed">CLOSED</option>
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="date" name="statusDate" onchange="CheckDate(this.value)" required /></td>
+                        <td><input class="form-control" type="file" name="evidence" accept=".pdf"></td>
+                        <td><textarea style="max-height:100%; max-width:100%; min-height:100%; min-width:100%; background-color:transparent" name="result"></textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
 </div>
-
-<hr />
-
-<div class="w-100">
-    <table class="table table-bordered text-center">
-        <thead>
-            <tr>
-                <th>Action Item</th>
-                <th>PIC</th>
-                <th>Target Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="width:20%">
-                    <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@Model!.Action</textarea>
-                </td>
-                <td style="width:20%">
-                    @Model.PIC
-                </td>
-                <td style="width:20%">
-                   <div>
-                       <input class="form-control w-100" value="@Model.TargetDate" readonly />
-                   </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="w-100">
-    <table class="table table-bordered text-center">
-        <thead>
-            <tr>
-                <th class="w-25">Status</th>
-
-                <th style="width:15%" id="statustext"> Date</th>
-
-                <th class="w-25">Evidence</th>
-                               
-                <th style="width:35%">Result</th>     
-
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <select class="form-select" name="status" onchange="DateHandler(this.value)" id="closeoropen" required>
-                            <option value="Open">OPEN</option>
-                        <option value="Closed">CLOSED</option>
-                    </select>
-                </td>
-                    <td><input class="form-control" type="date" name="statusDate" onchange="CheckDate(this.value)" required /></td>
-                <td><input class="form-control" type="file" name="evidence" accept=".pdf"></td>                                              
-                <td><textarea style="max-height:100%; max-width:100%; min-height:100%; min-width:100%; background-color:transparent" name="result"></textarea></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-</form>
 
 <div class="modal-content w-50 h-25 border-dark" id="wrongDate">
     <button class="modal-close btn btn-danger" onclick="CloseWrongDate()">Close</button>

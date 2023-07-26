@@ -9,138 +9,140 @@
     string? emailSnip = ViewBag.EmailSnip as string;
 }
 
-<div class="d-flex justify-content-center mt-5">
-    <div>
-        <h1 style="@setColor">@Model.ValRes Claim</h1>
-    </div>
-</div>
-
-<hr />
-<div class="col-12">
-    <div class="row" style="height:500px">
-        <div class="col-12 col-md-6">
-            <table class="table table-responsive">
-                <tr>
-                    <th>
-                        Issue Creator:
-                    </th>
-                    <td>
-                        @Model.IssueCreator
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Issue #:
-                    </th>
-                    <td>
-                        @Model.IssueNo
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Date Found:
-                    </th>
-                    <td>
-                        @Model.DateFound.ToShortDateString()
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Product:
-                    </th>
-                    <td>
-                        @Model.Product
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Serial #:
-                    </th>
-                    <td>
-                        @Model.SerialNo
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Affected P/N:
-                    </th>
-                    <td>
-                        @Model.AffectedPN
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Description:
-                    </th>
-                    <td>
-                        @Model.Desc
-                    </td>
-                </tr>
-                <tr style="height:auto">
-                    <th>
-                        Problem Description:
-                    </th>
-                    <td>
-                        @Model.ProbDesc
-                    </td>
-                </tr>
-            </table>
+<div class="container">
+    <div class="d-flex justify-content-center mt-5">
+        <div>
+            <h1 style="@setColor">@Model.ValRes Claim</h1>
         </div>
-        <div class="col-12 col-md-6 d-block justify-content-center" style="background-color:steelblue; border:3px solid">
-            <div >
-                <p class="fw-bold text-center mt-3">
-                    VALIDATION FORM RESULT
-                </p>
+    </div>
+
+    <hr />
+    <div class="col-12">
+        <div class="row" style="height:500px">
+            <div class="col-12 col-md-6">
+                <table class="table table-responsive">
+                    <tr>
+                        <th>
+                            Issue Creator:
+                        </th>
+                        <td>
+                            @Model.IssueCreator
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Issue #:
+                        </th>
+                        <td>
+                            @Model.IssueNo
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Date Found:
+                        </th>
+                        <td>
+                            @Model.DateFound.ToShortDateString()
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Product:
+                        </th>
+                        <td>
+                            @Model.Product
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Serial #:
+                        </th>
+                        <td>
+                            @Model.SerialNo
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Affected P/N:
+                        </th>
+                        <td>
+                            @Model.AffectedPN
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Description:
+                        </th>
+                        <td>
+                            @Model.Desc
+                        </td>
+                    </tr>
+                    <tr style="height:auto">
+                        <th>
+                            Problem Description:
+                        </th>
+                        <td>
+                            @Model.ProbDesc
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <div class="flex-column">
-                <div class="d-flex align-items-center mt-3 mx-5 mb-2">
-                    <label class="form-label fw-bold align-self-center">Report Number:</label>
-                    <input class="text-center form-control w-50" style="margin-left:5px" value="@Model.ValNo" readonly />
+            <div class="col-12 col-md-6 d-block justify-content-center" style="background-color:steelblue; border:3px solid">
+                <div>
+                    <p class="fw-bold text-center mt-3">
+                        VALIDATION FORM RESULT
+                    </p>
                 </div>
-                <div class="mt-3 w-50 mb-2 mx-5">
-                    <div class="d-flex justify-content-between">
-                        @{
-                            if (Model.Report != null)
-                            {
-                                <div>
-                                    <label style="font-weight:bold">Evidence:</label>
-                                    <button class="btn btn-primary" onclick="openModal()">View</button>
-                                </div>
-                            }
-                            else
-                            {
-                                Write("No Attachment");
-                            }
-
-                            if (Model.ValRes == "Invalid" && Model.EmailSnip != null)
-                            {
-                                <div>
-                                    <label style="font-weight:bold">Email Snip:</label>
-                                    <button class="btn btn-primary" onclick="OpenEmailSnip()">View</button>
-                                </div>
-                            }
-                            else if (Model.ValRes == "Invalid" && Model.EmailSnip == null)
-                            {
-                                <div style="margin-left:5px">
-                                    <label style="font-weight:bold">Add Email Snip:</label>
-                                    <button class="btn btn-primary" onclick="openAddEmailSnip()">Add</button>
-                                </div>
-                            }
-
-                            if (Model.ValRes == "Valid" && Model.HasTES)
-                            {
-                                <div style="margin-left:5px">
-                                    <label style="font-weight:bold">View Action Items:</label>
-                                    <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@Model.ControlNumber">Action Items</a>
-                                </div>
-                            }
-                        }
+                <div class="flex-column">
+                    <div class="d-flex align-items-center mt-3 mx-5 mb-2">
+                        <label class="form-label fw-bold align-self-center">Report Number:</label>
+                        <input class="text-center form-control w-50" style="margin-left:5px" value="@Model.ValNo" readonly />
                     </div>
-                </div>
-                <div class="mx-5 mb-2">
-                    <label class="form-label fw-bold">Summary Report:</label>
-                    <div>
-                        <textarea class="w-100 h-75 mt-2" style="max-height:250px; min-height:250px" readonly>@Model.ValidationRepSum</textarea>
+                    <div class="mt-3 w-50 mb-2 mx-5">
+                        <div class="d-flex justify-content-between">
+                            @{
+                                if (Model.Report != null)
+                                {
+                                    <div>
+                                        <label style="font-weight:bold">Evidence:</label>
+                                        <button class="btn btn-primary" onclick="openModal()">View</button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    Write("No Attachment");
+                                }
+
+                                if (Model.ValRes == "Invalid" && Model.EmailSnip != null)
+                                {
+                                    <div>
+                                        <label style="font-weight:bold">Email Snip:</label>
+                                        <button class="btn btn-primary" onclick="OpenEmailSnip()">View</button>
+                                    </div>
+                                }
+                                else if (Model.ValRes == "Invalid" && Model.EmailSnip == null)
+                                {
+                                    <div style="margin-left:5px">
+                                        <label style="font-weight:bold">Add Email Snip:</label>
+                                        <button class="btn btn-primary" onclick="openAddEmailSnip()">Add</button>
+                                    </div>
+                                }
+
+                                if (Model.ValRes == "Valid" && Model.HasTES)
+                                {
+                                    <div style="margin-left:5px">
+                                        <label style="font-weight:bold">View Action Items:</label>
+                                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@Model.ControlNumber">Action Items</a>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="mx-5 mb-2">
+                        <label class="form-label fw-bold">Summary Report:</label>
+                        <div>
+                            <textarea class="w-100 h-75 mt-2" style="max-height:250px; min-height:250px" readonly>@Model.ValidationRepSum</textarea>
+                        </div>
                     </div>
                 </div>
             </div>

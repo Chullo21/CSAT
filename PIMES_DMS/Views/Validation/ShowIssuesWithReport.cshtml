@@ -19,90 +19,92 @@
     </script>
 }
 
-<h1>Validated Issues</h1>
-<hr />
+<div class="container">
+    <h1>Validated Issues</h1>
+    <hr />
 
-<div>
-    <div class="form-control-lg w-100">
-        <form asp-controller="Validation" asp-action="SearchVal" method="get">
-            <div class="d-flex">
-                <div class="align-self-center">
-                    <input class="form-control w-100" name="ss" placeholder="Search" />
+    <div>
+        <div class="form-control-lg w-100">
+            <form asp-controller="Validation" asp-action="SearchVal" method="get">
+                <div class="d-flex">
+                    <div class="align-self-center">
+                        <input class="form-control w-100" name="ss" placeholder="Search" />
+                    </div>
+                    <div>
+                        <input style="margin-left:5px" class="btn btn-primary" type="submit" />
+                    </div>
                 </div>
-                <div>
-                    <input style="margin-left:5px" class="btn btn-primary" type="submit" />
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
-<table class="table table-bordered table-striped text-center align-content-center" id="myTable">
-    <thead>
-        <tr>
-            <th>
-                Issue No.
-            </th>
-            <th>
-                Issue Creator
-            </th>
-            <th>
-                Product
-            </th>
-            <th>
-                Serial No.
-            </th>
-            <th>
-                Affected P/N
-            </th>
-            <th>
-                Description
-            </th>
-            <th>
-                Date Acknowledged
-            </th>
-            <th>
-                Date Validated
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in mod)
-        {
-            <tr style="height:30px">
-                <td>
-                    @Html.DisplayFor(modelItem => item.IssueNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IssueCreator)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Product)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SerialNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AffectedPN)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Desc)
-                </td>
-                <td>
-                    @item.DateAck.ToShortDateString()
-                </td>
-                <td>
-                    @item.DateVdal.ToShortDateString()
-                </td>
-                <td>
-                    <a class="btn btn-primary" asp-route-id="@item.IssueID" asp-controller="Validation" asp-action="ValidatedIssueDetail">Details</a>
-                </td>
+    <table class="table table-bordered table-striped text-center align-content-center" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    Issue No.
+                </th>
+                <th>
+                    Issue Creator
+                </th>
+                <th>
+                    Product
+                </th>
+                <th>
+                    Serial No.
+                </th>
+                <th>
+                    Affected P/N
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Date Acknowledged
+                </th>
+                <th>
+                    Date Validated
+                </th>
+                <th>
+                    Actions
+                </th>
             </tr>
-        }   
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in mod)
+            {
+                <tr style="height:30px">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IssueNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IssueCreator)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SerialNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AffectedPN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Desc)
+                    </td>
+                    <td>
+                        @item.DateAck.ToShortDateString()
+                    </td>
+                    <td>
+                        @item.DateVdal.ToShortDateString()
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-route-id="@item.IssueID" asp-controller="Validation" asp-action="ValidatedIssueDetail">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 
 
