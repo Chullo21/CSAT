@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System.Net;
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace PIMES_DMS.Controllers
 {
@@ -35,6 +36,13 @@ namespace PIMES_DMS.Controllers
                 _Db.NotifDb.Add(nm);
                 _Db.SaveChangesAsync();
             }
+        }
+
+        public IActionResult ShowPdf(string ID)
+        {
+            var rep = _Db._8DDb.FirstOrDefault(j => j.ControlNo == ID);
+
+            return File(rep.Report, "application/pdf");
         }
 
         [HttpGet]
@@ -443,6 +451,8 @@ namespace PIMES_DMS.Controllers
             }
 
             ViewBag.remarks = vermodels;
+
+            ViewBag._8D = _Db._8DDb.Any(j => j.ControlNo == ID);
 
             return View(_Db.TESDb.FirstOrDefault(j => j.ControlNo == ID));
         }

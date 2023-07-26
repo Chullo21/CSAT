@@ -21,18 +21,14 @@
                 {
                     if (!Model.Acknowledged)
                     {
-                        <div class="align-self-center d-flex">
-                            <div class="mx-2">
-                                <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
-                            </div>
+                        <div class="align-self-center mx-2">
+                            <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
                         </div>
                     }
                     else if (Model.Acknowledged)
                     {
-                        <div class="align-self-center d-flex ">
-                            <div class="mx-2">
-                                <button class="btn btn-primary" onclick="openValModal()">Validate</button>
-                            </div>
+                        <div class="mx-2 align-self-center">
+                            <button class="btn btn-primary" onclick="openValModal()">Validate</button>
                         </div>
                     }
                 }
@@ -42,12 +38,12 @@
 </div>
 <hr />
 
-<div class="w-100 row mt-2" style="height:500px">
-    <div class="h-100" style="width:60%">
+<div class="w-100 row mt-2">
+    <div>
         <div style="margin-left:10px">
             Creator: @Model.IssueCreator
         </div>
-        <div style="width:100%">
+        <div>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr class="text-center align-content-center">

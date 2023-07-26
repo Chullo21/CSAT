@@ -86,31 +86,32 @@ namespace PIMES_DMS.Controllers
 
         }
 
-        [HttpGet]
-        [AutoValidateAntiforgeryToken]
-        public IActionResult ValidatedIssueDetail(int id)
+        public IActionResult ValIssueDet(int ID)
         {
-            IssueModel? det = _Db.IssueDb.FirstOrDefault(j => j.IssueID == id);
-
-            if (det.ValRes == "Invalid")
-            {
-                string stringforEmail = Convert.ToBase64String(det.EmailSnip);
-                ViewBag.EmailSnip = "data:image/jpeg;base64," + stringforEmail;
-            }
-
-            return View(det);
-
+            return View("ValidatedIssueDetail", _Db.IssueDb.FirstOrDefault(j => j.IssueID == ID));
         }
 
         [HttpGet]
         [AutoValidateAntiforgeryToken]
-        public IActionResult ShowPdf(int id, string type)
+        public IActionResult ValidatedIssueDetail(IssueModel issue)
         {
-            var details = _Db.IssueDb.Find(id);
+            if (issue.ValRes == "Invalid")
+            {
+                string stringforEmail = Convert.ToBase64String(issue.EmailSnip);
+                ViewBag.EmailSnip = "data:image/jpeg;base64," + stringforEmail;
+            }
 
-            byte[]? docinByte = details!.Report;
+            return View(issue);
 
-            return File(docinByte!, "application/pdf");      
+        }
+
+        public IActionResult ShowPdf(int ID)
+        {
+            IssueModel val = _Db.IssueDb.FirstOrDefault(j => j.IssueID == ID);
+
+            byte[] docinByte = val.Report!;
+
+            return File(docinByte!, "application/pdf");
         }
 
         [HttpGet]
@@ -185,17 +186,17 @@ namespace PIMES_DMS.Controllers
 
                 UpdateNotif(", have sumitted a validation report." + val.ValNo, "All");
 
-                ValidatedIssueDetail(id);
+                ValidatedIssueDetail(val);
             }
 
-            return View("ValidatedIssueDetail", val);
+            return RedirectToAction("ValidatedIssueDetail", val);
         }
 
         private string GetUniqueNumberForVR(IssueModel issue)
         {
             List<IssueModel> issues = _Db.IssueDb.Where(j => !string.IsNullOrEmpty(j.ValNo) && j.DateFound.Year == issue.DateFound.Year).ToList();
 
-            issues = issues.OrderByDescending(j => j.DateFound).ToList();
+            issues = issues.OrderByDescending(j => j.ControlNumber.Substring(6, 3)).ToList();
 
             int series = 1;
 
@@ -211,13 +212,13 @@ namespace PIMES_DMS.Controllers
         {
             List<IssueModel> issues = _Db.IssueDb.Where(j => !string.IsNullOrEmpty(j.ControlNumber) && j.DateFound.Year == issue.DateFound.Year).ToList();
 
-            issues = issues.OrderByDescending(j => j.DateFound).ToList();
+            issues = issues.OrderByDescending(j => j.ControlNumber.Substring(6,3)).ToList();
 
             int series = 1;
 
             if (issues.Count > 0)
             {
-                series = int.Parse(issues.First().ValNo!.Substring(6, 3)) + 1;
+                series = int.Parse(issues.First().ControlNumber!.Substring(6, 3)) + 1;
             }
 
             return "8D-" + issue.DateFound.Year.ToString().Substring(2, 2) + "-" + series.ToString("000");

@@ -207,44 +207,44 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
-        [HttpGet]
-        [AutoValidateAntiforgeryToken]
-        public IActionResult Search(string ss)
-        {
-            string? Role = TempData["Role"] as string;
-            TempData.Keep();
+        //[HttpGet]
+        //[AutoValidateAntiforgeryToken]
+        //public IActionResult Search(string ss)
+        //{
+        //    string? Role = TempData["Role"] as string;
+        //    TempData.Keep();
 
-            if (ss.IsNullOrEmpty())
-            {
-                return View("ERView", _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus));
-            }
+        //    if (ss.IsNullOrEmpty())
+        //    {
+        //        return View("ERView", _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus));
+        //    }
 
 
-            if (Role == "CLIENT")
-            {
+        //    if (Role == "CLIENT")
+        //    {
 
-                string? EN = TempData["EN"] as string;
-                TempData.Keep();
+        //        string? EN = TempData["EN"] as string;
+        //        TempData.Keep();
 
-                IEnumerable<IssueModel> obj = from m in _Db.IssueDb
-                                              where m.IssueCreator == EN && m.ValidatedStatus && m.Acknowledged &&
-                                              (m.IssueNo.Contains(ss) || m.ControlNumber.Contains(ss))
-                                              select m;
+        //        IEnumerable<IssueModel> obj = from m in _Db.IssueDb
+        //                                      where m.IssueCreator == EN && m.ValidatedStatus && m.Acknowledged &&
+        //                                      (m.IssueNo.Contains(ss) || m.ControlNumber.Contains(ss))
+        //                                      select m;
 
-                return View("ERView", obj);
-            }
-            else
-            {
-                IEnumerable<IssueModel> obj = _Db.IssueDb.Where(m => m.ValidatedStatus && m.Acknowledged && (m.IssueCreator.Contains(ss)
-                                              || m.IssueNo.Contains(ss) || m.ControlNumber.Contains(ss)));
+        //        return View("ERView", obj);
+        //    }
+        //    else
+        //    {
+        //        IEnumerable<IssueModel> obj = _Db.IssueDb.Where(m => m.ValidatedStatus && m.Acknowledged && (m.IssueCreator.Contains(ss)
+        //                                      || m.IssueNo.Contains(ss) || m.ControlNumber.Contains(ss)));
 
-                return View("ERView", obj);
-            }
-        }
+        //        return View("ERView", obj);
+        //    }
+        //}
 
         public void NotifyAboutSubmittedIssue()
         {
-            List<string?> sendTo = _Db.AccountsDb.Where(j => j.Section == "BC" || j.Section == "PPIC").Select(j => j.Email).ToList();
+            List<string?> sendTo = _Db.AccountsDb.Where(j => j.Section == "BC" || j.Section == "PPIC" || j.Section == "BCManager" || j.Section == "PPICManager").Select(j => j.Email).ToList();
 
             UserAndPass randtobeused = new UserAndPass();
             {

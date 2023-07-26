@@ -45,7 +45,11 @@
     <div class="col-12 col-md-4 w-100 flex-column">
         <div>
             <div class="w-100 d-flex justify-content-end">
-                <button class="btn btn-primary" onclick="openModal()">Add Action</button>
+                @if(ViewBag._8D)
+                {
+                    <button class="btn btn-success w-25 mx-5" onclick="OpenRep()">See 8D Report</button>
+                }
+                <button class="btn btn-primary w-25" onclick="openModal()">Add Action</button>
             </div>
         </div>
         <div class="d-flex flex-column flex-md-row">
@@ -512,19 +516,31 @@
     </textarea>
 </div>
 
-@*<div class="modal-content w-50 h-50" style="z-index:2100" id="verifyaction">
-    <button class="modal-close btn btn-danger" onclick="CloseVer()"><i style="font-size:24px" class="fa">&#xf00d;</i></button>
-    <h4 class="modal-title text-center">Verify Action</h4>
-    <div>
-        <label class="form-label">Status:</label>
-        <select>
-            <option value="Open">Open</option>
-            <option value="Closed">Closed</option>
-        </select>
+<div class="modal-content w-75 h-100" style="z-index:2100" id="8drep">
+    <button class="modal-close btn btn-danger" onclick="CloseRep()"><i style="font-size:24px" class="fa">&#xf00d;</i></button>
+    <h4 class="modal-title text-center">8D Report</h4>
+    <div class="w-100" style="height:90%">
+        @if (ViewBag._8D)
+        {
+            <iframe class="w-100 h-100" src="@Url.Action("ShowPdf", new { ID = Model.ControlNo})">Attachment here</iframe>
+        }
     </div>
-</div>*@
+</div>
 
 <script>
+
+    function OpenRep()
+    {
+        var Rep = document.getElementById('8drep');
+        Rep.style.display = "block";
+    }
+
+    function CloseRep()
+    {
+        var Rep = document.getElementById('8drep');
+        Rep.style.display = "none";
+    }
+
     function ShowRemarks(str)
     {
         var Remarks = document.getElementById('showremarks');

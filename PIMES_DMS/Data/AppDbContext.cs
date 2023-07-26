@@ -31,5 +31,7 @@ namespace PIMES_DMS.Data
         public DbSet<RMAModel> RMADb { get; set; }
 
         public DbSet<TargetDateModel> TDDb { get; set; }
+
+        public DbSet<_8DModel> _8DDb { get; set; }
     }
 }

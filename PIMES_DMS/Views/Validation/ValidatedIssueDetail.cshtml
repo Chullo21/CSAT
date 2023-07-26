@@ -1,4 +1,4 @@
-﻿@model PIMES_DMS.Models.IssueModel
+﻿@model IssueModel
 
 @{
     ViewData["Title"] = "Validated Issue With Report";
@@ -153,7 +153,7 @@
     <div class="modal-header justify-content-center">
         <h4 class="modal-title text-center">Report</h4>
     </div>
-    <iframe class="w-100" style="height:90%" src="@Url.Action("ShowPdf", new { id = Model.IssueID, type = "None"})"></iframe>
+    <iframe class="w-100" style="height:90%" src="@Url.Action("Validation", "ShowPdf", new {ID = Model.IssueID})"></iframe>
 </div>
 
 <div class="modal-content w-50 h-50" style="z-index: 2100" id="addEmail">

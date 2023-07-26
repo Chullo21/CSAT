@@ -1,0 +1,87 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+header {
+    border-bottom: 2px solid;
+    height: 55px;
+    background-color: #2706F0;
+}
+
+.logo {
+    height: 30px;
+    margin-inline: 25px;
+}
+
+.header-text {
+    color: white;
+}
+
+.login-form {
+    padding: 20px;
+    background-color: blue;
+    border-radius: 10px;
+    margin-top: 45%;
+}
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .login-form input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+.container {
+    padding: 20px;
+}
+
+.main-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border: 3px solid;
+    backdrop-filter: blur(3px);
+}
+
+    .main-image p {
+        color: black;
+    }
+
+.loginfooter {
+    background-color: #2706F0;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 767px) {
+    body {
+        overflow: auto;
+    }
+
+    .container-fluid {
+        padding: 10px;
+    }
+
+    .col-md-4,
+    .col-md-6 {
+        padding: 10px;
+    }
+}

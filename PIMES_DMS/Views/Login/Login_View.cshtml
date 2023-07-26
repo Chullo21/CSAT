@@ -15,64 +15,84 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PIMES_DMS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .blur-overlay {
+            backdrop-filter: blur(1px);
+            border: 3px solid;
+        }
+    </style>
 </head>
-<body class="loginbg vh-100">
-    <header class="header-nav">
+<body class="overflow-hidden loginbg">
+    <header class="header-nav mb-5">
         <div class="d-flex justify-content-between w-100" style="border-bottom:2px solid; height:55px; background-color:#2706F0">
             <div class="align-self-center">
                 <img style="height:30px; margin-inline:25px" src="~/photos/pimeslogo.png" />
             </div>
             <div class="align-self-center">
-                <a class="text-white billsfont text-decoration-none" href="https://pimes.com.ph/">AUTOMATION TECHNOLOGY SOLUTIONS - QUALITY ASSURANCE</a>
+                <a class="text-white billsfont text-decoration-none text-wrap" href="https://pimes.com.ph/">AUTOMATION TECHNOLOGY SOLUTIONS - QUALITY ASSURANCE</a>
             </div>
             <div class="align-self-center">
                 <img style="height:30px; margin-inline:25px" src="~/photos/ats wbg.png" />
             </div>
         </div>
     </header>
-
-    <div class="container-fluid row mx-0" style="height:100%">
-        <div class="col-sm-12 col-md-4 d-flex justify-content-center align-items-center">
-            <div class="card border-3 text-white h-75 w-75" style="background-color:blue;">
-                <p class="card-header text-center bg-primary">Customer Satisfaction</p>
-               <div class="m-2">                   
-                    <p>Customer Satisfaction or CSat is a chuchuchahachuchuahahahahcuahcuahuaauhauchauchaucaucha</p>
-               </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-4">
-            <div class="d-flex justify-content-center" style="margin-top:250px">    
-                <div class="card border-3 text-white" style="background-color:blue; border-color:blue">
-                    <form asp-controller="Login" asp-action="LoginAcc" method="post">
-                        <h3 class="text-center card-header bg-primary">Welcome to CSat Portal</h3>
+    <div class="container-fluid">
+        <div class="row vh-100 justify-content-around">
+            <div class="col-sm-12 col-lg-4 h-100 d-flex align-items-center" style="backdrop-filter: blur(3px); border: 3px solid; border-color:blue">
+                <div class="card bg-transparent border-0 w-100">
+                    <form asp-controller="Login" asp-action="LoginAcc" method="post" class="d-flex flex-column align-items-center">
+                        <div class="w-100 d-flex justify-content-center">
+                            <h3 class="text-center card-header text-white text-wrap w-75" style="background-color:blue; border-radius:10px">Welcome to CSat Portal</h3>
+                        </div>
                         @{
                             if (times > 0)
                             {
-                                <div class="alert alert-danger text-center" role="alert">
+                                <p class="alert alert-danger text-center" role="alert">
                                     @TempData["message"]
-                                </div>
+                                </p>
                             }
                         }
-                        <div class="input-group mt-3 mb-3 mx-auto w-75">
+                        <div class="input-group mt-3 mb-3 mx-auto w-50">
                             <span class="input-group-text" id="basic-addon1">&#64;</span>
                             <input class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="user">
                         </div>
-                        <div class="input-group mx-auto w-75">
+                        <div class="input-group mx-auto w-50">
                             <span class="input-group-text" id="basic-addon1"><i style="font-size:24px" class="fa">&#xf023;</i></span>
                             <input class="form-control" placeholder="Password" type="password" name="pass" />
                         </div>
-                        <div class="text-center mt-3">
-                            <input type="submit" class="btn btn-info w-75" value="Login" />
+                        <div class="text-center mt-3 w-100">
+                            <input type="submit" class="btn btn-primary w-50" value="Login" />
                         </div>
-                        <div class="mt-3"></div>
                     </form>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-md-4 d-flex justify-content-center align-items-center">
-            <div class="card border-3 text-white h-75 w-75" style="background-color:blue;">
-                <p class="card-header text-center bg-primary">Announcements:</p>
-                <p> chuchu chacha</p>
+            <div class="col-sm-12 col-lg-6 mt-5" style="backdrop-filter: blur(5px); border: 3px solid; border-color:blue">
+                <div class="h-100 card bg-transparent mt-5 border-0">
+                    <div class="d-flex align-items-center h-25">
+                       <div class="mx-auto">
+                            <img class="w-100" src="~/photos/csatlogo.png" />
+                       </div>
+                        <div class="m-auto text-center">
+                            <p class="text-wrap loginfont" style="color: black">CSat Portal</p>
+                        </div>
+                    </div>
+                    <div class="m-4" style="height:380px;overflow-y:auto">
+                        <p class="text-wrap text-white">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer Satisfaction (CSat) is a measure of how well a company's products or services meet or exceed customer expectations. It is the process of evaluating and addressing customer feedback and claims regarding issues related to products, services, or overall customer experience.
+                        </p>
+                        <dl class="text-wrap text-white">
+                            <dd>
+                                1. Customer Satisfaction (CSat): Refers to the level of contentment or happiness that customers experience with a company's offerings. It is an important metric for businesses to gauge their performance and identify areas for improvement.
+                            </dd>
+                            <dd>
+                                2. Addressing Customer Claims: When customers have complaints or issues with products or services, the company should take these claims seriously and work to resolve them in a satisfactory manner. This may involve investigating the problem, providing solutions, and ensuring customer concerns are resolved.
+                            </dd>
+                            <dd>
+                                3. Regarding Issues Concerning Products and Services: CSat covers a broad range of aspects related to products and services, such as quality, functionality, pricing, customer support, delivery, and more. It involves identifying pain points and areas of improvement to enhance the overall customer experience.
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -81,6 +101,12 @@
             &copy; 2023 - P. IMES - ATS QA
         </p>
     </footer>
+    <script>
+        window.addEventListener('touchmove', function (event) {
+          event.preventDefault();
+        }, { passive: false });
+    </script>
+
 </body>
 
 </html>

@@ -48,6 +48,14 @@ namespace PIMES_DMS.Models
         BC,
         Purchasing,
         PPIC,
-        Production
+        Production,
+        QAManager,
+        QEManager,
+        EngineeringManager,
+        BCManager,
+        PurchasingManager,
+        PPICManager,
+        ProductionManager,
+        VicePresident
     }
 }
