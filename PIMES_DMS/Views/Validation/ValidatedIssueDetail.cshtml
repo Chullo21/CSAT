@@ -10,7 +10,7 @@
 }
 
 <div class="container">
-    <div class="d-flex justify-content-center mt-5">
+    <div class="d-flex justify-content-center">
         <div>
             <h1 style="@setColor">@Model.ValRes Claim</h1>
         </div>
@@ -18,7 +18,7 @@
 
     <hr />
     <div class="col-12">
-        <div class="row" style="height:500px">
+        <div class="row">
             <div class="col-12 col-md-6">
                 <table class="table table-responsive">
                     <tr>
@@ -178,7 +178,12 @@
     </div>
     <br />
     <div class="w-100 h-100 mt-2">
-        <img class="w-100 h-75" id="modalImage" src="@emailSnip" alt="Image">
+        @if (Model.ValRes == "Invalid")
+        {
+            string stringforEmail = Convert.ToBase64String(Model.EmailSnip);
+            ViewBag.EmailSnip = $"data:image/jpeg;base64,{stringforEmail}";
+        }
+        <img class="w-100 h-75" id="modalImage" src="@ViewBag.EmailSnip" alt="Image">
     </div>
 </div>
 

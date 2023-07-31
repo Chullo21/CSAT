@@ -39,45 +39,46 @@
                 </div>
             }
         }
-        <table class="table text-center" id="myTable">
-            <thead>
-                <tr>
-                    <td class="w-25">
-                        Subject
-                    </td>
-                    <td class="w-50">
-                        Definition
-                    </td>
-                    <td class="w-25">
-
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var def in Model)
-                {
+        <div class="table-responsive">
+            <table class="table text-center" id="myTable">
+                <thead>
                     <tr>
-                        <td>
-                            @def.Subject
+                        <td class="w-25">
+                            Subject
                         </td>
-                        <td>
-                            @def.Definition
+                        <td class="w-50">
+                            Definition
                         </td>
-                        <td>
-                            <div class="d-flex justify-content-between">
-                                @{
-                                    if (Role == "Admin")
-                                    {
-                                        <button class="btn btn-success w-100" onclick="OpenEditTerm(@def.DefID, '@def.Subject', '@def.Definition')">Edit</button>
-                                        <button class="btn btn-danger w-100" onclick="OpenDeleteTerm(@def.DefID, '@def.Subject', '@def.Definition')">Delete</button>
-                                    }
-                                }
-                            </div>
+                        <td class="w-25">
                         </td>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var def in Model)
+                    {
+                        <tr>
+                            <td>
+                                @def.Subject
+                            </td>
+                            <td>
+                                @def.Definition
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    @{
+                                        if (Role == "Admin")
+                                        {
+                                            <button class="btn btn-success w-100" onclick="OpenEditTerm(@def.DefID, '@def.Subject', '@def.Definition')">Edit</button>
+                                            <button class="btn btn-danger w-100" onclick="OpenDeleteTerm(@def.DefID, '@def.Subject', '@def.Definition')">Delete</button>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

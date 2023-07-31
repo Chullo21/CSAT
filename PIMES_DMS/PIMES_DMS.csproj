@@ -153,6 +153,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.15" />
+    <PackageReference Include="Modernizr" Version="2.8.3" />
   </ItemGroup>
 
   <ItemGroup>

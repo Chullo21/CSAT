@@ -3,12 +3,15 @@
 @{
     ViewData["Title"] = "Details > " + Model.IssueNo;
 
+    string? error = TempData["NoEmailSnip"] as string;
+
     string? Role = TempData["Role"] as string;
     TempData.Keep();
 }
 
 <div class="container">
     <div>
+        <hr />
         <div class="d-flex justify-content-between">
             <div class="d-flex">
                 <div>
@@ -38,7 +41,6 @@
         </div>
     </div>
     <hr />
-
     <div class="w-100 row mt-2">
         <div>
             <div style="margin-left:10px">
@@ -128,7 +130,6 @@
                                     @{
                                         if (Model.ClientRep != null)
                                         {
-                //<iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" style="width:100%; height:500px"></iframe>
                                             <button class="btn btn-primary" onclick="openAttachModal()">Show Attachment</button>
                                         }
                                         else
@@ -185,7 +186,7 @@
                     </div>
                     <div style ="margin-left:30px" id="emailupload">
                         <label class="fw-bold form-label">Email Snip</label>
-                        <input class="form-control" type="file" accept="image/*" name="emailimg">
+                        <input class="form-control" type="file" accept="image/*" id="emailimginput" name="emailimg">
                     </div>
                 </div>
                 <div>
@@ -224,14 +225,22 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var emailImgInput = document.getElementById('emailimginput');
+        emailImgInput.required = true;
+    });
+
     function invorv(str) {
         var emailImgDiv = document.getElementById('emailupload');
         var Nrmadiv = document.getElementById('nrmadiv');
+        var emailImgInput = document.getElementById('emailimginput');
 
         if (str === "Valid") {
+            emailImgInput.required = false;
             emailImgDiv.style.display = "none";
             Nrmadiv.style.display = "none";
         } else {
+            emailImgInput.required = true;
             emailImgDiv.style.display = "block";
             Nrmadiv.style.display = "block";
         }

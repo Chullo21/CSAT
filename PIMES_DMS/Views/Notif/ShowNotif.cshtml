@@ -26,7 +26,7 @@
 
 <div class="container">
     <h1 class="text-center">Notification</h1>
-
+    <hr />
     <div>
         <div>
             @if (Role == "Admin")
@@ -34,7 +34,7 @@
                 <a class="btn btn-primary" asp-controller="Notif" asp-action="ClearNotificationBtn">Clear Notification</a>
             }
         </div>
-        <div>
+        <div class="table-responsive">
             <table class="table table-striped" id="myTable">
                 <thead>
                     <tr>
@@ -54,7 +54,7 @@
                                 @item.DateCreated.ToShortDateString()
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Message)
+                                @Html.DisplayFor(modelItem => item.Message).
                             </td>
                         </tr>
                     }

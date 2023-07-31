@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 using System.Drawing;
@@ -50,7 +51,7 @@ namespace PIMES_DMS.Controllers
             _Db.IssueDb.Update(model);
             _Db.SaveChanges();
 
-            return RedirectToAction("ValidatedIssueDetail", ID);
+            return RedirectToAction("ValIssueDet", ID);
         }
 
         [HttpGet]
@@ -91,18 +92,15 @@ namespace PIMES_DMS.Controllers
             return View("ValidatedIssueDetail", _Db.IssueDb.FirstOrDefault(j => j.IssueID == ID));
         }
 
-        [HttpGet]
-        [AutoValidateAntiforgeryToken]
         public IActionResult ValidatedIssueDetail(IssueModel issue)
         {
-            if (issue.ValRes == "Invalid")
-            {
-                string stringforEmail = Convert.ToBase64String(issue.EmailSnip);
-                ViewBag.EmailSnip = "data:image/jpeg;base64," + stringforEmail;
-            }
+            //if (issue.ValRes == "Invalid")
+            //{
+            //    string stringforEmail = Convert.ToBase64String(issue.EmailSnip);
+            //    ViewBag.EmailSnip = $"data:image/jpeg;base64,{stringforEmail}";
+            //}
 
             return View(issue);
-
         }
 
         public IActionResult ShowPdf(int ID)
@@ -129,6 +127,13 @@ namespace PIMES_DMS.Controllers
         public IActionResult ShowClientandQARep(int ID)
         {
             return View(_Db.IssueDb.FirstOrDefault(j => j.IssueID == ID));
+        }
+
+        private IActionResult NoEmailSnip()
+        {
+            TempData["NoEmailSnip"] = true;
+
+            return View();
         }
 
         [HttpPost]
@@ -196,12 +201,11 @@ namespace PIMES_DMS.Controllers
         {
             List<IssueModel> issues = _Db.IssueDb.Where(j => !string.IsNullOrEmpty(j.ValNo) && j.DateFound.Year == issue.DateFound.Year).ToList();
 
-            issues = issues.OrderByDescending(j => j.ControlNumber.Substring(6, 3)).ToList();
-
             int series = 1;
 
-            if (issues.Count > 0)
+            if (issues.Count() > 0)
             {
+                issues = issues.OrderByDescending(j => j.ValNo.Substring(6, 3)).ToList();
                 series = int.Parse(issues.First().ValNo!.Substring(6, 3)) + 1;
             }
 
@@ -212,12 +216,11 @@ namespace PIMES_DMS.Controllers
         {
             List<IssueModel> issues = _Db.IssueDb.Where(j => !string.IsNullOrEmpty(j.ControlNumber) && j.DateFound.Year == issue.DateFound.Year).ToList();
 
-            issues = issues.OrderByDescending(j => j.ControlNumber.Substring(6,3)).ToList();
-
             int series = 1;
 
-            if (issues.Count > 0)
+            if (issues.Count() > 0)
             {
+                issues = issues.OrderByDescending(j => j.ControlNumber.Substring(6, 3)).ToList();
                 series = int.Parse(issues.First().ControlNumber!.Substring(6, 3)) + 1;
             }
 

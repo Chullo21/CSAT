@@ -120,6 +120,7 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult IssueDetails(int ID)
         {
+
             IssueModel? det = _context.IssueDb.Find(ID);
 
             return View(det);

@@ -2,6 +2,7 @@
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 using System.Diagnostics;
+using System.Net.Mail;
 
 namespace PIMES_DMS.Controllers
 {
@@ -12,6 +13,24 @@ namespace PIMES_DMS.Controllers
         public HomeController(AppDbContext db)
         {
             _Db = db;
+        }
+
+        public void UpdateNotif(string message, string t)
+        {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            NotifModel nm = new NotifModel();
+            {
+                nm.Message = EN + message;
+                nm.DateCreated = DateTime.Now;
+                nm.Type = t;
+            }
+
+            if (ModelState.IsValid)
+            {
+                _Db.NotifDb.Add(nm);
+            }
         }
 
         public IActionResult Home()
@@ -72,7 +91,29 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
-        public IActionResult Upload8D(string controlno, IFormFile attachment)
+        public IActionResult CheckFor8D(string controlno, IFormFile attachment)
+        {
+            TempData["Existing8D"] = null;
+
+            _8DModel? existing8D = _Db._8DDb.FirstOrDefault(j => j.ControlNo == controlno);           
+
+            if (existing8D != null)
+            {
+                TempData["Existing8D"] = "You have replaced an existing 8D attachment with control number of " + controlno;
+
+                Update8D(controlno, attachment);
+
+                return RedirectToAction("AdminHome");
+            }
+            else
+            {
+                Upload8D(controlno, attachment);
+
+                return RedirectToAction("AdminHome");
+            }           
+        }
+
+        private void Update8D(string controlno, IFormFile attachment)
         {
             _8DModel model = new _8DModel();
             {
@@ -87,11 +128,44 @@ namespace PIMES_DMS.Controllers
 
             if (ModelState.IsValid)
             {
+                UpdateNotif(", replaced an existing 8D attachment with control number of " + controlno, "Admins");
+                _Db._8DDb.Update(model);
+                _Db.SaveChanges();
+            }
+        }
+
+        public void Upload8D(string controlno, IFormFile attachment)
+        {
+            //TempData["Existing8D"] = null;
+
+            //_8DModel? existing8D = _Db._8DDb.FirstOrDefault(j => j.ControlNo == controlno);
+
+            //TempData["Existing8D"] = "EXISTING CONTROL NUMBER";
+
+            //if (existing8D != null)
+            //{
+            //    return RedirectToAction("AdminHome");
+            //}
+
+            _8DModel model = new _8DModel();
+            {
+                model.ControlNo = controlno;
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    attachment.CopyTo(ms);
+                    model.Report = ms.ToArray();
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                UpdateNotif(", uploaded an 8D attachment with control number of " + controlno, "Admins");
                 _Db._8DDb.Add(model);
                 _Db.SaveChanges();
             }
 
-            return RedirectToAction("AdminHome");
+            //return RedirectToAction("AdminHome");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

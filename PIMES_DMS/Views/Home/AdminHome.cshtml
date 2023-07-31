@@ -3,11 +3,40 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     string? Role = TempData["Role"] as string;
-    TempData.Keep();
+
+    TempData.Keep("Role");
+
+    string? Warning = TempData["Existing8D"] as string;
+    TempData.Remove("Existing8D");
 }
-<div class="container mt-5">
+
+<div class="container"> 
+    <div class="w-100 d-flex justify-content-start align-items-center h-25 mb-2">
+        <h1 class="align-self-center w-50 h-100 my-0" style="font-family:Impact; text-align:center; font-size:5vw">CSAT PORTAL</h1>
+        <div class="flex-column w-50">
+            <marquee class="bg-black text-white w-100 h-100 my-0" style="border:5px solid; border-inline-color:black; border-top-color:blue; border-bottom-color:blue">
+                Welcome to CSat Portal! Do not hesitate to contact ATS-QA if you have concern or feedback. Have a great day!
+            </marquee>
+            <div class="d-flex w-100 border-dark my-0">
+                <select class="w-50 form-select border-dark">
+                    <option>Issue Details</option>
+                    <option>Validation Report</option>
+                    <option>CAPA</option>
+                    <option>8D Attachment</option>
+                </select>
+                <input class="w-50 form-control border-dark" placeholder="Search"/>
+            </div>
+        </div>
+    </div>
+    
+    @if (Warning != null)
+    {
+        <div class="d-flex justify-content-center" >
+            <p class="text-center w-75" style="border:2px solid; border-color:hotpink; background-color:lightpink" role="alert">@Warning</p>
+        </div>
+    }
     <div class="row">
-        <div class="col-sm-12 col-md-4 flex-column">
+        <div class="col-sm-12 col-md-4 flex-column mb-3">
             @if (Role == "Admin")
             {
                 <div class="d-flex justify-content-center">
@@ -199,7 +228,7 @@
 </div>
 
 <div class="modal-content w-50 h-50" id="8dmodal">
-    <form asp-controller="Home" asp-action="Upload8D" enctype="multipart/form-data" method="post">
+    <form asp-controller="Home" asp-action="CheckFor8D" enctype="multipart/form-data" method="post">
     <button class="btn btn-danger modal-close" onclick="Close8DModal()">Close</button>
     <p class="modal-title text-center">Submit 8D Report</p>
     <hr />
@@ -219,7 +248,29 @@
     </form>
 </div>
 
+@*<div class="modal-content" id="warning8D">
+    <button class="modal-close btn btn-danger w-25 h-25" onclick="CloseWarning()">x</button>
+    <h4 class="modal-header text-center">Warning</h4>
+    <div class="modal-body w-100" style="height:80%">
+        <p class="text-wrap">Action was not successful, the control number you have provided already contains an attachment.</p>
+    </div>
+</div>*@
+
 <script>
+    //function OpenWarning()
+    //{
+    //    var Warning8D = document.getElementById('warning8D');
+
+    //    Warning8D.style.display = "block";
+    //}
+
+    //function CloseWarning()
+    //{
+    //    var Warning8D = document.getElementById('warning8D');
+
+    //    Warning8D.style.display = "none";
+    //}
+
     function Open8DModal()
     {
         var modal = document.getElementById('8dmodal');
