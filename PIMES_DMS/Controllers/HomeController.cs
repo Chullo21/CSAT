@@ -143,6 +143,7 @@ namespace PIMES_DMS.Controllers
                     issuestoshow.Add(issue);
                 }
             }
+
             return issuestoshow.Count;
         }
 
@@ -175,7 +176,7 @@ namespace PIMES_DMS.Controllers
 
         private void Update8D(string controlno, IFormFile attachment)
         {
-            _8DModel mod = _Db._8DDb.FirstOrDefault(j => j.ControlNo == controlno);
+            _8DModel mod = _Db._8DDb.FirstOrDefault(j => j.ControlNo == controlno)!;
 
             _8DModel model = new _8DModel();
             {
