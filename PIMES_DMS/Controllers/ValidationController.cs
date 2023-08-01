@@ -94,12 +94,6 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult ValidatedIssueDetail(IssueModel issue)
         {
-            //if (issue.ValRes == "Invalid")
-            //{
-            //    string stringforEmail = Convert.ToBase64String(issue.EmailSnip);
-            //    ViewBag.EmailSnip = $"data:image/jpeg;base64,{stringforEmail}";
-            //}
-
             return View(issue);
         }
 
@@ -138,7 +132,7 @@ namespace PIMES_DMS.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult SubmitValidation(int id, string validation, string? valsumrep, IFormFile? valrep, string? nrma, DateTime dateval, IFormFile? emailimg)
+        public IActionResult SubmitValidation(int id, string validation, string? valsumrep, IFormFile? valrep, string? nrma, DateTime dateval, IFormFile? emailimg, string req)
         {
             string? EN = TempData["EN"] as string;
             TempData.Keep();

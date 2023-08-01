@@ -53,6 +53,8 @@ namespace PIMES_DMS.Models
         [DisplayName("Validation Number")]
         public string? ValNo { get; set; }
 
+        public string? Requirement { get; set; }
+
         public string Validator { get; set; }
 
         [DisplayName("Date Acknowledged")]

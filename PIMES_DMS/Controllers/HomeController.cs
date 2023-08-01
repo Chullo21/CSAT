@@ -2,7 +2,6 @@
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 using System.Diagnostics;
-using System.Net.Mail;
 
 namespace PIMES_DMS.Controllers
 {
@@ -88,11 +87,6 @@ namespace PIMES_DMS.Controllers
             }
         }
 
-        //private IActionResult SearchIssueDet(string ss)
-        //{
-        //    return View("~/Views/Issue/IssueDetails.cshtml", _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == ss || j.IssueNo == ss));
-        //}
-
         public IActionResult Home()
         {
             return View();
@@ -116,7 +110,7 @@ namespace PIMES_DMS.Controllers
 
         private int GetNumberOfClaims()
         {
-            return _Db.IssueDb.Count(j => !j.Acknowledged && !j.ValidatedStatus);
+            return _Db.IssueDb.Count(j => string.IsNullOrEmpty(j.ValRes));
         }
 
         private int GetNumberOfOnProcess()

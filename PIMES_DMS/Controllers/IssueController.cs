@@ -107,7 +107,7 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult IssuesList()
         {
-            return View(_context.IssueDb.Where(j => !j.isDeleted && j.ValRes != "Invalid"));
+            return View(_context.IssueDb.Where(j => string.IsNullOrEmpty(j.ValRes)));
         }
 
         [HttpGet]

@@ -23,5 +23,9 @@ namespace PIMES_DMS.Models
         public string ProblemDesc { get; set; } = string.Empty;
 
         public int QTY { get; set; }
+
+        public DateTime? DateReceived { get; set; }
+
+        public byte[] FA { get; set; }
     }
 }
