@@ -116,14 +116,14 @@
                                 if (Model.ValRes == "Invalid" && Model.EmailSnip != null)
                                 {
                                     <div>
-                                        <label style="font-weight:bold">Email Snip:</label>
+                                        <label style="font-weight:bold">Your reply to customer:</label>
                                         <button class="btn btn-primary" onclick="OpenEmailSnip()">View</button>
                                     </div>
                                 }
                                 else if (Model.ValRes == "Invalid" && Model.EmailSnip == null)
                                 {
                                     <div style="margin-left:5px">
-                                        <label style="font-weight:bold">Add Email Snip:</label>
+                                        <label style="font-weight:bold">Add photo of your reply to customer:</label>
                                         <button class="btn btn-primary" onclick="openAddEmailSnip()">Add</button>
                                     </div>
                                 }
@@ -155,7 +155,7 @@
     <div class="modal-header justify-content-center">
         <h4 class="modal-title text-center">Report</h4>
     </div>
-    <iframe class="w-100" style="height:90%" src="@Url.Action("Validation", "ShowPdf", new {ID = Model.IssueID})"></iframe>
+    <iframe class="w-100" style="height:90%" src="@Url.Action("ShowPdf", "Validation", new {ID = Model.IssueID})"></iframe>
 </div>
 
 <div class="modal-content w-50 h-50" style="z-index: 2100" id="addEmail">

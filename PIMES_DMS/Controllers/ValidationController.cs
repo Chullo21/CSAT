@@ -103,7 +103,7 @@ namespace PIMES_DMS.Controllers
             return View(issue);
         }
 
-        public IActionResult ShowPdf(int ID)
+        public FileResult ShowPdf(int ID)
         {
             IssueModel val = _Db.IssueDb.FirstOrDefault(j => j.IssueID == ID);
 

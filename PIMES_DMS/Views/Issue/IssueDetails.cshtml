@@ -185,7 +185,7 @@
                         </select>
                     </div>
                     <div style ="margin-left:30px" id="emailupload">
-                        <label class="fw-bold form-label">Email Snip</label>
+                        <label class="fw-bold form-label">Your Reply to Customer:</label>
                         <input class="form-control" type="file" accept="image/*" id="emailimginput" name="emailimg">
                     </div>
                 </div>
@@ -220,7 +220,7 @@
     <h4 class="modal-title text-center">Claim Attachment</h4>
     @if (Model.ClientRep != null)
     {
-        <iframe src="@Url.Action("ShowPdf", new { ID = Model.IssueID})" class="w-100 h-100"></iframe>
+        <iframe src="@Url.Action("ShowPdf", "Validation", new { ID = Model.IssueID})" class="w-100 h-100"></iframe>
     }
 </div>
 

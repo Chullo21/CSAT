@@ -9,7 +9,7 @@
         <input value="@Model.ERID" name="erid" hidden />
         <div class="d-flex justify-content-between">
             <div>
-                <h1>Edit > @Model.ControlNo</h1>
+                <h1>Edit C.R</h1>
             </div>
             <div class="align-self-center">
                 <div>
@@ -99,16 +99,16 @@
                 <div>
                     <label class="fw-bold">Emergency Response</label>
                 </div>
-                <div>
+               @* <div>
                     <label class="form-label mt-3">Need Replacement?</label>
                     <select class="form-select w-50" name="rep" asp-for="@Model.Rep">
                         <option value="false">No</option>
                         <option value="true">Yes</option>
                     </select>
-                </div>
+                </div>*@
                 <div class="mt-1 form-group">
                     <label class="form-label">RMA #</label>
-                    <input class="form-control w-50" name="rma" value="@Model.RMAno" />
+                    <input class="form-control w-50" name="rma" value="@Model.RMAno" readonly/>
                 </div>
             </div>
             <div class="w-50 d-flex justify-content-evenly">

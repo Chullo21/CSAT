@@ -35,17 +35,20 @@
         <table class="table table-striped table-bordered text-center" id="myTable">
             <thead>
                 <tr>
-                    <th class="desktop-only">
+                    @*<th class="desktop-only">
                         @Html.DisplayNameFor(model => model.IssueCreator)
-                    </th>
+                    </th>*@
                     <th>
                         @Html.DisplayNameFor(model => model.IssueNo)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Product)
-                    </th>
                     <th class="desktop-only">
                         @Html.DisplayNameFor(model => model.ControlNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product)
+                    </th>              
+                    <th>
+                        Description
                     </th>
                     <th>
                         Actions
@@ -56,25 +59,27 @@
                 @foreach (var item in mod)
                 {
                     <tr>
-                        <td class="desktop-only">
+                        @*<td class="desktop-only">
                             @Html.DisplayFor(modelItem => item.IssueCreator)
-                        </td>
+                        </td>*@
                         <td>
                             @Html.DisplayFor(modelItem => item.IssueNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Product)
                         </td>
                         <td class="desktop-only">
                             @Html.DisplayFor(modelItem => item.ControlNumber)
                         </td>
                         <td>
+                            @Html.DisplayFor(modelItem => item.Product)
+                        </td>    
+                        <td>
+                            <textarea class="text-dark bg-transparent" style="max-height: 100%; max-width:100%; min-width:100%; min-height:100%; border-color:transparent" readonly>@item.ProbDesc</textarea>
+                        </td>
+                        <td>
                             <div class="d-flex justify-content-evenly">
-                                @*<a class="btn btn-primary w-100" asp-controller="Validation" asp-action="ValidatedIssueDetail" asp-route-id="@item.IssueID">Details</a>&nbsp;*@
                                 @{
                                     if (Role == "Admin")
                                     {
-                                        <a class="btn btn-success w-100" asp-controller="ER" asp-action="Create_ContainmentView" asp-route-id="@item.IssueID">G.E.R.</a>
+                                        <a class="btn btn-success w-100" asp-controller="ER" asp-action="Create_ContainmentView" asp-route-id="@item.IssueID">Generate C.R & E.R</a>
                                     }
                                 }
                             </div>

@@ -33,6 +33,66 @@ namespace PIMES_DMS.Controllers
             }
         }
 
+        public IActionResult Search(string type, string ss)
+        {
+            switch (type)
+            {
+                case "IssueDetail":
+                    {
+                        IssueModel? issue = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == ss || j.IssueNo == ss);
+                        
+                        if (issue != null)
+                        {
+                            return View("~/Views/Issue/IssueDetails.cshtml", issue);
+                        }
+                        else
+                        {
+                            TempData["Existing8D"] = "Search failed, no '" + ss + "' was found.";
+                            return RedirectToAction("AdminHome");
+                        }
+                        
+                    }
+                case "VR":
+                    {
+                        IssueModel? issue = _Db.IssueDb.FirstOrDefault(j => (j.ControlNumber == ss || j.IssueNo == ss) && j.ValidatedStatus);
+
+                        if (issue != null)
+                        {
+                            return View("~/Views/Validation/ValidatedIssueDetail.cshtml", issue);
+                        }
+                        else
+                        {
+                            TempData["Existing8D"] = "Search failed, no '" + ss + "' was found.";
+                            return RedirectToAction("AdminHome");
+                        }
+                    }
+                case "CAPA":
+                    {
+                        IssueModel? issue = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == ss && j.HasTES);
+
+                        if (issue != null)
+                        {
+                          
+                            return RedirectToAction("TESActions", "RCV", new { ID = issue.ControlNumber });
+                        }
+                        else
+                        {
+                            TempData["Existing8D"] = "Search failed, no '" + ss + "' was found. Please input control number for CAPA.";
+                            return RedirectToAction("AdminHome");
+                        }
+                    }
+                default:
+                    {
+                        return View(type, ss);
+                    }
+            }
+        }
+
+        //private IActionResult SearchIssueDet(string ss)
+        //{
+        //    return View("~/Views/Issue/IssueDetails.cshtml", _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == ss || j.IssueNo == ss));
+        //}
+
         public IActionResult Home()
         {
             return View();
@@ -115,9 +175,11 @@ namespace PIMES_DMS.Controllers
 
         private void Update8D(string controlno, IFormFile attachment)
         {
+            _8DModel mod = _Db._8DDb.FirstOrDefault(j => j.ControlNo == controlno);
+
             _8DModel model = new _8DModel();
             {
-                model.ControlNo = controlno;
+                model = mod!;
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -136,17 +198,6 @@ namespace PIMES_DMS.Controllers
 
         public void Upload8D(string controlno, IFormFile attachment)
         {
-            //TempData["Existing8D"] = null;
-
-            //_8DModel? existing8D = _Db._8DDb.FirstOrDefault(j => j.ControlNo == controlno);
-
-            //TempData["Existing8D"] = "EXISTING CONTROL NUMBER";
-
-            //if (existing8D != null)
-            //{
-            //    return RedirectToAction("AdminHome");
-            //}
-
             _8DModel model = new _8DModel();
             {
                 model.ControlNo = controlno;
@@ -164,8 +215,6 @@ namespace PIMES_DMS.Controllers
                 _Db._8DDb.Add(model);
                 _Db.SaveChanges();
             }
-
-            //return RedirectToAction("AdminHome");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

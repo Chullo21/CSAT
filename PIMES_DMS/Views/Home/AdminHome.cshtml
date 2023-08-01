@@ -14,18 +14,20 @@
     <div class="w-100 d-flex justify-content-start align-items-center h-25 mb-2">
         <h1 class="align-self-center w-50 h-100 my-0" style="font-family:Impact; text-align:center; font-size:5vw">CSAT PORTAL</h1>
         <div class="flex-column w-50">
-            <marquee class="bg-black text-white w-100 h-100 my-0" style="border:5px solid; border-inline-color:black; border-top-color:blue; border-bottom-color:blue">
+            <marquee class="bg-black border-dark text-white w-100 h-100 my-0" style="border:5px solid">
                 Welcome to CSat Portal! Do not hesitate to contact ATS-QA if you have concern or feedback. Have a great day!
             </marquee>
-            <div class="d-flex w-100 border-dark my-0">
-                <select class="w-50 form-select border-dark">
-                    <option>Issue Details</option>
-                    <option>Validation Report</option>
-                    <option>CAPA</option>
-                    <option>8D Attachment</option>
-                </select>
-                <input class="w-50 form-control border-dark" placeholder="Search"/>
-            </div>
+            <form asp-controller="Home" asp-action="Search">
+                <div class="d-flex w-100 border-dark my-0">
+                    <select class="w-25 form-select border-dark" name="type">
+                        <option value="IssueDetail">Issue Details</option>
+                        <option value="VR">Validation Report</option>
+                        <option value="CAPA">CAPA</option>
+                    </select>
+                    <input class="w-75 form-control border-dark" placeholder="Search" name="ss"/>
+                </div>
+                <input type="submit" hidden/>
+            </form>
         </div>
     </div>
     

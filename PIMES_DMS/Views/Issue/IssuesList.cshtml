@@ -32,22 +32,22 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.IssueNo)
+                        Issue#
                     </th>
                     <th class="desktop-only">
-                        @Html.DisplayNameFor(model => model.IssueCreator)
+                        Creator
                     </th>
                     <th class="desktop-only">
-                        @Html.DisplayNameFor(model => model.DateFound)
+                        Found
                     </th>
                     <th class="desktop-only">
-                        @Html.DisplayNameFor(model => model.DateCreated)
+                        Created
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Product)
+                        Product
                     </th>
                     <th class="desktop-only">
-                        @Html.DisplayNameFor(model => model.ProbDesc)
+                        Problem Description
                     </th>
                     <th style="width:5%" class="desktop-only">
                         Ack.
@@ -80,7 +80,7 @@
                             @Html.DisplayFor(modelItem => item.Product)
                         </td>
                         <td class="w-25 desktop-only">
-                            <textarea class="w-100" style="min-height:80px; max-height:80px" readonly>@item.ProbDesc</textarea>
+                            <textarea class="w-100" style="min-height:80px; max-height:60px" readonly>@item.ProbDesc</textarea>
                         </td>
                         @{
                             if (item.Acknowledged)

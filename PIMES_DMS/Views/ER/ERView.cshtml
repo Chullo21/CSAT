@@ -29,57 +29,57 @@
     <div class="w-100">
         <h1 class="text-center">Emergency Responce Actions</h1>
     </div>
-
     <hr />
-
-    <table class="table text-center" id="myTable">
-        <thead>
-            <tr>
-                <th class="desktop-only">
-                    @Html.DisplayNameFor(model => model.IssueCreator)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IssueNo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ControlNumber)
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in mod)
-            {
+    <div class="table-responsive">
+        <table class="table text-center table-bordered table-striped" id="myTable">
+            <thead>
                 <tr>
-                    <td class="desktop-only">
-                        @Html.DisplayFor(modelItem => item.IssueCreator)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IssueNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ControlNumber)
-                    </td>
-                    <td>
-                        @{
-                            if (Role == "Admin")
-                            {
-                                <div class="d-flex">
-                                    <a class="btn btn-success w-100" asp-controller="ER" asp-action="EditERView" asp-route-id="@item.IssueNo">Edit</a>
-                                    <a class="btn btn-primary w-100" asp-controller="ER" asp-action="ERDet" asp-route-id="@item.IssueNo">Details</a>
-                                </div>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary w-100" asp-controller="ER" asp-action="ERDet" asp-route-id="@item.IssueNo">Details</a>
-                            }
-                        }
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IssueNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ControlNumber)
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Action
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in mod)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IssueNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ControlNumber)
+                        </td>
+                        <td>
+                            <textarea class="text-dark bg-transparent" style="max-height: 100%; max-width:100%; min-width:100%; min-height:100%; border-color:transparent" readonly>@item.ProbDesc</textarea>
+                        </td>
+                        <td>
+                            @{
+                                if (Role == "Admin")
+                                {
+                                    <div class="d-flex">
+                                        <a class="btn btn-success w-100" asp-controller="ER" asp-action="EditERView" asp-route-id="@item.IssueNo">Edit</a>
+                                        <a class="btn btn-primary w-100" asp-controller="ER" asp-action="ERDet" asp-route-id="@item.IssueNo">Details</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary w-100" asp-controller="ER" asp-action="ERDet" asp-route-id="@item.IssueNo">Details</a>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
 </div>

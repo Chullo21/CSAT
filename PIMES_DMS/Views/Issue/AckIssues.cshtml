@@ -29,16 +29,16 @@
         <thead>
             <tr>
                 <th class="w-25">
-                    @Html.DisplayNameFor(model => model.IssueNo)
+                    Issue#
                 </th>
                 <th class="desktop-only">
-                    @Html.DisplayNameFor(model => model.DateFound)
+                    Found
                 </th>
                 <th class="desktop-only">
-                    @Html.DisplayNameFor(model => model.DateCreated)
+                    Created
                 </th>
                 <th class="w-25">
-                    @Html.DisplayNameFor(model => model.Product)
+                    Product
                 </th>
                 <th class="w-25">
                     Ack.
@@ -51,18 +51,18 @@
         <tbody>
             @foreach (var item in mod)
             {
-                <tr style="height:30px">
+                <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IssueNo)
+                        @item.IssueNo
                     </td>
                     <td class="desktop-only">
-                        @Html.DisplayFor(modelItem => item.DateFound)
+                        @item.DateFound.ToShortDateString()
                     </td>
                     <td class="desktop-only">
-                        @Html.DisplayFor(modelItem => item.DateCreated)
+                        @item.DateCreated.ToShortDateString()
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Product)
+                        @item.Product
                     </td>
                     @{
                         if (item.Acknowledged)
@@ -83,7 +83,7 @@
                         }
                     }
                     <td>
-                        <a class="btn btn-primary" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@item.IssueID">Details</a>
+                        <a class="btn btn-primary w-100" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@item.IssueID">Details</a>
                     </td>
                 </tr>
             }

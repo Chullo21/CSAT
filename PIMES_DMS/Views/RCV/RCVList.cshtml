@@ -36,16 +36,16 @@
         <thead>
             <tr>
                 <th class="desktop-only">
-                    @Html.DisplayNameFor(model => model.IssueCreator)
-                </th>
-                <th class="desktop-only">
                     @Html.DisplayNameFor(model => model.IssueNo)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ControlNumber)
                 </th>
-                <th style="width:10%" class="desktop-only">
-                    For Verification
+                <th>
+                    Problem Description
+                </th>
+                <th style="width:10%" class="desktop-only text-danger">
+                    For Ver.
                 </th>
                 <th style="width:10%">
                     Open
@@ -63,18 +63,19 @@
             {
                 int fv;
                 int open = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Open;
-                int close = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Closed;
+                int close = oac.FirstOrDefault(j => j.ControlNo == item.ControlNumber).Closed;     
+                
                 if (fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber) != null) fv = fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber).ForVer; else fv = 0;
-
+                
                 <tr>
-                    <td class="desktop-only">
-                        @Html.DisplayFor(modelItem => item.IssueCreator)
-                    </td>
                     <td class="desktop-only">
                         @Html.DisplayFor(modelItem => item.IssueNo)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ControlNumber)
+                    </td>
+                    <td>
+                        @item.ProbDesc
                     </td>
                     <td class="desktop-only">
                         @{

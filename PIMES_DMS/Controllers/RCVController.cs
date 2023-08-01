@@ -105,7 +105,7 @@ namespace PIMES_DMS.Controllers
 
             foreach (var issue in issues)
             {
-                int tc = _Db.ActionDb.Count(j => !j.IsDeleted && j.ActionStatus == "Open" && j.TargetDate < DateTime.Now.Date);
+                int tc = _Db.ActionDb.Count(j => !j.IsDeleted && j.ActionStatus == "Open" && j.TargetDate < DateTime.Now.Date && j.ControlNo == issue.ControlNumber);
 
                 ForVerificationData fvdd = new ForVerificationData();
                 {
@@ -442,7 +442,7 @@ namespace PIMES_DMS.Controllers
             ViewBag.pic = _Db.AccountsDb.Select(account => account.AccName).ToList();
 
             foreach (var action in actions)
-            {
+              {
                 if (action.HasVer)
                 {
                     Vermodel vermodel = _Db.VerDb.Where(j => j.ActionID == action.ActionID).OrderByDescending(j => j.DateVer).First();
