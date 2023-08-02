@@ -26,6 +26,6 @@ namespace PIMES_DMS.Models
 
         public DateTime? DateReceived { get; set; }
 
-        public byte[] FA { get; set; }
+        public byte[]? FA { get; set; }
     }
 }

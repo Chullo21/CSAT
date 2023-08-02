@@ -14,6 +14,69 @@ namespace PIMES_DMS.Controllers
             _Db = db;
         }
 
+        public IActionResult ShowFA(int id)
+        {
+            RMAModel rma = _Db.RMADb.FirstOrDefault(j => j.RMAID == id);
+
+            byte[]? faByte = rma.FA;
+
+            if (faByte == null)
+            {
+                
+                return NoContent();
+            }
+            else
+            {
+                return File(faByte, "application/pdf");
+            }
+
+        }
+
+        public void UpdateNotif(string message, string t)
+        {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            NotifModel nm = new NotifModel();
+            {
+                nm.Message = EN + message;
+                nm.DateCreated = DateTime.Now;
+                nm.Type = t;
+            }
+
+            if (ModelState.IsValid)
+            {
+                _Db.NotifDb.Add(nm);
+            }
+        }
+
+        public IActionResult UploadFA(DateTime date, IFormFile attachment, int id)
+        {
+            var rma = _Db.RMADb.FirstOrDefault(j => j.RMAID == id);
+
+            RMAModel model = new RMAModel();
+            {
+                model = rma;
+                model.DateReceived = date;
+                
+                using(MemoryStream ms = new MemoryStream())
+                {
+                    attachment.CopyTo(ms);
+                    model.FA = ms.ToArray();
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                UpdateNotif(", uploaded an F.A attachment with RMA# of " + model.RMANo, "All");
+
+                _Db.RMADb.Update(model);
+                _Db.SaveChanges();
+            }
+
+            return RedirectToAction("GetRMA", "Issue");
+        }
+
         public IActionResult GenerateExcelFile(int ID)
         {
             using (var package = new ExcelPackage())

@@ -44,7 +44,7 @@
                             if (Role == "Admin")
                             {
                                 <a class="nav-link active text-white" asp-controller="Admin" asp-action="AdminView">Accounts</a>
-                                <a class="nav-link active text-white" asp-controller="Notif" asp-action="ShowNotif"> Notification</a>
+                                <a class="nav-link active text-white" asp-controller="Notif" asp-action="ShowNotif">Actions</a>
                             }
                         }
                             <select class="bg-transparent text-white bg-primary border-0 text-start" style="width:100px" onchange="submitForm()" name="aval">
@@ -53,7 +53,7 @@
                                 <option class="bg-primary border-primary" value="Valid">Valid Claims</option>
                                 <option class="bg-primary border-primary" value="8D">8D Reps.</option>
                                 <option class="bg-primary border-primary" value="RMA">RMA</option>
-                                <option class="bg-primary border-primary" value="Definition">Definition</option>
+                                @*<option class="bg-primary border-primary" value="Definition">Definition</option>*@
                             </select>
                     </div>
                     <div class="d-flex float-end">

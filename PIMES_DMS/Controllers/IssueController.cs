@@ -101,7 +101,14 @@ namespace PIMES_DMS.Controllers
 
             byte[]? docinByte = details!.ClientRep;
 
-            return File(docinByte!, "application/pdf");
+            if (docinByte == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return File(docinByte!, "application/pdf");
+            }
         }
 
         [AutoValidateAntiforgeryToken]

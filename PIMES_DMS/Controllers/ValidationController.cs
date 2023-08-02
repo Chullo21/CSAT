@@ -149,6 +149,7 @@ namespace PIMES_DMS.Controllers
             var val = new IssueModel();
             {
                 val = fromDb;
+                val.Requirement = req;
                 val.ValNo = GetUniqueNumberForVR(fromDb);
                 val.ValRes = validation;
                 val.ValidatedStatus = true;
@@ -184,11 +185,9 @@ namespace PIMES_DMS.Controllers
                 _Db.SaveChanges();
 
                 UpdateNotif(", have sumitted a validation report." + val.ValNo, "All");
-
-                ValidatedIssueDetail(val);
             }
 
-            return RedirectToAction("ValidatedIssueDetail", val);
+            return RedirectToAction("ValIssueDet", new {ID = val.IssueID});
         }
 
         private string GetUniqueNumberForVR(IssueModel issue)

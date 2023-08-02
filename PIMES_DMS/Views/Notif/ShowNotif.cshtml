@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PIMES_DMS.Models.NotifModel>
 
 @{
-    ViewData["Title"] = "Notification";
+    ViewData["Title"] = "Actions";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     string Role = TempData["Role"] as string;
@@ -25,13 +25,13 @@
 }
 
 <div class="container">
-    <h1 class="text-center">Notification</h1>
+    <h1 class="text-center">Actions</h1>
     <hr />
     <div>
         <div>
             @if (Role == "Admin")
             {
-                <a class="btn btn-primary" asp-controller="Notif" asp-action="ClearNotificationBtn">Clear Notification</a>
+                <a class="btn btn-primary" asp-controller="Notif" asp-action="ClearNotificationBtn">Clear Actions</a>
             }
         </div>
         <div class="table-responsive">
