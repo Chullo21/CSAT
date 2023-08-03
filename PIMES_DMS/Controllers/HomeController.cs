@@ -207,8 +207,25 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 UpdateNotif(", uploaded an 8D attachment with control number of " + controlno, "Admins");
+                CheckIfIssueHave8D(controlno);
                 _Db._8DDb.Add(model);
                 _Db.SaveChanges();
+            }
+        }
+
+        private void CheckIfIssueHave8D(string controlno)
+        {
+            IssueModel issue = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == controlno);           
+
+            if (issue != null)
+            {
+                IssueModel updateIssue = new IssueModel();
+                {
+                    updateIssue = issue;
+                    updateIssue.Has8D = true;
+                }
+
+                _Db.IssueDb.Update(updateIssue);
             }
         }
 

@@ -83,14 +83,13 @@ namespace PIMES_DMS.Models
 
         public string? NeedRMA { get; set; }
 
-        //public bool ForceClose { get; set; }
-
         public bool Acknowledged { get; set; } = false;
 
-        //For TC, EC and SC. Named HasAction before
         public bool HasTES { get; set; } = false;        
         
         public bool HasCR { get; set; } = false;
+
+        public bool Has8D { get; set; }
 
         public bool isDeleted { get; set; }
     }
