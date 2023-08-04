@@ -47,13 +47,13 @@
                                 <a class="nav-link active text-white" asp-controller="Notif" asp-action="ShowNotif">Actions</a>
                             }
                         }
-                            <select class="bg-transparent text-white bg-primary border-0 text-start" style="width:100px" onchange="submitForm()" name="aval">
+                            <select class="nav-link bg-transparent text-white bg-primary border-0" style="width:100px" onchange="submitForm()" name="aval">
                                 <option class="bg-primary border-primary">More</option>
                                 <option class="bg-primary border-primary" value="Invalid">Invalid Claims</option>
                                 <option class="bg-primary border-primary" value="Valid">Valid Claims</option>
+                                <option class="bg-primary border-primary" value="CR">C.R & E.R.A</option>
                                 <option class="bg-primary border-primary" value="8D">8D Reps.</option>
                                 <option class="bg-primary border-primary" value="RMA">RMA</option>
-                                @*<option class="bg-primary border-primary" value="Definition">Definition</option>*@
                             </select>
                     </div>
                     <div class="d-flex float-end">
@@ -86,10 +86,12 @@
         </main>
     </div>
     <footer class="loginfooter">
-        <p class="mx-5 text-white">
-            &copy; 2023 - P. IMES - ATS QA
-        </p>
-    </footer> 
+        <div class="w-100 h-100">
+            <p class="text-white mt-1 mx-3">
+                &copy; 2023 - P. IMES - ATS QUALITY ASSURANCE
+            </p>
+        </div>
+    </footer>
     <script>
         function submitForm() {
             document.getElementById("myForm").submit();

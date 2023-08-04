@@ -12,12 +12,12 @@
         <input value="@Model.ActionID" name="id" hidden />
         <input value="@Model.Type" name="type" hidden />
         <input value="@Model.ControlNo" name="controlno" hidden />
-        <div class="w-100 d-flex justify-content-between">
+        <div class="w-100 d-flex justify-content-between mt-3">
             <div>
-                <h1> Verify Action Item</h1>
+                <h1 class="my-auto"> Verify Action Item</h1>
             </div>
-            <div>
-                <input class="btn btn-primary" type="submit" />
+            <div class="align-self-center w-25">
+                <input class="btn btn-primary w-100" type="submit" />
             </div>
         </div>
 
@@ -35,14 +35,14 @@
                 <tbody>
                     <tr>
                         <td style="width:20%">
-                            <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@Model!.Action</textarea>
+                            <textarea style="max-height:auto; max-width:100%; min-height:auto; min-width:100%; background-color:transparent" readonly>@Model!.Action</textarea>
                         </td>
                         <td style="width:20%">
                             @Model.PIC
                         </td>
                         <td style="width:20%">
                             <div>
-                                <input class="form-control w-100" value="@Model.TargetDate" readonly />
+                                <input class="form-control w-100 text-center" value="@Model.TargetDate.ToShortDateString()" readonly />
                             </div>
                         </td>
                     </tr>
@@ -50,17 +50,17 @@
             </table>
         </div>
 
-        <div class="w-100">
+        <div class="table-responsive">
             <table class="table table-bordered text-center">
                 <thead>
                     <tr>
                         <th class="w-25">Status</th>
 
-                        <th style="width:15%" id="statustext"> Date</th>
+                        <th class="w-25" id="statustext"> Date</th>
 
                         <th class="w-25">Evidence</th>
 
-                        <th style="width:35%">Result</th>
+                        <th class="w-25">Result</th>
 
                     </tr>
                 </thead>

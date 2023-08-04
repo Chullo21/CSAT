@@ -263,9 +263,9 @@ namespace PIMES_DMS.Controllers
                     {
                         return RedirectToAction("GetRMA");
                     }
-                case "Definition":
+                case "CR":
                     {
-                        return RedirectToAction("DefinitionsView");
+                        return RedirectToAction("ERView", "ER");
                     }
                 default:
                     {

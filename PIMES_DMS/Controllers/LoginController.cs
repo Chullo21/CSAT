@@ -33,7 +33,7 @@ namespace PIMES_DMS.Controllers
                 loginTimes += 1;
                 TempData["loginTimes"] = loginTimes;
 
-                TempData["message"] = "Please input your loging credentials.";
+                TempData["message"] = "Please input your log-in credentials.";
 
                 return View("Login_View");
             }
@@ -51,7 +51,7 @@ namespace PIMES_DMS.Controllers
             {
                 loginTimes += 1;
                 TempData["loginTimes"] = loginTimes;
-                TempData["message"] = "Invalid loging credentials.";
+                TempData["message"] = "Invalid log-in credentials.";
 
                 return View("Login_View");
             }

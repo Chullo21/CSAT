@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PIMES_DMS.Models.IssueModel>
 
 @{
-    ViewData["Title"] = "E.R List";
+    ViewData["Title"] = "C.R List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var mod = Model.OrderByDescending(j => j.DateCreated).ToList();
@@ -27,11 +27,11 @@
 
 <div class="container">
     <div class="w-100">
-        <h1 class="text-center">Emergency Responce Actions</h1>
+        <h1 class="text-center">Containment Reports</h1>
     </div>
     <hr />
     <div class="table-responsive">
-        <table class="table text-center table-bordered table-striped" id="myTable">
+        <table class="table tableborder table-striped" id="myTable">
             <thead>
                 <tr>
                     <th>

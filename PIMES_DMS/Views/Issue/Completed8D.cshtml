@@ -20,44 +20,46 @@
 }
 
 <div class="container">
-    <h1 class="text-center">Completed QI</h1>
-
-    <table class="table table-striped text-center" id="myTable">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.IssueNo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProbDesc)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ControlNumber)
-                </th>
-                <th>
-
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.OrderByDescending(j => j.DateFound))
-            {
+    <h1 class="text-center">Closed Issues</h1>
+    <hr />
+    <div class="table-responsive">
+        <table class="table table-striped text-center" id="myTable">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IssueNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProbDesc)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ControlNumber)
-                    </td>
-                    <td>
-                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">View</a>
-                    </td>
+                    <th>
+                        Issue#
+                    </th>
+                    <th class="text-nowrap">
+                        Prob. Desc.
+                    </th>
+                    <th>
+                        Control#
+                    </th>
+                    <th>
+
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderByDescending(j => j.DateCreated))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IssueNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProbDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ControlNumber)
+                        </td>
+                        <td>
+                            <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="TESActions" asp-route-id="@item.ControlNumber">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
 </div>

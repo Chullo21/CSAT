@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<IssueModel>
 
 @{
-    ViewData["Title"] = "Pending E.R.A";
+    ViewData["Title"] = "For C.R & E.R.A";
     Layout = "~/Views/Shared/_Layout.cshtml";
     string? Role = TempData["Role"] as string;
     TempData.Keep();
@@ -27,21 +27,18 @@
 
 <div class="container">
     <div class="w-100">
-        <h1 class="text-center">Pending - E.R.A</h1>
+        <h1 class="text-center">Pending - C.R & E.R.A</h1>
     </div>
     <hr />
 
-    <div>
+    <div class="table-responsive">
         <table class="table table-striped table-bordered text-center" id="myTable">
             <thead>
                 <tr>
-                    @*<th class="desktop-only">
-                        @Html.DisplayNameFor(model => model.IssueCreator)
-                    </th>*@
                     <th>
                         @Html.DisplayNameFor(model => model.IssueNo)
                     </th>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.ControlNumber)
                     </th>
                     <th>
@@ -59,20 +56,17 @@
                 @foreach (var item in mod)
                 {
                     <tr>
-                        @*<td class="desktop-only">
-                            @Html.DisplayFor(modelItem => item.IssueCreator)
-                        </td>*@
                         <td>
                             @Html.DisplayFor(modelItem => item.IssueNo)
                         </td>
-                        <td class="desktop-only">
+                        <td>
                             @Html.DisplayFor(modelItem => item.ControlNumber)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Product)
                         </td>    
                         <td>
-                            <textarea class="text-dark bg-transparent" style="max-height: 100%; max-width:100%; min-width:100%; min-height:100%; border-color:transparent" readonly>@item.ProbDesc</textarea>
+                            <textarea class="text-dark bg-transparent" style="max-height: 100%; max-width:100%; min-width:100%; min-height:30px; border-color:transparent" readonly>@item.ProbDesc</textarea>
                         </td>
                         <td>
                             <div class="d-flex justify-content-evenly">

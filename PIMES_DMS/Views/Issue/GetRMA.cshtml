@@ -25,7 +25,10 @@
 }
 
 <div class="container">
-    <h1 class="text-center">RMA Monitoring</h1>
+    <div class="flex-column justify-content-center">
+        <h1 class="text-center mb-0">RMA Monitoring</h1>
+        <p class="mt-0 text-center">RETURN MATERIAL ARTICLE</p>
+    </div>
     <hr />
     <form asp-controller="RMA" asp-action="SelectedDate" method="get">
         <div class="w-100 d-flex justify-content-center mt-3 align-items-center">
@@ -46,8 +49,8 @@
     </form>
 
     <div class="table-responsive">
-        <table class="table" id="myTable">
-            <thead>
+        <table class="table table-striped text-center" id="myTable">
+            <thead class="text-nowrap">
                 <tr>
                     <th>
                         RMA#
@@ -65,7 +68,7 @@
                         Description
                     </th>
                     <th>
-                        Problem Description
+                        Prob. Desc.
                     </th>
                     <th>
                         Quantity
@@ -109,11 +112,11 @@
                                         }
                                         else
                                         {
-                                            <button class="btn btn-success w-100" onclick="OpenViewFA('@item.RMAID')">View F.A</button>
+                                            <button class="btn btn-success w-100 text-nowrap" onclick="OpenViewFA('@item.RMAID')">View F.A</button>
                                         }
                                     }
                                 }
-                                <a class="btn btn-primary w-100 mx-2" asp-controller="RMA" asp-action="GenerateExcelFile" asp-route-id="@item.RMAID">Download</a>
+                                <a class="btn btn-primary w-100 mx-2 align-self-center" asp-controller="RMA" asp-action="GenerateExcelFile" asp-route-id="@item.RMAID">Download</a>
                            </div>
                         </td>
                     </tr>
@@ -148,7 +151,7 @@
 <div class="modal-content w-75 h-100" style="z-index:2001" id="viewfa">
     <button class="btn btn-danger modal-close" onclick="CloseViewFA()">Close</button>
     <p class="modal-title text-center">FAILURE ANALYSIS</p>
-    <div class="modal-body w-100 mt-2" style="height:90%; border:2px solid">
+    <div class="modal-body w-100 mt-2" style="height:95%; border:2px solid">
         <iframe class="w-100 h-100" src="">pdf here</iframe>
     </div>
 </div>

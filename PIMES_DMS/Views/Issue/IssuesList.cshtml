@@ -80,7 +80,7 @@
                             @Html.DisplayFor(modelItem => item.Product)
                         </td>
                         <td class="w-25 desktop-only">
-                            <textarea class="w-100" style="min-height:80px; max-height:60px" readonly>@item.ProbDesc</textarea>
+                            <textarea class="w-100" style="min-height:auto; max-height:100px" readonly>@item.ProbDesc</textarea>
                         </td>
                         @{
                             if (item.Acknowledged)

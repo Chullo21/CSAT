@@ -34,25 +34,25 @@
     <hr />
 
     <div class="table-responsive">
-        <table class="table table-striped table-responsive" id="myTable">
+        <table class="table table-striped" id="myTable">
             <thead>
                 <tr>
-                    <th>
+                    <th class="desktop-only">
                         @Html.DisplayNameFor(model => model.AccUCode)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.AccName)
                     </th>
-                    <th>
+                    <th class="desktop-only">
                         @Html.DisplayNameFor(model => model.Section)
                     </th>
-                    <th>
+                    <th class="desktop-only">
                         @Html.DisplayNameFor(model => model.Role)
                     </th>
                     <th class="desktop-only">
                         @Html.DisplayNameFor(model => model.UserName)
                     </th>
-                    <th>
+                    <th class="desktop-only">
                         Email
                     </th>
                     <th>
@@ -64,22 +64,22 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
+                        <td class="desktop-only">
                             @Html.DisplayFor(modelItem => item.AccUCode)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.AccName)
                         </td>
-                        <td>
+                        <td class="desktop-only">
                             @Html.DisplayFor(modelItem => item.Section)
                         </td>
-                        <td>
+                        <td class="desktop-only">
                             @Html.DisplayFor(modelItem => item.Role)
                         </td>
                         <td class="desktop-only">
                             @Html.DisplayFor(modelItem => item.UserName)
                         </td>
-                        <td>
+                        <td class="desktop-only">
                             @item.Email
                         </td>
                         <td>
