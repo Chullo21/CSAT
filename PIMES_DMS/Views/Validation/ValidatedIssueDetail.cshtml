@@ -39,6 +39,23 @@
                     </tr>
                     <tr>
                         <th>
+                            Control #:
+                        </th>
+                        <td>
+                            @{
+                                if (string.IsNullOrEmpty(Model.ControlNumber))
+                                {
+                                    Write("Not Required");
+                                }
+                                else
+                                {
+                                    Write(Model.ControlNumber);
+                                }
+                            }                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             Date Found:
                         </th>
                         <td>
@@ -170,11 +187,10 @@
     </form>
 </div>
 
-<div class="modal-content w-75 h-75" style="z-index: 2100" id="openEmail">
-    <button class="modal-close btn btn-danger" onclick="CloseEmailSnip()">Close</button>
-    <h4 class="modal-title text-center ">Reply to customer</h4>
-    <hr class="my-0"/>
-    <div class="w-100" style="height:90%">
+<div class="modal-content w-100 h-75" style="z-index: 2100" id="openEmail">
+    <button class="modal-close btn btn-danger" onclick="CloseEmailSnip()">X</button>
+    <h4 class="modal-title text-center my-0">Reply to customer</h4>
+    <div class="w-auto" style="height:90%">
         @if (Model.ValRes == "Invalid")
         {
             string stringforEmail = Convert.ToBase64String(Model.EmailSnip);
