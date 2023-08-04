@@ -150,12 +150,18 @@ namespace PIMES_DMS.Controllers
         {
             TempData["Existing8D"] = null;
 
-            _8DModel? existing8D = _Db._8DDb.FirstOrDefault(j => j.ControlNo == controlno);           
+            var CheckForIssueWithCN = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == controlno);
+
+            if (CheckForIssueWithCN == null)
+            {
+                TempData["Existing8D"] = "We have no QI with control number of '" + controlno + "'. Please put the control number correctly.";
+                return RedirectToAction("AdminHome");
+            }
+
+            _8DModel? existing8D = _Db._8DDb.FirstOrDefault(j => j.ControlNo == controlno);
 
             if (existing8D != null)
             {
-                TempData["Existing8D"] = "You have replaced an existing 8D attachment with control number of " + controlno;
-
                 Update8D(controlno, attachment);
 
                 return RedirectToAction("AdminHome");
@@ -165,7 +171,7 @@ namespace PIMES_DMS.Controllers
                 Upload8D(controlno, attachment);
 
                 return RedirectToAction("AdminHome");
-            }           
+            }
         }
 
         private void Update8D(string controlno, IFormFile attachment)
@@ -185,6 +191,7 @@ namespace PIMES_DMS.Controllers
 
             if (ModelState.IsValid)
             {
+                TempData["Existing8D"] = "You have replaced an existing 8D attachment with control number of " + controlno;
                 UpdateNotif(", replaced an existing 8D attachment with control number of " + controlno, "Admins");
                 _Db._8DDb.Update(model);
                 _Db.SaveChanges();
@@ -206,6 +213,7 @@ namespace PIMES_DMS.Controllers
 
             if (ModelState.IsValid)
             {
+                TempData["Existing8D"] = "You have uploaded an 8D attachment with control number of " + controlno;
                 UpdateNotif(", uploaded an 8D attachment with control number of " + controlno, "Admins");
                 CheckIfIssueHave8D(controlno);
                 _Db._8DDb.Add(model);

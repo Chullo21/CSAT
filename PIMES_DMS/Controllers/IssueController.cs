@@ -46,6 +46,15 @@ namespace PIMES_DMS.Controllers
         public IActionResult SubmitIssue(string issueno, DateTime datefound, string product, string serialno,
             string affectedpn, string description, string problemdescription, IFormFile? cp, int qty, string fffs)
         {
+            TempData["Existing8D"] = null;
+            var checkForExistingIssue = _context.IssueDb.FirstOrDefault(j => j.IssueNo == issueno);
+
+            if (checkForExistingIssue != null)
+            {
+                TempData["Existing8D"] = "An Issue with issue number of '" + issueno +"' already exist. Issue Submission was not successful.";
+                return View("~/Views/Home/AdminHome.cshtml");
+            }
+
             string? creator = TempData["EN"] as string;
             TempData.Keep();
             var catchIssue = _context.IssueDb.FirstOrDefault(j => j.IssueNo == issueno);
@@ -78,17 +87,17 @@ namespace PIMES_DMS.Controllers
                 issue.ClientRep = memoryStream.ToArray();
             }
 
-            if (ModelState.IsValid)
-            {
-                NotifyAboutSubmittedIssue();
+            //if (ModelState.IsValid)
+            //{
+            //    NotifyAboutSubmittedIssue();
 
-                _context.IssueDb.Add(issue);
-                _context.SaveChanges();
+            //    _context.IssueDb.Add(issue);
+            //    _context.SaveChanges();
 
-                UpdateNotif(DateTime.Now, ", have submitted a claim. " + issueno, "All");
+            //    UpdateNotif(DateTime.Now, ", have submitted a claim. " + issueno, "All");
 
-                return View("IssueDetails", issue);
-            }
+            //    return View("IssueDetails", issue);
+            //}
 
             return RedirectToAction("IssuesList");
         }
