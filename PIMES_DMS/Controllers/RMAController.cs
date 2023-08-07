@@ -81,7 +81,7 @@ namespace PIMES_DMS.Controllers
         {
             using (var package = new ExcelPackage())
             {
-                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+                var worksheet = package.Workbook.Worksheets.Add("RMA P.1");
 
                 var item = _Db.RMADb.FirstOrDefault(j => j.RMAID == ID);
 
@@ -93,6 +93,7 @@ namespace PIMES_DMS.Controllers
                 worksheet.Cells[1, 6].Value = "Description";
                 worksheet.Cells[1, 7].Value = "Problem Statement";
                 worksheet.Cells[1, 8].Value = "Quantity";
+                worksheet.Cells[1, 9].Value = "Date Received";
 
                 worksheet.Cells[2, 1].Value = item!.DateCreated.ToShortDateString();
                 worksheet.Cells[2, 2].Value = item.RMANo;
@@ -103,6 +104,16 @@ namespace PIMES_DMS.Controllers
                 worksheet.Cells[2, 7].Value = item.ProblemDesc;
                 worksheet.Cells[2, 8].Value = item.QTY;
 
+                if (item.DateReceived == null)
+                {
+                    worksheet.Cells[2, 9].Value = "Not Yet received";
+                }
+                else
+                {
+                    worksheet.Cells[2, 9].Value = item.DateReceived.Value.ToShortDateString();
+                }
+
+
                 worksheet.Column(1).Width = 12;
                 worksheet.Column(2).Width = 20;
                 worksheet.Column(3).Width = 12;
@@ -111,8 +122,8 @@ namespace PIMES_DMS.Controllers
                 worksheet.Column(6).Width = 40;
                 worksheet.Column(7).Width = 80;
                 worksheet.Column(8).Width = 12;
+                worksheet.Column(9).Width = 12;
 
-                // Set row height
                 worksheet.Row(1).Height = 25;
 
                 byte[] excelBytes = package.GetAsByteArray();
@@ -157,6 +168,7 @@ namespace PIMES_DMS.Controllers
                     worksheet.Cells[1, 6].Value = "Description";
                     worksheet.Cells[1, 7].Value = "Problem Statement";
                     worksheet.Cells[1, 8].Value = "Quantity";
+                    worksheet.Cells[1, 9].Value = "Date Received";
 
                     worksheet.Cells[row, 1].Value = item.DateCreated.ToShortDateString();
                     worksheet.Cells[row, 2].Value = item.RMANo;
@@ -167,10 +179,18 @@ namespace PIMES_DMS.Controllers
                     worksheet.Cells[row, 7].Value = item.ProblemDesc;
                     worksheet.Cells[row, 8].Value = item.QTY;
 
+                    if (item.DateReceived != null)
+                    {
+                        worksheet.Cells[row, 9].Value = item.DateReceived.Value.ToShortDateString();                        
+                    }
+                    else
+                    {
+                        worksheet.Cells[row, 9].Value = "Not Yet received";
+                    }
+
                     row++;
                 }
 
-                // Set column widths
                 worksheet.Column(1).Width = 12;
                 worksheet.Column(2).Width = 20;
                 worksheet.Column(3).Width = 12;
@@ -179,8 +199,8 @@ namespace PIMES_DMS.Controllers
                 worksheet.Column(6).Width = 40;
                 worksheet.Column(7).Width = 80;
                 worksheet.Column(8).Width = 12;
+                worksheet.Column(9).Width = 12;
 
-                // Set row height
                 worksheet.Row(1).Height = 25;
 
                 byte[] excelBytes = package.GetAsByteArray();
