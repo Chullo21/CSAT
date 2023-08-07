@@ -87,17 +87,17 @@ namespace PIMES_DMS.Controllers
                 issue.ClientRep = memoryStream.ToArray();
             }
 
-            //if (ModelState.IsValid)
-            //{
-            //    NotifyAboutSubmittedIssue();
+            if (ModelState.IsValid)
+            {
+                NotifyAboutSubmittedIssue();
 
-            //    _context.IssueDb.Add(issue);
-            //    _context.SaveChanges();
+                _context.IssueDb.Add(issue);
+                _context.SaveChanges();
 
-            //    UpdateNotif(DateTime.Now, ", have submitted a claim. " + issueno, "All");
+                UpdateNotif(DateTime.Now, ", have submitted a claim. " + issueno, "All");
 
-            //    return View("IssueDetails", issue);
-            //}
+                return View("IssueDetails", issue);
+            }
 
             return RedirectToAction("IssuesList");
         }
@@ -123,7 +123,7 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult IssuesList()
         {
-            return View(_context.IssueDb.Where(j => string.IsNullOrEmpty(j.ValRes)));
+            return View(_context.IssueDb.Where(j => !j.Acknowledged));
         }
 
         [HttpGet]
@@ -166,44 +166,22 @@ namespace PIMES_DMS.Controllers
             return RedirectToAction("IssuesList");
         }
 
-        [HttpGet]
-        [AutoValidateAntiforgeryToken]
-        public IActionResult Search(string ss)
-        {
-            string? Role = TempData["Role"] as string;
-            TempData.Keep();
-
-            if (ss.IsNullOrEmpty())
-            {
-                return RedirectToAction("IssuesList");
-            }
-
-           if (Role == "CLIENT")
-            {
-                string? EN = TempData["EN"] as string;
-                TempData.Keep();
-                
-                IEnumerable<IssueModel> obj = _context.IssueDb.Where(m => (!m.Acknowledged && !m.ValidatedStatus && m.IssueCreator == EN) && (m.IssueNo.Contains(ss) || 
-                                                m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) || m.SerialNo!.ToString().Contains(ss)));
-
-                return View("IssuesList", obj);
-            }
-            else
-            {
-                IEnumerable<IssueModel> obj = _context.IssueDb.Where(m => (!m.Acknowledged && !m.ValidatedStatus) && (m.IssueCreator.Contains(ss)
-                                              || m.IssueNo.Contains(ss) || m.AffectedPN.Contains(ss) || m.Desc.Contains(ss) || m.SerialNo!.ToString().Contains(ss) ));
-
-                return View("IssuesList", obj);
-            }
-        }
-
         public IActionResult EditIssueView(int ID)
         {
             return View(_context.IssueDb.FirstOrDefault(j => j.IssueID == ID));
         }
 
-        public IActionResult EditIssue(int ID, string? issueno, string? serial, string? affected, int qty, string? desc, string? probdesc, IFormFile? doc)
+        public IActionResult EditIssue(int ID, string issueno, string? serial, string? affected, int qty, string? desc, string? probdesc, IFormFile? doc)
         {
+
+            var checkForIssueWithSameNumber = _context.IssueDb.FirstOrDefault(j => j.IssueNo == issueno);
+
+            if (checkForIssueWithSameNumber != null)
+            {
+                TempData["Existing8D"] = "An Issue with issue number of '" + issueno + "' already exist. Request to edit Issue was not successful.";
+                return View("~/Views/Home/AdminHome.cshtml");
+            }
+
             var issue = _context.IssueDb.FirstOrDefault(j => j.IssueID == ID);
 
             IssueModel model = new IssueModel();

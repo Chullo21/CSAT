@@ -24,20 +24,20 @@
 <div class="container">
     <h1 class="text-center">Invalid Claims</h1>
     <hr />
-    <div >
+    <div class="table-responsive">
         <table class="table table-bordered table-striped text-center align-items-center" id="myTable">
             <thead>
                 <tr>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.IssueCreator)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.IssueNo)
                     </th>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.Product)
                     </th>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.ProbDesc)
                     </th>
                     <th>
@@ -49,16 +49,16 @@
                 @foreach (var item in Model.OrderByDescending(j => j.DateFound))
                 {
                     <tr>
-                        <td class="desktop-only">
+                        <td>
                             @Html.DisplayFor(modelItem => item.IssueCreator)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.IssueNo)
                         </td>
-                        <td class="desktop-only">
+                        <td>
                             @Html.DisplayFor(modelItem => item.Product)
                         </td>
-                        <td class="desktop-only">
+                        <td>
                             @Html.DisplayFor(modelItem => item.ProbDesc)
                         </td>
                         <td>

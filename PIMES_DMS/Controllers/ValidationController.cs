@@ -132,7 +132,7 @@ namespace PIMES_DMS.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult SubmitValidation(int id, string validation, string? valsumrep, IFormFile? valrep, string? nrma, DateTime dateval, IFormFile? emailimg, string req)
+        public IActionResult SubmitValidation(int id, string validation, string? valsumrep, IFormFile? valrep, string? nrma, DateTime dateval, IFormFile? emailimg, string? req)
         {
             string? EN = TempData["EN"] as string;
             TempData.Keep();

@@ -24,23 +24,23 @@
 <div class="container">
     <h1 class="text-center">Valid Claims</h1>
     <hr />
-    <div>
+    <div class="table-responsive">
         <table class="table table-bordered table-striped" id="myTable">
             <thead>
                 <tr>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.IssueCreator)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.IssueNo)
                     </th>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.Product)
                     </th>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.ProbDesc)
                     </th>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.ControlNumber)
                     </th>
                     <th>
@@ -52,19 +52,19 @@
                 @foreach (var item in Model.OrderByDescending(j => j.DateCreated))
                 {
                     <tr>
-                        <td class="desktop-only">
+                        <td>
                             @item.IssueCreator
                         </td>
                         <td>
                             @item.IssueNo
                         </td>
-                        <td class="desktop-only">
+                        <td>
                             @item.Product
                         </td>
-                        <td class="desktop-only">
+                        <td>
                             @item.ProbDesc
                         </td>
-                        <td class="desktop-only">
+                        <td>
                             @item.ControlNumber
                         </td>
                         <td>

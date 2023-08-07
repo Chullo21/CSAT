@@ -110,7 +110,7 @@ namespace PIMES_DMS.Controllers
 
         private int GetNumberOfClaims()
         {
-            return _Db.IssueDb.Count(j => string.IsNullOrEmpty(j.ValRes));
+            return _Db.IssueDb.Count(j => !j.Acknowledged);
         }
 
         private int GetNumberOfOnProcess()
