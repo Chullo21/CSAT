@@ -8,10 +8,14 @@ namespace PIMES_DMS.Controllers
     public class HomeController : Controller
     {
         private readonly AppDbContext _Db;
+        private readonly List<IssueModel> mainIssues = new List<IssueModel>();
+        private readonly List<ActionModel> mainActions = new List<ActionModel>();
 
         public HomeController(AppDbContext db)
         {
             _Db = db;
+            mainIssues = _Db.IssueDb.ToList();
+            mainActions = _Db.ActionDb.ToList();
         }
 
         public void UpdateNotif(string message, string t)
@@ -38,7 +42,7 @@ namespace PIMES_DMS.Controllers
             {
                 case "IssueDetail":
                     {
-                        IssueModel? issue = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == ss || j.IssueNo == ss);
+                        IssueModel? issue = mainIssues.FirstOrDefault(j => j.ControlNumber == ss || j.IssueNo == ss);
                         
                         if (issue != null)
                         {
@@ -53,7 +57,7 @@ namespace PIMES_DMS.Controllers
                     }
                 case "VR":
                     {
-                        IssueModel? issue = _Db.IssueDb.FirstOrDefault(j => (j.ControlNumber == ss || j.IssueNo == ss) && j.ValidatedStatus);
+                        IssueModel? issue = mainIssues.FirstOrDefault(j => (j.ControlNumber == ss || j.IssueNo == ss) && j.ValidatedStatus);
 
                         if (issue != null)
                         {
@@ -67,7 +71,7 @@ namespace PIMES_DMS.Controllers
                     }
                 case "CAPA":
                     {
-                        IssueModel? issue = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == ss && j.HasTES);
+                        IssueModel? issue = mainIssues.FirstOrDefault(j => j.ControlNumber == ss && j.HasTES);
 
                         if (issue != null)
                         {
@@ -100,8 +104,8 @@ namespace PIMES_DMS.Controllers
             string? EN = TempData["EN"] as string;
             TempData.Keep();
 
-            ViewData["InComingIssue"] = _Db.IssueDb.Where(j => !j.Acknowledged && !j.ValidatedStatus);
-            ViewData["OnProgressIssue"] = _Db.IssueDb.Where(j => j.Acknowledged && !j.ValidatedStatus);
+            ViewData["InComingIssue"] = mainIssues.Where(j => !j.Acknowledged && !j.ValidatedStatus);
+            ViewData["OnProgressIssue"] = mainIssues.Where(j => j.Acknowledged && !j.ValidatedStatus);
 
             ViewBag.Claims = GetNumberOfClaims();
             ViewBag.OnProcess = GetNumberOfOnProcess();
@@ -110,7 +114,7 @@ namespace PIMES_DMS.Controllers
 
             if (Role != "Admin")
             {
-                ViewBag.Acts = _Db.ActionDb.Where(j => j.PIC == EN).ToList();
+                ViewBag.Acts = mainActions.Where(j => j.PIC == EN).ToList();
             }
 
             return View();
@@ -118,27 +122,27 @@ namespace PIMES_DMS.Controllers
 
         private int GetNumberOfClaims()
         {
-            return _Db.IssueDb.Count(j => !j.Acknowledged);
+            return mainIssues.Count(j => !j.Acknowledged);
         }
 
         private int GetNumberOfOnProcess()
         {
-            return _Db.IssueDb.Count(j => j.Acknowledged && !j.ValidatedStatus);
+            return mainIssues.Count(j => j.Acknowledged && !j.ValidatedStatus);
         }
 
         private int GetNumberOfERA()
         {
-            return _Db.IssueDb.Count(j => j.Acknowledged && j.ValidatedStatus && !j.HasCR);
+            return mainIssues.Count(j => j.Acknowledged && j.ValidatedStatus && !j.HasCR);
         }
 
         private int GetNumberOfRC()
         {
-            List<IssueModel> issues = _Db.IssueDb.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
+            List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
             List<IssueModel> issuestoshow = new List<IssueModel>();
 
             foreach (var issue in issues)
             {
-                List<ActionModel> actions = _Db.ActionDb.Where(j => j.ControlNo == issue.ControlNumber).ToList();
+                List<ActionModel> actions = mainActions.Where(j => j.ControlNo == issue.ControlNumber).ToList();
 
                 if (!actions.All(j => j.ActionStatus == "Closed") || actions.Count == 0)
                 {
@@ -158,7 +162,7 @@ namespace PIMES_DMS.Controllers
         {
             TempData["Existing8D"] = null;
 
-            var CheckForIssueWithCN = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == controlno);
+            var CheckForIssueWithCN = mainIssues.FirstOrDefault(j => j.ControlNumber == controlno);
 
             if (CheckForIssueWithCN == null)
             {
@@ -231,7 +235,7 @@ namespace PIMES_DMS.Controllers
 
         private void CheckIfIssueHave8D(string controlno)
         {
-            IssueModel issue = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == controlno);           
+            IssueModel issue = mainIssues.FirstOrDefault(j => j.ControlNumber == controlno);           
 
             if (issue != null)
             {

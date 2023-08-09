@@ -280,7 +280,7 @@ namespace PIMES_DMS.Controllers
             int year = (int)TempData["selectedYear"]!;
             TempData.Keep();
 
-            IEnumerable<IssueModel> issues = mainIssues.Where(j =>j.ValidatedStatus && j.DateFound.Year == year);
+            List<IssueModel> issues = mainIssues.Where(j =>j.ValidatedStatus && j.DateFound.Year == year).ToList();
 
             ViewBag.invalidforpie = issues.Count(j => j.ValidatedStatus && j.ValRes == "Invalid");
             ViewBag.validforpie = issues.Count(j => j.ValidatedStatus && j.ValidatedStatus && j.ValRes == "Valid");
