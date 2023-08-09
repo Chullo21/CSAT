@@ -16,7 +16,7 @@
         <div class="col-md-4">
             <form asp-controller="Admin" asp-action="CreateUser" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group mt-2">
+                <div class="form-group">
                     <label asp-for="AccName" class="control-label"></label>
                     <input asp-for="AccName" class="form-control" name="accname" required />
                     <span asp-validation-for="AccName" class="text-danger"></span>
@@ -49,17 +49,41 @@
                     <input asp-for="UserName" class="form-control" name="username" required />
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
-                <div class="form-group mt-2">
-                    <label asp-for="Password" class="control-label"></label>
-                    <input asp-for="Password" class="form-control" name="password" required />
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                <div class="form-group mt-2 d-flex">
+                   <div class="w-50">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" name="password" required />
+                   </div>
+                    <div class="align-self-end w-50">
+                        <button type="button" class="btn btn-success w-100" onclick="generatePassword()">Generate Password</button>
+                    </div>
                 </div>
-                <div class="form-group mt-3 d-flex justify-content-between">
+                <div class="form-group mt-5 d-flex justify-content-between">
                     <input type="submit" value="Create" class="btn btn-primary w-50" />
-                    <a class="btn btn-danger" asp-action="Index">Back to List</a>
+                    <a class="btn btn-danger span" asp-controller="Admin" asp-action="AdminView">Back to List</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    function generatePassword() {
+        var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var password = "";
+        var charsetLength = charset.length;
+
+        while (password.length < 8) {
+            var randomIndex = Math.floor(Math.random() * charsetLength);
+            var randomChar = charset.charAt(randomIndex);
+
+            if (password.indexOf(randomChar) === -1) {
+                password += randomChar;
+            }
+        }
+
+        var passwordInput = document.querySelector('[name="password"]');
+        passwordInput.value = password;
+    }
+</script>
 

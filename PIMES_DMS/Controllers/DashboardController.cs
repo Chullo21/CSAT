@@ -9,10 +9,14 @@ namespace PIMES_DMS.Controllers
     public class DashboardController : Controller
     {
         private readonly AppDbContext _Db;
+        private readonly List<IssueModel> mainIssues = new List<IssueModel>();
+        private readonly List<ActionModel> mainActions = new List<ActionModel>();
 
         public DashboardController(AppDbContext db)
         {
             _Db = db;
+            mainIssues = _Db.IssueDb.ToList();
+            mainActions = _Db.ActionDb.ToList();
         }
 
         public IActionResult DashView()
@@ -21,10 +25,11 @@ namespace PIMES_DMS.Controllers
             TempData["selectedYear"] = yearNow;
 
             GetMonth();
-            GetDataforLineChart(yearNow, DateTime.Now.Month);
+
             GetResValues(DateTime.Now.Month, yearNow);
-            GetValdataforBar(yearNow, DateTime.Now.Month);
+            GetDataforLineChart(yearNow, DateTime.Now.Month);
             GetDataforValidandInv();
+            GetValdataforBar(yearNow, DateTime.Now.Month);            
             GetFFFS(yearNow);
 
             return View();
@@ -46,14 +51,11 @@ namespace PIMES_DMS.Controllers
                 TempData["Months"] = currentMonths - 1;
             }
 
-            //GetMonth();
             GetResValues(currentMonths, year);
             GetDataforLineChart(year, currentMonths);
             GetDataforValidandInv();
             GetValdataforBar(year, currentMonths);
-            GetFFFS(year);
-
-            GetDataforLineChart(year, currentMonths);            
+            GetFFFS(year);        
 
             return View("DashView");
         }
@@ -62,45 +64,27 @@ namespace PIMES_DMS.Controllers
         {
             int[] data = new int[4];
 
-            data[0] = _Db.IssueDb.Count(j => j.FFFS == "Function" && j.DateCreated.Year == year);
-            data[1] = _Db.IssueDb.Count(j => j.FFFS == "Form" && j.DateCreated.Year == year);
-            data[2] = _Db.IssueDb.Count(j => j.FFFS == "Fit" && j.DateCreated.Year == year);
-            data[3] = _Db.IssueDb.Count(j => j.FFFS == "Safety" && j.DateCreated.Year == year);
+            List<IssueModel> issues = mainIssues.Where(j => j.DateCreated.Year == year).ToList();
+
+            data[0] = issues.Count(j => j.FFFS == "Function");
+            data[1] = issues.Count(j => j.FFFS == "Form");
+            data[2] = issues.Count(j => j.FFFS == "Fit");
+            data[3] = issues.Count(j => j.FFFS == "Safety");
 
             ViewBag.fffs = JsonConvert.SerializeObject(data);
         }
 
-        public IActionResult GetVerSummary(int year)
-        {
-            List<Vermodel> obj = new();
-            IEnumerable<ActionModel> actionIDs = _Db.ActionDb.Where(j => !j.IsDeleted);
-
-            foreach (var act in actionIDs)
-            {
-                IEnumerable<Vermodel> objs = _Db.VerDb.Where(j => j.ActionID == act.ActionID);
-
-                if (objs.Any())
-                {
-                    objs = objs.OrderByDescending(j => j.DateVer).ToList();
-                    obj.Add(objs.First());
-                }
-            }
-
-            return NoContent();
-        }
-
         public void GetValdataforBar(int year, int month)
         {
-            IEnumerable<IssueModel> issues = _Db.IssueDb.Where(j => j.DateFound.Year == year && !j.isDeleted);
+            List<IssueModel> issues = mainIssues.Where(j => j.DateFound.Year == year).ToList();
 
             int[] valids = new int[month + 1];
             int[] invalids = new int[month + 1];
 
             for (int i = 1; i <= month; i++)
             {
-                DateTime YYear = new DateTime(year, i, 1);
-                valids[i] = issues.Count(j => j.DateFound.Year == YYear.Year && j.DateFound.Month == YYear.Month && j.ValRes == "Valid");
-                invalids[i] = issues.Count(j => j.DateFound.Year == YYear.Year && j.DateFound.Month == YYear.Month && j.ValRes == "Invalid");
+                valids[i] = issues.Count(j => j.DateFound.Month == i && j.ValRes == "Valid");
+                invalids[i] = issues.Count(j =>  j.DateFound.Month == i && j.ValRes == "Invalid");
             }
 
             int[] newValids = new int[month];
@@ -117,9 +101,9 @@ namespace PIMES_DMS.Controllers
         {
             int res = 0;
 
-            foreach (var issue in _Db.IssueDb.Where(j => !j.isDeleted && j.ValidatedStatus && j.HasTES && j.DateFound.Year == year && j.ValRes == "Valid"))
+            foreach (var issue in mainIssues.Where(j => j.HasTES && j.DateFound.Year == year && j.ValRes == "Valid"))
             {
-                foreach (var action in _Db.ActionDb.Where(j => !j.IsDeleted && j.ControlNo == issue.ControlNumber))
+                foreach (var action in _Db.ActionDb.Where(j => j.ControlNo == issue.ControlNumber))
                 {
                     if (!action.HasVer)
                     {
@@ -127,7 +111,7 @@ namespace PIMES_DMS.Controllers
                         break;
                     }
 
-                    IEnumerable<Vermodel> vers = _Db.VerDb.Where(j => !j.IsDeleted && j.ActionID == action.ActionID);
+                    IEnumerable<Vermodel> vers = _Db.VerDb.Where(j => j.ActionID == action.ActionID);
 
                     vers = vers.OrderByDescending(j => j.DateVer).ToList();
 
@@ -138,7 +122,7 @@ namespace PIMES_DMS.Controllers
                     }
                 }
             }
-            res = res + _Db.IssueDb.Count(j => !j.isDeleted && j.ValidatedStatus && !j.HasTES && j.DateFound.Year == year && j.ValRes == "Valid");
+            res = res + _Db.IssueDb.Count(j => !j.HasTES && j.DateFound.Year == year && j.ValRes == "Valid");
 
             ViewBag.open = JsonConvert.SerializeObject(res);
         }
@@ -147,17 +131,17 @@ namespace PIMES_DMS.Controllers
         {
             int res = 0;
 
-            var issues = _Db.IssueDb.Where(j => !j.isDeleted && j.ValidatedStatus && j.HasTES && j.DateFound.Year == year && j.ValRes == "Valid");
+            var issues = mainIssues.Where(j => j.HasTES && j.DateFound.Year == year && j.ValRes == "Valid");
 
             foreach (var issue in issues)
             {
                 List<Vermodel> verCheck = new List<Vermodel>();
 
-                var actions = _Db.ActionDb.Where(j => !j.IsDeleted && j.ControlNo == issue.ControlNumber);
+                var actions = _Db.ActionDb.Where(j => j.ControlNo == issue.ControlNumber);
 
                 foreach (var action in actions)
                 {
-                    IEnumerable<Vermodel> vers = _Db.VerDb.Where(j => !j.IsDeleted && j.ActionID == action.ActionID);
+                    IEnumerable<Vermodel> vers = _Db.VerDb.Where(j => j.ActionID == action.ActionID);
 
                     if (vers.Any())
                     {
@@ -205,7 +189,7 @@ namespace PIMES_DMS.Controllers
             int[] valid = new int[month + 1];
             int[] invalid = new int[month + 1];
 
-            IEnumerable<IssueModel> issues = _Db.IssueDb.Where(j => j.DateFound.Year == year && !j.isDeleted);
+            List<IssueModel> issues = mainIssues.Where(j => j.DateFound.Year == year && !j.isDeleted).ToList();
 
             for (int i = 1; i <= month; i++)
             {
@@ -257,7 +241,7 @@ namespace PIMES_DMS.Controllers
 
         public void GetResValues(int month, int year)
         {
-            List<IssueModel> issues = _Db.IssueDb.Where(j => j.ValidatedStatus && j.DateFound.Year == year && !j.isDeleted).OrderBy(j => j.DateFound).ToList();
+            List<IssueModel> issues = mainIssues.Where(j => j.ValidatedStatus && j.DateFound.Year == year && !j.isDeleted).OrderBy(j => j.DateFound).ToList();
             List<ResData> resValues = new List<ResData>();
             
             foreach (IssueModel issue in issues)
@@ -266,7 +250,6 @@ namespace PIMES_DMS.Controllers
 
                 ResData rd = new ResData();
                 {
-                    //rd.Days = CalculateTotalDays(issue.DateFound, issue.DateVdal);
                     List<int> arraySetter = new List<int>();
                     
                     for (int k = 1; k <= DateMonth; k++)
@@ -297,7 +280,7 @@ namespace PIMES_DMS.Controllers
             int year = (int)TempData["selectedYear"]!;
             TempData.Keep();
 
-            IEnumerable<IssueModel> issues = _Db.IssueDb.Where(j => !j.isDeleted && j.ValidatedStatus && j.DateFound.Year == year);
+            IEnumerable<IssueModel> issues = mainIssues.Where(j =>j.ValidatedStatus && j.DateFound.Year == year);
 
             ViewBag.invalidforpie = issues.Count(j => j.ValidatedStatus && j.ValRes == "Invalid");
             ViewBag.validforpie = issues.Count(j => j.ValidatedStatus && j.ValidatedStatus && j.ValRes == "Valid");
@@ -305,7 +288,7 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult GetInvalids()
         {
-            IEnumerable<IssueModel> issues = _Db.IssueDb.Where(j => !j.isDeleted && j.ValidatedStatus && j.ValRes == "Invalid");
+            IEnumerable<IssueModel> issues = mainIssues.Where(j => j.ValidatedStatus && j.ValRes == "Invalid");
 
             TempData["sfd"] = "Invalid Claims";
 
@@ -314,14 +297,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult GetValids()
         {
-            List<IssueModel> issues = _Db.IssueDb.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
+            List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
             List<ActionModel> actions = new List<ActionModel>();
             List<GetActionPercent> gaps = new List<GetActionPercent>();
             ViewData["ActionPercents"] = null;
 
             foreach (IssueModel issue in issues)
             {
-                List<ActionModel> actionlist = _Db.ActionDb.Where(j => j.ControlNo == issue.ControlNumber).ToList();
+                List<ActionModel> actionlist = mainActions.Where(j => j.ControlNo == issue.ControlNumber).ToList();
                 actions.AddRange(actionlist);
                 
                 GetActionPercent gap = new GetActionPercent();

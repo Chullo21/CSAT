@@ -96,6 +96,9 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult AdminHome()
         {
+            string? Role = TempData["Role"] as string;
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
 
             ViewData["InComingIssue"] = _Db.IssueDb.Where(j => !j.Acknowledged && !j.ValidatedStatus);
             ViewData["OnProgressIssue"] = _Db.IssueDb.Where(j => j.Acknowledged && !j.ValidatedStatus);
@@ -104,6 +107,11 @@ namespace PIMES_DMS.Controllers
             ViewBag.OnProcess = GetNumberOfOnProcess();
             ViewBag.ERA = GetNumberOfERA();
             ViewBag.RC = GetNumberOfRC();
+
+            if (Role != "Admin")
+            {
+                ViewBag.Acts = _Db.ActionDb.Where(j => j.PIC == EN).ToList();
+            }
 
             return View();
         }
@@ -234,6 +242,29 @@ namespace PIMES_DMS.Controllers
                 }
 
                 _Db.IssueDb.Update(updateIssue);
+            }
+        }
+
+        public IActionResult LogoutOptions(string Accs)
+        {
+            switch (Accs)
+            {
+                case "Accounts":
+                    {
+                        return RedirectToAction("AdminView", "Admin");
+                    }
+                case "Actions":
+                    {
+                        return RedirectToAction("ShowNotif", "Notif");
+                    }
+                case "Log-out":
+                    {
+                        return RedirectToAction("Login", "Login");
+                    }
+                default:
+                    {
+                        return Ok();
+                    }
             }
         }
 

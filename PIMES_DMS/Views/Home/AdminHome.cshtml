@@ -6,30 +6,68 @@
 
     TempData.Keep("Role");
 
+    IEnumerable<IssueModel>? InComingIssue = ViewData["InComingIssue"] as IEnumerable<IssueModel>;
+    IEnumerable<IssueModel>? Progress = ViewData["OnProgressIssue"] as IEnumerable<IssueModel>;
+    List<ActionModel>? Actions = ViewBag.Acts as List<ActionModel>;
+
     string? Warning = TempData["Existing8D"] as string;
     TempData.Remove("Existing8D");
 }
 
+@section scripts {
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                searching: false,
+                lengthChange: false,
+                pageLength: 2,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#pending').DataTable({
+                searching: false,
+                lengthChange: false,
+                pageLength: 2,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#process').DataTable({
+                searching: false,
+                lengthChange: false,
+                pageLength: 2,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+}
+
 <div class="container"> 
     <div class="w-100 d-flex justify-content-start align-items-center h-25 mb-2">
-        <div class="flex-column w-100">
-            <marquee class="bg-black border-dark text-white w-100 h-100 my-0" style="border:5px solid">
+        <form class="d-flex w-100" asp-controller="Home" asp-action="Search">
+            <marquee class="bg-black border-dark text-white w-50 mx-1" style="border:5px solid">
                 Welcome to CSat Portal! Do not hesitate to contact ATS-QA if you have concern or feedback. Have a great day!
             </marquee>
-            <form asp-controller="Home" asp-action="Search">
-                <div class="w-100 border-dark text-center d-flex justify-content-end">
-                    <div class="w-50 d-flex">
-                        <select class="form-select border-dark mx-auto w-25" name="type">
-                            <option value="IssueDetail">Issue Details</option>
-                            <option value="VR">Validation Report</option>
-                            <option value="CAPA">CAPA</option>
-                        </select>
-                        <input class="w-75 form-control border-dark" placeholder="Search" name="ss" />
-                    </div>
-                </div>
-                <input type="submit" hidden/>
-            </form>
-        </div>
+            <div class="w-50 d-flex">
+                <select class="form-select border-dark mx-auto w-25" name="type">
+                    <option value="IssueDetail">Issue Details</option>
+                    <option value="VR">Validation Report</option>
+                    <option value="CAPA">CAPA</option>
+                </select>
+                <input class="w-75 form-control border-dark" placeholder="Search" name="ss" />
+            </div>
+            <input type="submit" hidden />
+        </form>
     </div>
     @if (Warning != null)
     {
@@ -43,6 +81,7 @@
                 <div class="my-2">
                     <h2 class="" style="font-family:Impact; text-align:center; font-size:30px">QI PROCESS</h2>
                 </div>
+                <hr />
                 @if (Role == "Admin")
                 {
                     <div class="d-flex justify-content-center align-items-center">
@@ -102,24 +141,27 @@
                         </div>
                     </a>
                </div>
-               <div class="d-flex justify-content-center">
-                    <a asp-controller="Validation" asp-action="ForGERVal" class="btn btn-primary text-center w-100 my-2 shadow mx-3">
-                        <div class="d-flex justify-content-between">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clipboard-plus" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" />
-                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
-                                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
-                            </svg>
-                            <div class="d-flex justify-content-start align-self-center m-auto">
-                                Submit C.R & E.R.A
+               @if (Role == "Admin")
+                {
+                    <div class="d-flex justify-content-center">
+                        <a asp-controller="Validation" asp-action="ForGERVal" class="btn btn-primary text-center w-100 my-2 shadow mx-3">
+                            <div class="d-flex justify-content-between">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clipboard-plus" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" />
+                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
+                                </svg>
+                                <div class="d-flex justify-content-start align-self-center m-auto">
+                                    Submit C.R & E.R.A
+                                </div>
+                                <div>
+                                    <span class="badge text-bg-secondary bg-danger">@ViewBag.ERA</span>
+                                </div>
                             </div>
-                            <div>
-                                <span class="badge text-bg-secondary bg-danger">@ViewBag.ERA</span>
-                            </div>
-                        </div>
-                    </a>
-               </div>
-               <div class="d-flex justify-content-center">
+                        </a>
+                    </div>
+                }
+                <div class="d-flex justify-content-center">
                     <a asp-controller="RCV" asp-action="RCVList" class="btn btn-primary text-center w-100 mt-2 shadow mx-3">
                         <div class="d-flex justify-content-between">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clipboard2-pulse" viewBox="0 0 16 16">
@@ -139,145 +181,189 @@
             </div>
         </div>
 
-        <div class="col-6 col-md-4 mx-auto mt-2" style="border: 2px solid">
-            <div class="text-center">
-                <div>
-                    <div class="mt-2" style="font-weight:bold; font-size:20px">
-                        PENDING
-                    </div>
-                    <hr class="mt-0"/>
-                    <div class="table-data table-responsive h-auto">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="text-nowrap">
-                                        ISSUE #
-                                    </th>
-                                    <th>
-                                        Date
-                                    </th>
-                                    <th>
-                                        Details
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    IEnumerable<IssueModel>? InComingIssue = ViewData["InComingIssue"] as IEnumerable<IssueModel>;
-                                    if (InComingIssue != null)
+        <div class="col-12 col-md-4 mx-auto mt-2">
+           <div class="card w-100 h-100 bg-transparent">
+               <h4 class="card-header text-center bg-secondary text-white">
+                    Pending (@InComingIssue.Count())
+               </h4>
+                <div class="card-body table-data table-responsive h-auto">
+                    <table class="table table-striped table-hover text-center fw-bold" id="pending">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th class="text-nowrap w-auto">
+                                    ISSUE #
+                                </th>
+                                <th class="w-auto">
+                                    Date
+                                </th>
+                                <th class="w-auto">
+                                    Details
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="align-text-bottom">
+                            @{
+                                
+                                if (InComingIssue != null)
+                                {
+                                    foreach (var obj in InComingIssue!)
                                     {
-                                        foreach (var obj in InComingIssue!)
+                                        <tr>
+                                            <td>
+                                                @obj.IssueNo
+                                            </td>
+                                            <td>
+                                                @obj.DateCreated.ToString("MM/dd/yyy")
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-primary" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@obj.IssueID">View</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+           </div>
+        </div>
+
+        <div class="col-12 col-md-4 mx-auto mt-2">
+            <div class="card w-100 h-100 bg-transparent">
+                <h4 class="card-header text-center bg-secondary text-white">
+                    On-Process (@Progress.Count())
+                </h4>
+                <div class="card-body table-data table-responsive h-auto">
+                    <table class="table table-striped table-hover fw-bold text-center" id="process">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th class="text-nowrap w-auto">ISSUE #</th>
+                                <th class="w-auto">DAYS</th>
+                                <th class="w-auto">
+                                    Details
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="align-text-bottom">
+                            @{
+                                
+                                if (Progress != null)
+                                {
+                                    foreach (var obj in Progress!)
+                                    {
+                                        DateTime dateack = Convert.ToDateTime(obj.DateAck);
+                                        DateTime today = Convert.ToDateTime(DateTime.Now);
+                                        TimeSpan res = today - dateack;
+                                        int resDay = res.Days;
+
+                                        if (resDay >= 4)
                                         {
-                                            <tr>
+                                            <tr class="bg-danger">
                                                 <td>
                                                     @obj.IssueNo
                                                 </td>
                                                 <td>
-                                                    @obj.DateCreated.ToString("MM/dd/yyy")
+                                                    @{
+                                                        Write(resDay);
+                                                    }
                                                 </td>
                                                 <td>
-                                                    <a class="btn btn-primary w-100" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@obj.IssueID">View</a>
+                                                    <a class="btn btn-primary" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@obj.IssueID">View</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else if (resDay == 3 || resDay == 2)
+                                        {
+                                            <tr class="bg-success">
+                                                <td>
+                                                    @obj.IssueNo
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        Write(resDay);
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-primary" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@obj.IssueID">View</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else if (resDay <= 1)
+                                        {
+                                            <tr class="bg-primary">
+                                                <td>
+                                                    @obj.IssueNo
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        Write(resDay);
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-primary" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@obj.IssueID">View</a>
                                                 </td>
                                             </tr>
                                         }
                                     }
                                 }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <div class="col-6 col-md-4 mx-auto mt-2" style="border: 2px solid">
-            <div class="text-center">
-                <div>
-                    <div class="mt-2" style="font-weight:bold; font-size:20px">
-                        ON PROCESS
-                    </div>
-                    <hr class="mt-0"/>
-                    <div class="table-data table-responsive h-auto">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="text-nowrap">ISSUE #</th>
-                                    <th>DAYS</th>
-                                    <th>
-                                        Details
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    IEnumerable<IssueModel>? Progress = ViewData["OnProgressIssue"] as IEnumerable<IssueModel>;
-                                    if (Progress != null)
-                                    {
-                                        foreach (var obj in Progress!)
-                                        {
-                                            DateTime dateack = Convert.ToDateTime(obj.DateAck);
-                                            DateTime today = Convert.ToDateTime(DateTime.Now);
-                                            TimeSpan res = today - dateack;
-                                            int resDay = res.Days;
-
-                                            if (resDay >= 4)
-                                            {
-                                                <tr class="bg-danger">
-                                                    <td>
-                                                        @obj.IssueNo
-                                                    </td>
-                                                    <td>
-                                                        @{
-                                                            Write(resDay);
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        <a class="btn btn-primary w-100" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@obj.IssueID">View</a>
-                                                    </td>
-                                                </tr>
-                                            }
-                                            else if (resDay == 3 || resDay == 2)
-                                            {
-                                                <tr class="bg-success">
-                                                    <td>
-                                                        @obj.IssueNo
-                                                    </td>
-                                                    <td>
-                                                        @{
-                                                            Write(resDay);
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        <a class="btn btn-primary w-100" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@obj.IssueID">View</a>
-                                                    </td>
-                                                </tr>
-                                            }
-                                            else if (resDay <= 1)
-                                            {
-                                                <tr class="bg-primary">
-                                                    <td>
-                                                        @obj.IssueNo
-                                                    </td>
-                                                    <td>
-                                                        @{
-                                                            Write(resDay);
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        <a class="btn btn-primary w-100" asp-controller="Issue" asp-action="IssueDetails" asp-route-id="@obj.IssueID">View</a>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+    @if (Role != "Admin")
+    {
+        <div class="card bg-transparent mt-3">
+            <h4 class="card-header text-center bg-secondary text-white">Your Action Item/s (@Actions.Count())</h4>
+            <div class="table-responsive">
+                <table class="w-100 text-center mt-1 table table-striped" id="myTable">
+                    <thead class="bg-primary">
+                        <tr>
+                            <th class="w-25">
+                                PIC
+                            </th>
+                            <th>
+                                Control#
+                            </th>
+                            <th class="w-50">
+                                Action Item
+                            </th>
+                            <th>
+                                Target Date
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var action in Actions)
+                            {
+                                <tr>
+                                    <td>
+                                        @action.PIC
+                                    </td>
+                                    <td>
+                                        @action.ControlNo
+                                    </td>
+                                    <td>
+                                        @action.Action
+                                    </td>
+                                    <td>
+                                        @action.TargetDate.ToShortDateString()
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
 </div>
+
 
 <div class="modal-content w-auto h-auto" id="8dmodal">
     <form asp-controller="Home" asp-action="CheckFor8D" enctype="multipart/form-data" method="post">

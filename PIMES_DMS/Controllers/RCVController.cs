@@ -3,19 +3,22 @@ using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 using System.Net.Mail;
 using System.Net;
-using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace PIMES_DMS.Controllers
 {
     public class RCVController : Controller
     {
         private readonly AppDbContext _Db;
+        private readonly List<IssueModel> mainIssues = new List<IssueModel>();
+        private readonly List<ActionModel> mainActions = new List<ActionModel>();
+        private readonly List<Vermodel> mainVers = new List<Vermodel>();
 
         public RCVController(AppDbContext db)
         {
             _Db = db;
+            mainIssues = _Db.IssueDb.ToList();
+            mainActions = _Db.ActionDb.ToList();
+            mainVers = _Db.VerDb.ToList();
         }
 
         public void UpdateNotif(string message, string t)
@@ -53,12 +56,12 @@ namespace PIMES_DMS.Controllers
             GetOpenAndCloseDataForTable();
             HasCRChecker();
 
-            List<IssueModel> issues = _Db.IssueDb.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
+            List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
             List<IssueModel> issuestoshow = new List<IssueModel>();
 
             foreach (var issue in issues)
             {
-                List<ActionModel> actions = _Db.ActionDb.Where(j => j.ControlNo == issue.ControlNumber).ToList();
+                List<ActionModel> actions = mainActions.Where(j => j.ControlNo == issue.ControlNumber).ToList();
 
                 if (!actions.All(j => j.ActionStatus == "Closed") || actions.Count == 0)
                 {
@@ -73,14 +76,14 @@ namespace PIMES_DMS.Controllers
         {
             ViewData["openandclosed"] = null;
 
-            List<IssueModel> validIssues = _Db.IssueDb.Where(j => !j.isDeleted && j.ValRes == "Valid" && j.HasCR).ToList();
+            List<IssueModel> validIssues = mainIssues.Where(j => !j.isDeleted && j.ValRes == "Valid" && j.HasCR).ToList();
             List<OpenAndClosed> oac = new List<OpenAndClosed>();
 
             foreach (var issue in validIssues)
             {
-                int open = _Db.ActionDb.Count(j => j.ControlNo == issue.ControlNumber && j.ActionStatus == "Open");
+                int open = mainActions.Count(j => j.ControlNo == issue.ControlNumber && j.ActionStatus == "Open");
 
-                int closed = _Db.ActionDb.Count(j => j.ControlNo == issue.ControlNumber && j.ActionStatus == "Closed");
+                int closed = mainActions.Count(j => j.ControlNo == issue.ControlNumber && j.ActionStatus == "Closed");
 
                 OpenAndClosed oacc = new OpenAndClosed();
                 {
@@ -99,13 +102,13 @@ namespace PIMES_DMS.Controllers
         {
             ViewData["ForVers"] = null;
 
-            List<IssueModel> issues = _Db.IssueDb.Where(j => !j.isDeleted && j.ValRes == "Valid" && j.HasTES).ToList();
+            List<IssueModel> issues = mainIssues.Where(j => !j.isDeleted && j.ValRes == "Valid" && j.HasTES).ToList();
 
             List<ForVerificationData> fvd = new List<ForVerificationData>();
 
             foreach (var issue in issues)
             {
-                int tc = _Db.ActionDb.Count(j => !j.IsDeleted && j.ActionStatus == "Open" && j.TargetDate < DateTime.Now.Date && j.ControlNo == issue.ControlNumber);
+                int tc = mainActions.Count(j => !j.IsDeleted && j.ActionStatus == "Open" && j.TargetDate < DateTime.Now.Date && j.ControlNo == issue.ControlNumber);
 
                 ForVerificationData fvdd = new ForVerificationData();
                 {
@@ -124,7 +127,7 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult RCVView(int ID)
         {
-            return View(_Db.IssueDb.FirstOrDefault(j => j.IssueID == ID));
+            return View(mainIssues.FirstOrDefault(j => j.IssueID == ID));
         }
 
         [HttpGet]
@@ -139,11 +142,11 @@ namespace PIMES_DMS.Controllers
                 string? EN = TempData["EN"] as string;
                 TempData.Keep();
 
-                return View(_Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus && j.HasCR && j.IssueCreator == EN && !j.isDeleted && j.HasTES));
+                return View(mainIssues.Where(j => j.Acknowledged && j.ValidatedStatus && j.HasCR && j.IssueCreator == EN && !j.isDeleted && j.HasTES));
             }
             else
             {
-                return View(_Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus && j.HasCR && !j.isDeleted && j.HasTES));
+                return View(mainIssues.Where(j => j.Acknowledged && j.ValidatedStatus && j.HasCR && !j.isDeleted && j.HasTES));
             }
         }
 
@@ -151,9 +154,9 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ViewVer(int ID)
         {
-            var action = _Db.ActionDb.FirstOrDefault(j => j.ActionID == ID);
+            var action = mainActions.FirstOrDefault(j => j.ActionID == ID);
             List<ShowVerification> sv = new List<ShowVerification>();
-            var verifications = _Db.VerDb.Where(j => !j.IsDeleted && j.RCType == "tc" && j.ActionID == ID);
+            var verifications = mainVers.Where(j => !j.IsDeleted && j.RCType == "tc" && j.ActionID == ID);
 
             foreach (var ver in verifications)
             {
@@ -215,7 +218,7 @@ namespace PIMES_DMS.Controllers
                 }   
             }
 
-            var am = _Db.ActionDb.FirstOrDefault(j => j.ActionID == id);
+            var am = mainActions.FirstOrDefault(j => j.ActionID == id);
 
             ActionModel newTc = new ActionModel();
             {
@@ -253,7 +256,7 @@ namespace PIMES_DMS.Controllers
 
         public void CheckForArt(string contno)
         {
-            IssueModel? issue = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == contno);
+            IssueModel? issue = mainIssues.FirstOrDefault(j => j.ControlNumber == contno);
 
             if (_Db.ART_8D.Count(j => j.ControlNo == contno) == 0)
             {               
@@ -279,7 +282,7 @@ namespace PIMES_DMS.Controllers
             ViewBag.td = null;
             ViewData["Ver"] = null;
 
-            var action = _Db.ActionDb.FirstOrDefault(j => j.ActionID == ID && !j.IsDeleted);
+            var action = mainActions.FirstOrDefault(j => j.ActionID == ID && !j.IsDeleted);
 
             ViewBag.td = _Db.TDDb.Where(j => j.ActionID == ID).OrderByDescending(j => j.TD).First();
 
@@ -289,7 +292,7 @@ namespace PIMES_DMS.Controllers
             }
 
             ViewData["Action"] = action;
-            ViewData["Ver"] = _Db.VerDb.Where(i => i.ActionID == ID);
+            ViewData["Ver"] = mainVers.Where(i => i.ActionID == ID);
 
             return View();
 
@@ -299,7 +302,7 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ShowFile(int ID)
         {
-            var file = _Db.VerDb.FirstOrDefault(j => j.VerID == ID);
+            var file = mainVers.FirstOrDefault(j => j.VerID == ID);
 
             if (file!.Files == null)
             {
@@ -313,8 +316,8 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult UpdateVER(int ID, DateTime datever, string? status, string? Uresult, IFormFile? file, DateTime statusDate)
         {
-            var model = _Db.VerDb.FirstOrDefault(m => m.VerID == ID);
-            var obj = _Db.ActionDb.FirstOrDefault(j => j.ControlNo == model!.ControlNo);
+            var model = mainVers.FirstOrDefault(m => m.VerID == ID);
+            var obj = mainActions.FirstOrDefault(j => j.ControlNo == model!.ControlNo);
 
             var edit = new Vermodel();
             {
@@ -353,10 +356,10 @@ namespace PIMES_DMS.Controllers
             //Make action hasVer false
             foreach (ActionModel action in _Db.ActionDb)
             {
-                var ver = _Db.VerDb.Count(j => j.ActionID == action.ActionID);
+                var ver = mainVers.Count(j => j.ActionID == action.ActionID);
                 if (ver == 0)
                 {
-                    var act = _Db.ActionDb.FirstOrDefault(j => j.ActionID == action.ActionID);
+                    var act =mainActions.FirstOrDefault(j => j.ActionID == action.ActionID);
 
                     act!.HasVer = false;
 
@@ -368,7 +371,7 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult CreateTESView(int ID)
         {
-            return View(_Db.IssueDb.FirstOrDefault(j => j.IssueID == ID));
+            return View(mainIssues.FirstOrDefault(j => j.IssueID == ID));
         }
 
         private int GetLastIndexWithValue(List<string> arr)
@@ -407,7 +410,7 @@ namespace PIMES_DMS.Controllers
                 tes.SRC = swhy?[GetLastIndexWithValue(swhy)];
             }
 
-            var issue = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == ID);
+            var issue = mainIssues.FirstOrDefault(j => j.ControlNumber == ID);
 
             IssueModel updateIssue = new IssueModel();
             {
@@ -421,7 +424,7 @@ namespace PIMES_DMS.Controllers
                 _Db.TESDb.Add(tes);
                 _Db.SaveChanges();
 
-                UpdateNotif(", have submitted a 3x5why.", "All");
+                UpdateNotif(", have submitted a 3x5why with Control# of " + tes.ControlNo + ".", "All");
             }
             else
             {
@@ -435,7 +438,7 @@ namespace PIMES_DMS.Controllers
        {
             ViewBag.tds = null;
             List<Vermodel> vermodels = new List<Vermodel>();
-            List<ActionModel> actions = _Db.ActionDb.Where(j => !j.IsDeleted && j.ControlNo == ID).ToList();
+            List<ActionModel> actions = mainActions.Where(j => !j.IsDeleted && j.ControlNo == ID).ToList();
 
             ViewData["actions"] = actions;
             ViewBag.tds = _Db.TDDb.Where(j => j.ControlNo == ID).ToList();
@@ -445,7 +448,7 @@ namespace PIMES_DMS.Controllers
               {
                 if (action.HasVer)
                 {
-                    Vermodel vermodel = _Db.VerDb.Where(j => j.ActionID == action.ActionID).OrderByDescending(j => j.DateVer).First();
+                    Vermodel vermodel = mainVers.Where(j => j.ActionID == action.ActionID).OrderByDescending(j => j.DateVer).First();
                     vermodels.Add(vermodel);
                 }
             }
@@ -479,7 +482,7 @@ namespace PIMES_DMS.Controllers
                 _Db.ActionDb.Add(act);
                 _Db.SaveChanges();
                 AddTd(ID, action, whichdb, td);
-                UpdateNotif(", have submitted an action item.", "All");
+                UpdateNotif(", have submitted an action item on a CAPA with Control# of " + act.ControlNo + ".", "All");
             }
 
             return RedirectToAction("TESActions", new { ID });
@@ -487,7 +490,7 @@ namespace PIMES_DMS.Controllers
 
         void AddTd(string ID, string action, string whichdb, DateTime td)
         {
-            var setTd = _Db.ActionDb.FirstOrDefault(j => j.ControlNo == ID && j.Action == action && j.Type == whichdb);
+            var setTd = mainActions.FirstOrDefault(j => j.ControlNo == ID && j.Action == action && j.Type == whichdb);
 
             TargetDateModel targetDateModel = new TargetDateModel();
             {

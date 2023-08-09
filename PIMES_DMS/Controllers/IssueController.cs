@@ -89,12 +89,12 @@ namespace PIMES_DMS.Controllers
 
             if (ModelState.IsValid)
             {
-                NotifyAboutSubmittedIssue();
+                NotifyAboutSubmittedIssue(issueno);
 
                 _context.IssueDb.Add(issue);
                 _context.SaveChanges();
 
-                UpdateNotif(DateTime.Now, ", have submitted a claim. " + issueno, "All");
+                UpdateNotif(DateTime.Now, ", have submitted a claim having issue# of  " + issueno + ".", "All");
 
                 return View("IssueDetails", issue);
             }
@@ -158,7 +158,7 @@ namespace PIMES_DMS.Controllers
                 _context.IssueDb.Update(ackissue);
                 _context.SaveChanges();
 
-                UpdateNotif(DateTime.Now, ", have acknowledged a claim. " + issue!.IssueNo, "All");
+                UpdateNotif(DateTime.Now, ", have acknowledged a claim with Issue# of " + issue!.IssueNo + ".", "All");
 
                 return View("IssueDetails", ackissue);
             }
@@ -174,12 +174,12 @@ namespace PIMES_DMS.Controllers
         public IActionResult EditIssue(int ID, string issueno, string? serial, string? affected, int qty, string? desc, string? probdesc, IFormFile? doc)
         {
 
-            var checkForIssueWithSameNumber = _context.IssueDb.FirstOrDefault(j => j.IssueNo == issueno);
+            var checkForIssueWithSameNumber = _context.IssueDb.FirstOrDefault(j => j.IssueNo == issueno && j.IssueID != ID);
 
             if (checkForIssueWithSameNumber != null)
             {
                 TempData["Existing8D"] = "An Issue with issue number of '" + issueno + "' already exist. Request to edit Issue was not successful.";
-                return View("~/Views/Home/AdminHome.cshtml");
+                return RedirectToAction("AdminHome", "Home");
             }
 
             var issue = _context.IssueDb.FirstOrDefault(j => j.IssueID == ID);
@@ -209,7 +209,7 @@ namespace PIMES_DMS.Controllers
                 _context.IssueDb.Update(model);
                 _context.SaveChanges();
 
-                UpdateNotif(DateTime.Now, ", have edited a claim. " + issue!.IssueNo, "All");
+                UpdateNotif(DateTime.Now, ", have edited a claim with issue# of " + issue!.IssueNo + ".", "All");
             }
 
             return RedirectToAction("IssuesList");
@@ -285,7 +285,7 @@ namespace PIMES_DMS.Controllers
             return View(issuestoshow);
         }
 
-        public void NotifyAboutSubmittedIssue()
+        public void NotifyAboutSubmittedIssue(string issueno)
         {
             List<string?> sendTo = _context.AccountsDb.Where(j => !string.IsNullOrEmpty(j.Email)).Select(j => j.Email).ToList();
 
@@ -313,7 +313,7 @@ namespace PIMES_DMS.Controllers
 
             string link = "http://192.168.3.39";
 
-            string body = "Good day,\r\n\r\nWe have received a new quality claim from our costumer. Feel free to access our CSat Portal to review the said claim.\r\n\r\n";
+            string body = "Good day,\r\n\r\nWe have received a new quality claim from our costumer with issue# of " + issueno + ". Feel free to access our CSat Portal to review the said claim.\r\n\r\n";
             body += $"Please click \"{link}\" for your reference.\r\n\r\nHave a great day!";
 
             using (MailMessage message = new MailMessage())

@@ -184,7 +184,7 @@ namespace PIMES_DMS.Controllers
                 _Db.IssueDb.Update(val);
                 _Db.SaveChanges();
 
-                UpdateNotif(", have sumitted a validation report." + val.ValNo, "All");
+                UpdateNotif(", have sumitted a validation report with VR# of " + val.ValNo + ".", "All");
             }
 
             return RedirectToAction("ValIssueDet", new {ID = val.IssueID});

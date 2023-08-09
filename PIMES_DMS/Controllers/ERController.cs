@@ -114,7 +114,7 @@ namespace PIMES_DMS.Controllers
                 _Db.ERDb.Add(obj);
                 _Db.SaveChanges();
 
-                UpdateNotif(", have submitted a new containment report.", "All");
+                UpdateNotif(", have submitted a new containment report with Control# of " + obj.ControlNo + ".", "All");
             }
 
             return RedirectToAction("AdminHome", "Home");

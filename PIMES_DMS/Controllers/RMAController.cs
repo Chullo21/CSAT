@@ -113,7 +113,6 @@ namespace PIMES_DMS.Controllers
                     worksheet.Cells[2, 9].Value = item.DateReceived.Value.ToShortDateString();
                 }
 
-
                 worksheet.Column(1).Width = 12;
                 worksheet.Column(2).Width = 20;
                 worksheet.Column(3).Width = 12;
