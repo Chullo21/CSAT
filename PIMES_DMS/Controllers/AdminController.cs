@@ -48,7 +48,7 @@ namespace PIMES_DMS.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult CreateUser(string username, string password, string accname, string compname, string role, string email)
+        public IActionResult CreateUser(string username, string password, string accname, string compname, string role, string email, string sec, string dom)
         {
 
             if (username != null || password != null || accname != null || compname != null || role != null)
@@ -63,7 +63,7 @@ namespace PIMES_DMS.Controllers
                     acc.Section = compname!;
                     acc.UserName = username!;
                     acc.Password = password!;
-                    acc.Email = email;
+                    acc.Email = email + sec + dom;
                 }
 
                 if (ModelState.IsValid)
