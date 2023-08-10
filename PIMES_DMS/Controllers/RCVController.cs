@@ -121,7 +121,6 @@ namespace PIMES_DMS.Controllers
             ViewData["ForVers"] = fvd;
         }
 
-
         [HttpGet]
         [AutoValidateAntiforgeryToken]
         public IActionResult RCVView(int ID)
@@ -177,8 +176,6 @@ namespace PIMES_DMS.Controllers
 
             return View("VerRCVView", action);
         }
-
-
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
@@ -240,7 +237,6 @@ namespace PIMES_DMS.Controllers
                 _Db.TDDb.Add(targetDateModel);
             }
 
-
             if (ModelState.IsValid)
             {
                 _Db.ActionDb.Update(newTc);
@@ -293,7 +289,6 @@ namespace PIMES_DMS.Controllers
             ViewData["Ver"] = mainVers.Where(i => i.ActionID == ID);
 
             return View();
-
         }
 
         [HttpGet]
@@ -559,8 +554,6 @@ namespace PIMES_DMS.Controllers
                 }
             }
         }
-
-
     }
 
     class NoVers
