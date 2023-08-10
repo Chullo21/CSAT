@@ -134,7 +134,6 @@ namespace PIMES_DMS.Controllers
             }
             else if (GetRole() == "Viewer")
             {
-                //ViewBag.Acts = mainActions.Where(j = > )
                 ViewBag.Acts =  GetCFTActionItems();
             }
 

@@ -52,7 +52,7 @@ namespace PIMES_DMS.Controllers
             if (checkForExistingIssue != null)
             {
                 TempData["Existing8D"] = "An Issue with issue number of '" + issueno +"' already exist. Issue Submission was not successful.";
-                return View("~/Views/Home/AdminHome.cshtml");
+                return RedirectToAction("AdminHome", "Home");
             }
 
             string? creator = TempData["EN"] as string;

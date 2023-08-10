@@ -37,7 +37,6 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _Db.NotifDb.Add(nm);
-                _Db.SaveChangesAsync();
             }
         }
 
@@ -245,10 +244,9 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _Db.ActionDb.Update(newTc);
-                _Db.VerDb.Add(model);               
-                _Db.SaveChanges();
-
+                _Db.VerDb.Add(model);
                 UpdateNotif(", have verified an action.", "All");
+                _Db.SaveChanges();              
             }
 
             return RedirectToAction("TESActions", new { ID= controlno });
@@ -343,9 +341,8 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _Db.VerDb.Update(edit);
-                _Db.SaveChanges();
-
                 UpdateNotif(", have edited a verification report.", "All");
+                _Db.SaveChanges();               
             }
 
             return RedirectToAction("RCVViewDet", "RCV", new { ID = model!.ActionID });
@@ -422,9 +419,8 @@ namespace PIMES_DMS.Controllers
             {
                 _Db.IssueDb.Update(updateIssue);
                 _Db.TESDb.Add(tes);
-                _Db.SaveChanges();
-
                 UpdateNotif(", have submitted a 3x5why with Control# of " + tes.ControlNo + ".", "All");
+                _Db.SaveChanges();               
             }
             else
             {
@@ -480,9 +476,10 @@ namespace PIMES_DMS.Controllers
                 NotifyAboutSubmittedIssue(pic, ID);
 
                 _Db.ActionDb.Add(act);
-                _Db.SaveChanges();
-                AddTd(ID, action, whichdb, td);
                 UpdateNotif(", have submitted an action item on a CAPA with Control# of " + act.ControlNo + ".", "All");
+                _Db.SaveChanges();
+                
+                AddTd(ID, action, whichdb, td);
             }
 
             return RedirectToAction("TESActions", new { ID });
@@ -490,11 +487,11 @@ namespace PIMES_DMS.Controllers
 
         void AddTd(string ID, string action, string whichdb, DateTime td)
         {
-            var setTd = mainActions.FirstOrDefault(j => j.ControlNo == ID && j.Action == action && j.Type == whichdb);
+            var setTd = _Db.ActionDb.FirstOrDefault(j => j.ControlNo == ID && j.Action == action && j.Type == whichdb);
 
             TargetDateModel targetDateModel = new TargetDateModel();
             {
-                targetDateModel.ActionID = setTd!.ActionID;
+                targetDateModel.ActionID = setTd.ActionID;
                 targetDateModel.ControlNo = ID;
                 targetDateModel.TD = td;
                 targetDateModel.Status = "Open";
@@ -502,7 +499,6 @@ namespace PIMES_DMS.Controllers
 
             if (ModelState.IsValid)
             {
-
                 _Db.TDDb.Add(targetDateModel);
                 _Db.SaveChanges();
             }
