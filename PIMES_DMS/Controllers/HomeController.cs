@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
+using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace PIMES_DMS.Controllers
@@ -10,12 +11,31 @@ namespace PIMES_DMS.Controllers
         private readonly AppDbContext _Db;
         private readonly List<IssueModel> mainIssues = new List<IssueModel>();
         private readonly List<ActionModel> mainActions = new List<ActionModel>();
+        private readonly List<AccountsModel> mainAccounts = new List<AccountsModel>();
 
         public HomeController(AppDbContext db)
         {
             _Db = db;
+
             mainIssues = _Db.IssueDb.ToList();
             mainActions = _Db.ActionDb.ToList();
+            mainAccounts = _Db.AccountsDb.ToList();
+        }
+
+        private string? GetUsername()
+        {
+            string username = TempData["EN"] as string;
+            TempData.Keep();
+
+            return username;
+        }
+
+        private string? GetRole()
+        {
+            string Role = TempData["Role"] as string;
+            TempData.Keep();
+
+            return Role;
         }
 
         public void UpdateNotif(string message, string t)
@@ -100,10 +120,6 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult AdminHome()
         {
-            string? Role = TempData["Role"] as string;
-            string? EN = TempData["EN"] as string;
-            TempData.Keep();
-
             ViewData["InComingIssue"] = mainIssues.Where(j => !j.Acknowledged && !j.ValidatedStatus);
             ViewData["OnProgressIssue"] = mainIssues.Where(j => j.Acknowledged && !j.ValidatedStatus);
 
@@ -112,12 +128,88 @@ namespace PIMES_DMS.Controllers
             ViewBag.ERA = GetNumberOfERA();
             ViewBag.RC = GetNumberOfRC();
 
-            if (Role != "Admin")
+            if (GetRole() == "CFT")
             {
-                ViewBag.Acts = mainActions.Where(j => j.PIC == EN).ToList();
+                ViewBag.Acts = mainActions.Where(j => j.PIC == GetUsername()).ToList();
+            }
+            else if (GetRole() == "Viewer")
+            {
+                //ViewBag.Acts = mainActions.Where(j = > )
+                ViewBag.Acts =  GetCFTActionItems();
             }
 
             return View();
+        }
+
+        private List<ActionModel> GetCFTActionItems()
+        {
+            List<ActionModel> actionItems = new List<ActionModel>();
+
+            foreach (var cft in GetCFTUnderManager())
+            {
+                actionItems.AddRange(mainActions.Where(j => j.PIC == cft.AccName));
+            }
+
+            return actionItems;
+        }
+
+        private List<AccountsModel> GetCFTUnderManager()
+        {
+            List<AccountsModel> accounts = new List<AccountsModel>();
+            string Sec = mainAccounts.FirstOrDefault(j => j.AccName == GetUsername()).Section;
+
+            switch (Sec)
+            {
+                case "BCManager":
+                    {
+                        accounts = mainAccounts.Where(j => j.Section == "BC").ToList();
+                        return accounts;
+                    }
+                case "PurchasingManager":
+                    {
+                        accounts = mainAccounts.Where(j => j.Section == "Purchasing").ToList();
+                        return accounts;
+                    }
+                case "NPIManager":
+                    {
+                        accounts = mainAccounts.Where(j => j.Section == "NPI").ToList();
+                        return accounts;
+                    }
+                case "QEManager":
+                    {
+                        accounts = mainAccounts.Where(j => j.Section == "QE").ToList();
+                        return accounts;
+                    }
+                case "QAManager":
+                    {
+                        accounts = mainAccounts.Where(j => j.Section == "QA").ToList();
+                        return accounts;
+                    }
+                case "PPICManager":
+                    {
+                        accounts = mainAccounts.Where(j => j.Section == "PPIC").ToList();
+                        return accounts;
+                    }
+                case "ProductionManager":
+                    {
+                        accounts = mainAccounts.Where(j => j.Section == "Production").ToList();
+                        return accounts;
+                    }
+                case "EngineeringManager":
+                    {
+                        accounts = mainAccounts.Where(j => j.Section == "Engineering").ToList();
+                        return accounts;
+                    }
+                case "VicePresident":
+                    {
+                        accounts = mainAccounts.ToList();
+                        return accounts;
+                    }
+                default:
+                    {
+                        return accounts;
+                    }
+            }
         }
 
         private int GetNumberOfClaims()
@@ -132,7 +224,8 @@ namespace PIMES_DMS.Controllers
 
         private int GetNumberOfERA()
         {
-            return mainIssues.Count(j => j.Acknowledged && j.ValidatedStatus && !j.HasCR);
+            return mainIssues.Count(j => (j.Acknowledged && j.ValidatedStatus && !j.HasCR && j.ValRes == "Valid")
+            || (j.Acknowledged && j.ValidatedStatus && !j.HasCR && j.ValRes == "Invalid" && j.NeedRMA == "Yes"));
         }
 
         private int GetNumberOfRC()

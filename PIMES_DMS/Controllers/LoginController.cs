@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PIMES_DMS.Data;
-
+using PIMES_DMS.Models;
 
 namespace PIMES_DMS.Controllers
 {
@@ -8,10 +8,12 @@ namespace PIMES_DMS.Controllers
     {
 
         private readonly AppDbContext _Db;
+        private readonly List<AccountsModel> mainAccounts = new List<AccountsModel>();
 
         public LoginController(AppDbContext db)
         {
             _Db = db;
+            mainAccounts = _Db.AccountsDb.ToList();
         }
 
         public IActionResult Login()
@@ -38,7 +40,7 @@ namespace PIMES_DMS.Controllers
                 return View("Login_View");
             }
 
-            var log = _Db.AccountsDb.FirstOrDefault(j => j.UserName == user && j.Password == pass);
+            var log = mainAccounts.FirstOrDefault(j => j.UserName == user && j.Password == pass);
 
             if (log != null)
             {
@@ -56,7 +58,6 @@ namespace PIMES_DMS.Controllers
                 return View("Login_View");
             }
         }
-
 
         public IActionResult Logout()
         {

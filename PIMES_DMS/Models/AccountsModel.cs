@@ -36,7 +36,7 @@ namespace PIMES_DMS.Models
     public enum Roles
     {
         Admin,
-        Verificator,
+        CFT,
         Viewer
     }
 

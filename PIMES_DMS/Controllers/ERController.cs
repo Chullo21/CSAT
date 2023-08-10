@@ -141,7 +141,7 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ERView()
         {
-            return View(_Db.IssueDb.Where(j => j.HasCR && !j.isDeleted));
+            return View(_Db.IssueDb.Where(j => j.HasCR));
         }
 
         [HttpGet]

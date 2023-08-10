@@ -49,12 +49,12 @@
                     <th>
                         Problem Description
                     </th>
-                    <th style="width:5%">
+                   @* <th style="width:5%">
                         Ack.
                     </th>
                     <th style="width:5%">
                         Val.
-                    </th>
+                    </th>*@
                     <th>
                         Action
                     </th>
@@ -82,7 +82,7 @@
                         <td class="w-25">
                             <textarea class="w-100" style="min-height:auto; max-height:100px" readonly>@item.ProbDesc</textarea>
                         </td>
-                        @{
+                       @* @{
                             if (item.Acknowledged)
                             {
                                 <td style="background-color:limegreen">
@@ -117,7 +117,7 @@
                                     </svg>
                                 </td>
                             }
-                        }
+                        }*@
                         <td>
                             <div class="d-flex justify-content-around">
                                 @{
