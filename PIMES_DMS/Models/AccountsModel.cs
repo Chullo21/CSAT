@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace PIMES_DMS.Models
@@ -29,6 +30,8 @@ namespace PIMES_DMS.Models
         public string Password { get; set; } = string.Empty;
 
         public string? Email { get; set; }
+
+        public DateTime DateCreated { get; set; } = DateTime.Now;
 
         public bool isDeleted { get; set; }
     }

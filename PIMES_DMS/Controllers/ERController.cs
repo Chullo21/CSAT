@@ -32,7 +32,6 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _Db.NotifDb.Add(nm);
-                _Db.SaveChangesAsync();
             }
         }
 
@@ -112,9 +111,10 @@ namespace PIMES_DMS.Controllers
 
                 _Db.IssueDb.Update(issue);
                 _Db.ERDb.Add(obj);
+                UpdateNotif(", have submitted a new containment report with Control# of " + obj.ControlNo + ".", "All");
                 _Db.SaveChanges();
 
-                UpdateNotif(", have submitted a new containment report with Control# of " + obj.ControlNo + ".", "All");
+                return RedirectToAction("ERDet", new {ID = issueno});
             }
 
             return RedirectToAction("AdminHome", "Home");
@@ -195,9 +195,8 @@ namespace PIMES_DMS.Controllers
             }
 
             _Db.ERDb.Update(obj);
-            _Db.SaveChanges();
-
             UpdateNotif(", have edited a containment report.", "All");
+            _Db.SaveChanges();
 
             return View("ERDet", _Db.ERDb.FirstOrDefault(j => j.ControlNo == controlno));
         }
@@ -206,41 +205,6 @@ namespace PIMES_DMS.Controllers
         {
             return View();
         }
-
-        //[HttpGet]
-        //[AutoValidateAntiforgeryToken]
-        //public IActionResult Search(string ss)
-        //{
-        //    string? Role = TempData["Role"] as string;
-        //    TempData.Keep();
-
-        //    if (ss.IsNullOrEmpty())
-        //    {
-        //        return View("ERView", _Db.IssueDb.Where(j => j.Acknowledged && j.ValidatedStatus));
-        //    }
-
-
-        //    if (Role == "CLIENT")
-        //    {
-
-        //        string? EN = TempData["EN"] as string;
-        //        TempData.Keep();
-
-        //        IEnumerable<IssueModel> obj = from m in _Db.IssueDb
-        //                                      where m.IssueCreator == EN && m.ValidatedStatus && m.Acknowledged &&
-        //                                      (m.IssueNo.Contains(ss) || m.ControlNumber.Contains(ss))
-        //                                      select m;
-
-        //        return View("ERView", obj);
-        //    }
-        //    else
-        //    {
-        //        IEnumerable<IssueModel> obj = _Db.IssueDb.Where(m => m.ValidatedStatus && m.Acknowledged && (m.IssueCreator.Contains(ss)
-        //                                      || m.IssueNo.Contains(ss) || m.ControlNumber.Contains(ss)));
-
-        //        return View("ERView", obj);
-        //    }
-        //}
 
         public void NotifyAboutSubmittedIssue()
         {

@@ -8,10 +8,12 @@ namespace PIMES_DMS.Controllers
     public class AdminController : Controller
     {
         private readonly AppDbContext _Db;
+        private readonly List<AccountsModel> mainAccounts = new List<AccountsModel>();
 
         public AdminController(AppDbContext db)
         {
             _Db = db;
+            mainAccounts = _Db.AccountsDb.ToList();
         }
 
         public void UpdateNotif(DateTime time, string message, string t)
@@ -30,7 +32,6 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _Db.NotifDb.Add(nm);
-                _Db.SaveChangesAsync();
             }
         }
 
@@ -57,7 +58,7 @@ namespace PIMES_DMS.Controllers
 
                 AccountsModel acc = new();
                 {
-                    acc.AccUCode = role + "-" + compname + "-" + guid.ToString().Substring(0,4);
+                    acc.AccUCode = role + "-" + compname + "-" + guid.ToString().Substring(0, 4);
                     acc.AccName = accname!;
                     acc.Role = role;
                     acc.Section = compname!;
@@ -69,9 +70,8 @@ namespace PIMES_DMS.Controllers
                 if (ModelState.IsValid)
                 {
                     _Db.AccountsDb.Add(acc);
+                    UpdateNotif(DateTime.Now, ", have created a new account named '" + accname + "'", "Admin");
                     _Db.SaveChanges();
-
-                    UpdateNotif(DateTime.Now, ", have created a new account.", "Admin");
                 }
             }
            
@@ -107,9 +107,10 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _Db.AccountsDb.Update(obj);
+                UpdateNotif(DateTime.Now, ", have edited an account named '" + obj.AccName + "'.", "Admin");
                 _Db.SaveChanges();
 
-                UpdateNotif(DateTime.Now, ", have edited an account.", "Admin");
+                
             }
 
             return RedirectToAction("AdminView");
@@ -145,9 +146,10 @@ namespace PIMES_DMS.Controllers
             var del = _Db.AccountsDb.FirstOrDefault(j => j.AccID == ID);
 
             _Db.AccountsDb.Remove(del!);
+            UpdateNotif(DateTime.Now, ", have deleted an account named '" + del.AccName + "'.", "Admin");
             _Db.SaveChanges();
 
-            UpdateNotif(DateTime.Now, ", have deleted an account.", "Admin");
+            
 
             return RedirectToAction("AdminView");
         }
