@@ -91,7 +91,7 @@
                                 PIC
                             </th>
                             <th>
-                                TD
+                                TCD
                             </th>
                             <th>
                                 STATUS
@@ -141,48 +141,53 @@
                                             }
                                         </td>
                                         <td style="@style" class="text-white">
-                                            @tc.ActionStatus
-                                            @if(tc.ActionStatus == "Closed")
-                                            {
-                                                Write(tc.TargetDate.ToShortDateString());
-                                            }
+                                            <div class="flex-column">
+                                                <div>
+                                                    @tc.ActionStatus
+                                                </div>
+                                                @if (tc.ActionStatus == "Closed")
+                                                {
+                                                    <div>
+                                                        @tc.TargetDate.ToShortDateString()
+                                                    </div>
+                                                }
+                                                @if (tc.VerStatus)
+                                                {
+                                                    <div class="bg-primary">
+                                                        Verified
+                                                   </div>
+                                                }
+                                            </div>
                                         </td>
                                         <td class="">
                                             <div class="d-flex flex-column flex-lg-row">
                                                 @{
-                                                    string settext = "Action";
-
-                                                    if (tc.HasVer && tc.ActionStatus == "Closed" && tc.PIC != EN)
-                                                    {
-                                                        settext = "Verify";
-                                                    }
-
                                                     if (tc.HasVer)
                                                     {
                                                         <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@tc.ActionID">View</a>
                                                     }
-                                                    if (tc.PIC == EN || Role == "Admin")
+                                                    if ((tc.PIC == EN || Role == "Admin") && !tc.VerStatus)
                                                     {
-                                                        if (tc.PIC == EN)
-                                                        {
-                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
-                                                        }
-                                                        else if (Role == "Admin" && tc.ActionStatus == "Closed")
-                                                        {
-                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
-                                                        }
+                                                        <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">Action</a>                                                 
                                                     }
                                                     if (tc.HasVer)
                                                     {
                                                         string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
+
                                                         <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
                                                     }
+                                                                                                   
                                                 }
                                             </div>
 
                                             @if (tc.ActionStatus == "Closed")
                                             {
                                                 <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                            }
+
+                                            @if (Role == "Admin" && tc.ActionStatus == "Closed" && !tc.VerStatus)
+                                            {
+                                                <button class="btn btn-secondary text-white border-2 border-dark w-100" onclick="OpenVerModal('@tc.ActionID')">Verify</button>
                                             }
 
                                         </td>
@@ -226,7 +231,7 @@
                                 PIC
                             </th>
                             <th>
-                                TD
+                                TCD
                             </th>
                             <th>
                                 STATUS
@@ -277,47 +282,53 @@
                                             }
                                         </td>
                                         <td style="@style" class="text-white">
-                                            @tc.ActionStatus
-                                            @if (tc.ActionStatus == "Closed")
-                                            {
-                                                Write(tc.TargetDate.ToShortDateString());
-                                            }
+                                            <div class="flex-column">
+                                                <div>
+                                                    @tc.ActionStatus
+                                                </div>
+                                                @if (tc.ActionStatus == "Closed")
+                                                {
+                                                    <div>
+                                                        @tc.TargetDate.ToShortDateString()
+                                                    </div>
+                                                }
+                                                @if (tc.VerStatus)
+                                                {
+                                                    <div class="bg-primary">
+                                                        Verified
+                                                    </div>
+                                                }
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="d-flex flex-column flex-lg-row">
                                                 @{
-                                                    string settext = "Action";
-
-                                                    if (tc.HasVer && tc.ActionStatus == "Closed" && tc.PIC != EN)
-                                                    {
-                                                        settext = "Verify";
-                                                    }
                                                     if (tc.HasVer)
                                                     {
                                                         <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@tc.ActionID">View</a>
                                                     }
-                                                    if (tc.PIC == EN || Role == "Admin")
+                                                    if ((tc.PIC == EN || Role == "Admin") && !tc.VerStatus)
                                                     {
-                                                        if (tc.PIC == EN)
-                                                        {
-                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
-                                                        }
-                                                        else if (Role == "Admin" && tc.ActionStatus == "Closed")
-                                                        {
-                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
-                                                        }
+                                                        <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">Action</a>
                                                     }
                                                     if (tc.HasVer)
                                                     {
                                                         string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
+
                                                         <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
                                                     }
+
                                                 }
                                             </div>
 
                                             @if (tc.ActionStatus == "Closed")
                                             {
                                                 <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                            }
+
+                                            @if (Role == "Admin" && tc.ActionStatus == "Closed" && !tc.VerStatus)
+                                            {
+                                                <button class="btn btn-secondary text-white border-2 border-dark w-100" onclick="OpenVerModal('@tc.ActionID')">Verify</button>
                                             }
 
                                         </td>
@@ -361,7 +372,7 @@
                                 PIC 
                             </th>
                             <th>
-                                TD
+                                TCD
                             </th>
                             <th>
                                 STATUS
@@ -412,47 +423,53 @@
                                             }
                                         </td>
                                         <td style="@style" class="text-white">
-                                            @tc.ActionStatus
-                                            @if (tc.ActionStatus == "Closed")
-                                            {
-                                                Write(tc.TargetDate.ToShortDateString());
-                                            }
+                                            <div class="flex-column">
+                                                <div>
+                                                    @tc.ActionStatus
+                                                </div>
+                                                @if (tc.ActionStatus == "Closed")
+                                                {
+                                                    <div>
+                                                        @tc.TargetDate.ToShortDateString()
+                                                    </div>
+                                                }
+                                                @if (tc.VerStatus)
+                                                {
+                                                    <div class="bg-primary">
+                                                        Verified
+                                                    </div>
+                                                }
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="d-flex flex-column flex-lg-row">
                                                 @{
-                                                    string settext = "Action";
-
-                                                    if (tc.HasVer && tc.ActionStatus == "Closed" && tc.PIC != EN)
-                                                    {
-                                                        settext = "Verify";
-                                                    }
                                                     if (tc.HasVer)
                                                     {
                                                         <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@tc.ActionID">View</a>
                                                     }
-                                                    if (tc.PIC == EN || Role == "Admin")
+                                                    if ((tc.PIC == EN || Role == "Admin") && !tc.VerStatus)
                                                     {
-                                                        if (tc.PIC == EN)
-                                                        {
-                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
-                                                        }
-                                                        else if (Role == "Admin" && tc.ActionStatus == "Closed")
-                                                        {
-                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">@settext</a>
-                                                        }
+                                                        <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">Action</a>
                                                     }
                                                     if (tc.HasVer)
                                                     {
                                                         string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
+
                                                         <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
                                                     }
+
                                                 }
                                             </div>
 
                                             @if (tc.ActionStatus == "Closed")
                                             {
                                                 <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                            }
+
+                                            @if (Role == "Admin" && tc.ActionStatus == "Closed" && !tc.VerStatus)
+                                            {
+                                                <button class="btn btn-secondary text-white border-2 border-dark w-100" onclick="OpenVerModal('@tc.ActionID')">Verify</button>
                                             }
 
                                         </td>
@@ -536,7 +553,66 @@
     </div>
 </div>
 
+<div class="modal-content" id="vermodal">
+    <h4 class="modal-title text-center">Verify Action Item</h4>
+    <button class="modal-close btn btn-danger" onclick="CloseVerModal()">X</button>
+    <hr />
+    <form class="flex-column text-dark" asp-controller="RCV" asp-action="VerifyActionItem" enctype="multipart/form-data">
+        <input id="verid" name="actionid" hidden/>
+        <div class="flex-column mt-2">
+            <label class="form-label">Status</label>
+            <select class="form-select w-50" onchange="ChangedStatus('this.value')" name="status">
+                <option value="" selected hidden>Please select status</option>
+                <option>Open</option>
+                <option>Closed</option>
+            </select>
+        </div>
+        <div class="flex-column mt-2">
+            <label class="form-label" id="statuschange">Date Verified</label>
+            <input type="date" class="form-control w-50" name="date"/>
+        </div>
+        <div class="flex-column mt-2">
+            <label class="form-label">Evidence</label>
+            <input type="file" class="form-control w-50" name="file"/>
+        </div>
+        <div class="flex-column mt-2">
+            <label class="form-label">Remarks</label>
+            <textarea name="remarks" class="form-control" style="max-height:150px; min-height:50px; max-width:100%; min-width:100%; height:50px"></textarea>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            <input type="submit" class="btn btn-primary w-25"/>
+        </div>
+    </form>
+</div>
+
 <script>
+    function ChangedStatus(str)
+    {
+        var StatChange = document.getElementById('statuschange');
+
+        if (str === "Please select status" || str === "Close")
+        {
+            StatChange.innerHTML = "Date Verified";
+        }
+        else
+        {
+            StatChange.innerHTML = "Recommit Date";
+        }
+    }
+
+    function OpenVerModal(id)
+    {
+        var VerModal = document.getElementById('vermodal');
+        document.getElementById('verid').value = id;
+
+        VerModal.style.display = 'block';
+        
+    }
+
+    function CloseVerModal()
+    {
+        document.getElementById('vermodal').style.display = 'none';
+    }
 
     function OpenRep()
     {

@@ -40,6 +40,34 @@ namespace PIMES_DMS.Controllers
             }
         }
 
+        public IActionResult VerifyActionItem(int actionid, string status, DateTime date, IFormFile file,
+            string remarks)
+        {
+            ActionModel action = mainActions.FirstOrDefault(j => j.ActionID == actionid);
+
+            ActionModel act = new ActionModel();
+            {
+                act = action;
+                act.ActionStatus = status;
+                act.DateVerified = date;
+                act.VerRemarks = remarks;
+                act.VerStatus = true;
+                using(MemoryStream ms =  new MemoryStream())
+                {
+                    file.CopyTo(ms);
+                    act.VerificationFile = ms.ToArray();
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                _Db.ActionDb.Update(act);
+                _Db.SaveChanges();
+            }
+
+            return RedirectToAction("RCVViewDet", new {ID = actionid});
+        }
+
         public IActionResult ShowPdf(string ID)
         {
             var rep = _Db._8DDb.FirstOrDefault(j => j.ControlNo == ID);
@@ -53,7 +81,6 @@ namespace PIMES_DMS.Controllers
         {
             GetDataForVerification();
             GetOpenAndCloseDataForTable();
-            HasCRChecker();
 
             List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
             List<IssueModel> issuestoshow = new List<IssueModel>();
@@ -62,7 +89,7 @@ namespace PIMES_DMS.Controllers
             {
                 List<ActionModel> actions = mainActions.Where(j => j.ControlNo == issue.ControlNumber).ToList();
 
-                if (!actions.All(j => j.ActionStatus == "Closed") || actions.Count == 0)
+                if (!actions.All(j => j.ActionStatus == "Closed" && j.VerStatus) || actions.Count == 0)
                 {
                     issuestoshow.Add(issue);
                 }
@@ -101,13 +128,13 @@ namespace PIMES_DMS.Controllers
         {
             ViewData["ForVers"] = null;
 
-            List<IssueModel> issues = mainIssues.Where(j => !j.isDeleted && j.ValRes == "Valid" && j.HasTES).ToList();
+            List<IssueModel> issues = mainIssues.Where(j => j.ValRes == "Valid" && j.HasTES).ToList();
 
             List<ForVerificationData> fvd = new List<ForVerificationData>();
 
             foreach (var issue in issues)
             {
-                int tc = mainActions.Count(j => !j.IsDeleted && j.ActionStatus == "Open" && j.TargetDate < DateTime.Now.Date && j.ControlNo == issue.ControlNumber);
+                int tc = mainActions.Count(j => (!j.VerStatus && j.TargetDate < DateTime.Now.Date && j.ControlNo == issue.ControlNumber) || (!j.VerStatus && j.ActionStatus == "Closed"));
 
                 ForVerificationData fvdd = new ForVerificationData();
                 {
@@ -291,18 +318,30 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
-        [HttpGet]
-        [AutoValidateAntiforgeryToken]
-        public IActionResult ShowFile(int ID)
+        public IActionResult ShowVerPdf(int ID)
         {
-            var file = mainVers.FirstOrDefault(j => j.VerID == ID);
+            byte[]? file = mainActions.FirstOrDefault(j => j.ActionID == ID).VerificationFile;
 
-            if (file!.Files == null)
+            if (file == null || file.Count() <= 0)
             {
                 return NoContent();
             }
 
-            return File(file!.Files, "application/pdf");
+            return File(file, "application/pdf");
+        }
+
+        [HttpGet]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult ShowFile(int ID)   
+        {
+            byte[]? file = mainVers.FirstOrDefault(j => j.VerID == ID).Files;
+
+            if (file == null || file.Count() <= 0)
+            {
+                return NoContent();
+            }
+
+            return File(file, "application/pdf");
         }
 
         [HttpPost]
@@ -341,24 +380,6 @@ namespace PIMES_DMS.Controllers
             }
 
             return RedirectToAction("RCVViewDet", "RCV", new { ID = model!.ActionID });
-        }
-
-        public void HasCRChecker()
-        {
-            //Make action hasVer false
-            foreach (ActionModel action in _Db.ActionDb)
-            {
-                var ver = mainVers.Count(j => j.ActionID == action.ActionID);
-                if (ver == 0)
-                {
-                    var act =mainActions.FirstOrDefault(j => j.ActionID == action.ActionID);
-
-                    act!.HasVer = false;
-
-                    _Db.ActionDb.Update(act);
-                    _Db.SaveChanges();
-                }
-            }
         }
 
         public IActionResult CreateTESView(int ID)

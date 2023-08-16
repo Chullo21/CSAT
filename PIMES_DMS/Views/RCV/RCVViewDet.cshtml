@@ -13,102 +13,162 @@
 
 }
 
+<script>
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+</script>
+
 <div class="container">
     <h1 class="text-center">View Verification > @action!.ControlNo</h1>
     <hr />
 
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <table class="table table-bordered text-center">
-                    <thead>
-                        <tr>
-                            <th class="w-25">PIC</th>
-                            <th class="w-50">Action</th>
-                            <th class="w-25">Target Date</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white">
-                        <tr>
-                            <td>
-                                <input class="form-control text-center" value="@action!.PIC" readonly />
-                            </td>
-                            <td>
-                                <textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@action!.Action</textarea>
-                            </td>
-                            <td>
-                                <input class="form-control w-100 text-center" value="@td?.TD.ToShortDateString()" readonly />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="col-sm-12 col-md-12">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th class="w-25 desktop-only">Report Creator</th>
-                            <th class="w-25">Action Item Status</th>
-                            <th style="width:40%">Remarks</th>
-                            <th style="width:10%"> </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white">
-                        @{
-                            foreach (var obj in ver!)
-                            {
-                                string? style;
-                                string? stat;
-
-                                if (obj.Status == "Open")
-                                {
-                                    style = "background-color:hotpink; width:20%";
-                                    stat = "OPEN";
-                                }
-                                else
-                                {
-                                    style = "background-color:mediumseagreen; width:20%";
-                                    stat = "CLOSED";
-                                }
-
-                                <tr>
-                                    <td class="desktop-only"><input class="form-control text-center w-100 h-100" type="text" value="@obj.Verificator" readonly /></td>
-                                    <td style="@style">
-                                        <input class="form-control text-center w-100 h-100" type="text" value="@stat" readonly />
-                                        @{
-                                            string print = "Closed Date";
-
-                                            if (obj.Status == "Open")
-                                            {
-                                                print = "Recommit Date";
-                                            }
-                                        }
-                                        <input class="form-control text-center mt-2" type="text" value="@print: @obj.StatusDate.ToShortDateString()" readonly />
-                                    </td>
-                                    <td><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@obj.Result</textarea></td>
-                                    <td>
-                                        <button class="btn btn-secondary mt-2 w-100 mt-1" onclick="getsrc('@Url.Action("ShowFile", "RCV", new {ID = obj.VerID})')">File</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+    <div class="justify-content-center d-lg-flex">
+        <div class="card w-100">
+            <h6 class="card-title text-center my-2">Action Item Details</h6>
+            <table class="table table-bordered text-center border-white">
+                <thead>
+                    <tr>
+                        <th>PIC</th>
+                        <th>Action</th>
+                        <th>Target Date</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    <tr>
+                        <td>
+                            <input class="form-control text-center" value="@action!.PIC" readonly />
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#actionitemdet" aria-expanded="false" aria-controls="collapseExample">
+                                View Action
+                            </button>
+                            <div class="collapse" id="actionitemdet">
+                                <div class="card card-body border-2 border-dark">
+                                    @action!.Action
+                                </div>
+                            </div>                            
+                        </td>
+                        <td>
+                            <input class="form-control w-100 text-center" value="@td?.TD.ToShortDateString()" readonly />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+        @if (action.VerStatus)
+        {
+            <div class="card w-100">
+                <h6 class="card-title text-center my-2">Verification Details</h6>
+                <table class="table table-bordered text-center border-white">
+                    <thead>
+                        <tr>
+                            <th style="width:20%">Status</th>
+                            <th>Date Verified</th>
+                            <th>Evidence</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        <tr>
+                            <td>
+                                <input class="form-control text-center" value="@action!.ActionStatus" readonly />
+                            </td>
+                            <td>
+                                <input class="w-100 form-control text-center" value="@action.DateVerified.Value.ToShortDateString()" readonly />
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" onclick="document.getElementById('reportContent').style.display = 'block'">Show Report</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#verremark" aria-expanded="false" aria-controls="collapseExample">
+                                    View Remarks
+                                </button>
+                                <div class="collapse" id="verremark">
+                                    <div class="card card-body border-2 border-dark">
+                                        @action!.VerRemarks
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 </div>
 
+<div class="card container mx-auto mt-2">
+    <h5 class="card-title text-center my-2">C.F.T Reports</h5>
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th class="w-25 desktop-only">Report Creator</th>
+                <th class="w-25">Action Item Status</th>
+                <th style="width:40%">Remarks</th>
+                <th style="width:10%"> </th>
+            </tr>
+        </thead>
+        <tbody class="bg-white">
+            @{
+                foreach (var obj in ver!)
+                {
+                    string? style;
+                    string? stat;
+
+                    if (obj.Status == "Open")
+                    {
+                        style = "background-color:hotpink; width:20%";
+                        stat = "OPEN";
+                    }
+                    else
+                    {
+                        style = "background-color:mediumseagreen; width:20%";
+                        stat = "CLOSED";
+                    }
+
+                    <tr>
+                        <td class="desktop-only"><input class="form-control text-center w-100 h-100" type="text" value="@obj.Verificator" readonly /></td>
+                        <td style="@style">
+                            <input class="form-control text-center w-100 h-100" type="text" value="@stat" readonly />
+                            @{
+                                string print = "Closed Date";
+
+                                if (obj.Status == "Open")
+                                {
+                                    print = "Recommit Date";
+                                }
+                            }
+                            <input class="form-control text-center mt-2" type="text" value="@print: @obj.StatusDate.ToShortDateString()" readonly />
+                        </td>
+                        <td><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@obj.Result</textarea></td>
+                        <td>
+                            @if (obj.Files != null || obj.Files.Count() > 0)
+                            {
+                                <button class="btn btn-secondary mt-2 w-100 mt-1" onclick="getsrc('@Url.Action("ShowFile", "RCV", new {ID = obj.VerID})')">File</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="modalContent" class="modal-content">
+    <h2 class="text-center">Evidence</h2>
+    <iframe class="w-100" style="height:90%" id="pdfsrc" src="">No File...</iframe>
+    <button class="modal-close btn btn-danger" onclick="closeModal()">Close</button>
+</div>
+
+<div id="reportContent" class="modal-content">
+    <h4 class="text-center modal-title">Evidence</h4>
+    <button class="modal-close btn btn-danger" onclick="document.getElementById('reportContent').style.display = 'none'">X</button>
+    <iframe class="w-100" style="height:90%" src="@Url.Action("ShowVerPdf", "RCV", new { ID = action.ActionID})" >No File</iframe>
+    
+</div>
 
 
-    <div id="modalContent" class="modal-content">
-        <h2 class="text-center">Evidence</h2>
-        <iframe class="w-100" style="height:90%" id="pdfsrc" src=""></iframe>
-        <button class="modal-close btn btn-danger" onclick="closeModal()">Close</button>
-    </div>
-
-    <div id="statusModal" class="modal-content w-75 h-75 bg-gradient">
+   @* <div id="statusModal" class="modal-content w-75 h-75 bg-gradient">
         <form asp-controller="RCV" asp-action="UpdateVER" method="post" enctype="multipart/form-data">
             <input id="ver" value="" name="ID" type="text" hidden/>
             <h2 class="text-center">Update/Edit Verification</h2>
@@ -141,7 +201,7 @@
             </div>
         </form>
     <button class="modal-close btn btn-danger" onclick="CloseUpdate()">Close</button>
-    </div>
+    </div>*@
 
 <script>
     var stat = document.getElementById('updatestatus');

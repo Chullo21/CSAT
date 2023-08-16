@@ -34,5 +34,13 @@ namespace PIMES_DMS.Models
         public bool HasVer { get; set; } = false;
 
         public string ActionStatus { get; set; } = "Open";
+
+        public bool VerStatus { get; set; }
+
+        public DateTime? DateVerified { get; set; }
+
+        public byte[]? VerificationFile { get; set; }
+
+        public string? VerRemarks { get; set; }
     }
 }

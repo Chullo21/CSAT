@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIMES_DMS.Data;
 
@@ -11,9 +12,11 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230815045412_adddateverinactionmodel")]
+    partial class adddateverinactionmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +116,7 @@ namespace PIMES_DMS.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateVerified")
+                    b.Property<DateTime>("DateVerified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Dependency")
@@ -142,14 +145,8 @@ namespace PIMES_DMS.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VerRemarks")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("VerStatus")
                         .HasColumnType("bit");
-
-                    b.Property<byte[]>("VerificationFile")
-                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("ActionID");
 
