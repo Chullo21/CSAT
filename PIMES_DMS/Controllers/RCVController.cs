@@ -40,8 +40,36 @@ namespace PIMES_DMS.Controllers
             }
         }
 
-        public IActionResult VerifyActionItem(int actionid, string status, DateTime date, IFormFile file,
-            string remarks)
+        public IActionResult RecommitActionItem(int actID, DateTime date)
+        {
+            ActionModel action = mainActions.FirstOrDefault(j => j.ActionID == actID);
+
+            ActionModel act = new ActionModel();
+            {
+                act = action;
+                act.TargetDate = date;
+                act.VerStatus = false;
+            }
+
+            TargetDateModel targetDateModel = new TargetDateModel();
+            {
+                targetDateModel.ActionID = actID;
+                targetDateModel.ControlNo = act.ControlNo;
+                targetDateModel.TD = date;
+                targetDateModel.Status = "Open";
+            }
+
+            if (ModelState.IsValid)
+            {
+                _Db.ActionDb.Update(act);
+                _Db.TDDb.Add(targetDateModel);
+                _Db.SaveChanges();
+            }
+
+            return RedirectToAction("TESActions", new {ID = act.ControlNo});
+        }
+
+        public IActionResult VerifyActionItem(int actionid, string status, IFormFile file, string remarks, DateTime date)
         {
             ActionModel action = mainActions.FirstOrDefault(j => j.ActionID == actionid);
 
@@ -49,8 +77,8 @@ namespace PIMES_DMS.Controllers
             {
                 act = action;
                 act.ActionStatus = status;
-                act.DateVerified = date;
                 act.VerRemarks = remarks;
+                act.DateVerified = date;
                 act.VerStatus = true;
                 using(MemoryStream ms =  new MemoryStream())
                 {
@@ -134,7 +162,7 @@ namespace PIMES_DMS.Controllers
 
             foreach (var issue in issues)
             {
-                int tc = mainActions.Count(j => (!j.VerStatus && j.TargetDate < DateTime.Now.Date && j.ControlNo == issue.ControlNumber) || (!j.VerStatus && j.ActionStatus == "Closed"));
+                int tc = mainActions.Count(j => (!j.VerStatus && j.TargetDate < DateTime.Now.Date && j.ControlNo == issue.ControlNumber) || (!j.VerStatus && j.ActionStatus == "Closed" && j.ControlNo == issue.ControlNumber));
 
                 ForVerificationData fvdd = new ForVerificationData();
                 {
@@ -387,19 +415,6 @@ namespace PIMES_DMS.Controllers
             return View(mainIssues.FirstOrDefault(j => j.IssueID == ID));
         }
 
-        private int GetLastIndexWithValue(List<string> arr)
-        {
-
-            for (int i = 0; i < arr.Count(); i++)
-            {
-                if (arr[i] == null)
-                {
-                    return i - 1;
-                }
-            }
-            return 0;
-        }
-
         [HttpPost]
         public IActionResult CreateTES(string ID ,List<string>? twhy, List<string>? ewhy, List<string>? swhy)
         {
@@ -410,17 +425,17 @@ namespace PIMES_DMS.Controllers
                 tes.TCWhy2 = twhy?[1];
                 tes.TCWhy3 = twhy?[2];
                 tes.TCWhy4 = twhy?[3];
-                tes.TRC = twhy?[GetLastIndexWithValue(twhy)];
+                tes.TRC = twhy.Last(j => !string.IsNullOrEmpty(j));
                 tes.ECWhy1 = ewhy?[0];
                 tes.ECWhy2 = ewhy?[1];
                 tes.ECWhy3 = ewhy?[2];
                 tes.ECWhy4 = ewhy?[3];
-                tes.ERC = ewhy?[GetLastIndexWithValue(ewhy)];
+                tes.ERC = ewhy.Last(j => !string.IsNullOrEmpty(j));
                 tes.SCWhy1 = swhy?[0];
                 tes.SCWhy2 = swhy?[1];
                 tes.SCWhy3 = swhy?[2];
                 tes.SCWhy4 = swhy?[3];
-                tes.SRC = swhy?[GetLastIndexWithValue(swhy)];
+                tes.SRC = swhy.Last(j => !string.IsNullOrEmpty(j));
             }
 
             var issue = mainIssues.FirstOrDefault(j => j.ControlNumber == ID);
@@ -436,7 +451,7 @@ namespace PIMES_DMS.Controllers
                 _Db.IssueDb.Update(updateIssue);
                 _Db.TESDb.Add(tes);
                 UpdateNotif(", have submitted a 3x5why with Control# of " + tes.ControlNo + ".", "All");
-                _Db.SaveChanges();               
+                _Db.SaveChanges();
             }
             else
             {

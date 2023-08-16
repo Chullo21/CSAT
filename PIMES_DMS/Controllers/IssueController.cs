@@ -276,7 +276,7 @@ namespace PIMES_DMS.Controllers
             {
                 List<ActionModel> actions = _context.ActionDb.Where(j => j.ControlNo == issue.ControlNumber).ToList();
 
-                if (actions.All(j => j.ActionStatus == "Closed") && actions.Count > 0)
+                if (actions.All(j => j.ActionStatus == "Closed" && j.VerStatus) && actions.Count > 0)
                 {
                     issuestoshow.Add(issue);
                 }

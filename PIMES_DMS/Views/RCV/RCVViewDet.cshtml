@@ -22,8 +22,8 @@
     <h1 class="text-center">View Verification > @action!.ControlNo</h1>
     <hr />
 
-    <div class="justify-content-center d-lg-flex">
-        <div class="card w-100">
+    <div class="justify-content-between d-lg-flex">
+        <div class="card bg-success mx-2 mt-2">
             <h6 class="card-title text-center my-2">Action Item Details</h6>
             <table class="table table-bordered text-center border-white">
                 <thead>
@@ -39,7 +39,7 @@
                             <input class="form-control text-center" value="@action!.PIC" readonly />
                         </td>
                         <td>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#actionitemdet" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn btn-primary text-nowrap" type="button" data-bs-toggle="collapse" data-bs-target="#actionitemdet" aria-expanded="false" aria-controls="collapseExample">
                                 View Action
                             </button>
                             <div class="collapse" id="actionitemdet">
@@ -57,7 +57,7 @@
         </div>
         @if (action.VerStatus)
         {
-            <div class="card w-100">
+            <div class="card bg-primary mx-2 mt-2">
                 <h6 class="card-title text-center my-2">Verification Details</h6>
                 <table class="table table-bordered text-center border-white">
                     <thead>
@@ -97,61 +97,63 @@
     </div>
 </div>
 
-<div class="card container mx-auto mt-2">
-    <h5 class="card-title text-center my-2">C.F.T Reports</h5>
-    <table class="table table-bordered text-center">
-        <thead>
-            <tr>
-                <th class="w-25 desktop-only">Report Creator</th>
-                <th class="w-25">Action Item Status</th>
-                <th style="width:40%">Remarks</th>
-                <th style="width:10%"> </th>
-            </tr>
-        </thead>
-        <tbody class="bg-white">
-            @{
-                foreach (var obj in ver!)
-                {
-                    string? style;
-                    string? stat;
-
-                    if (obj.Status == "Open")
+<div class="container">
+    <div class="card mx-2 mt-2 bg-secondary">
+        <h5 class="card-title text-center my-2">C.F.T Reports</h5>
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th class="w-25 desktop-only">Report Creator</th>
+                    <th class="w-25">Action Item Status</th>
+                    <th style="width:40%">Remarks</th>
+                    <th style="width:10%"> </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white">
+                @{
+                    foreach (var obj in ver!)
                     {
-                        style = "background-color:hotpink; width:20%";
-                        stat = "OPEN";
-                    }
-                    else
-                    {
-                        style = "background-color:mediumseagreen; width:20%";
-                        stat = "CLOSED";
-                    }
+                        string? style;
+                        string? stat;
 
-                    <tr>
-                        <td class="desktop-only"><input class="form-control text-center w-100 h-100" type="text" value="@obj.Verificator" readonly /></td>
-                        <td style="@style">
-                            <input class="form-control text-center w-100 h-100" type="text" value="@stat" readonly />
-                            @{
-                                string print = "Closed Date";
+                        if (obj.Status == "Open")
+                        {
+                            style = "background-color:hotpink; width:20%";
+                            stat = "OPEN";
+                        }
+                        else
+                        {
+                            style = "background-color:mediumseagreen; width:20%";
+                            stat = "CLOSED";
+                        }
 
-                                if (obj.Status == "Open")
-                                {
-                                    print = "Recommit Date";
+                        <tr>
+                            <td class="desktop-only"><input class="form-control text-center w-100 h-100" type="text" value="@obj.Verificator" readonly /></td>
+                            <td style="@style">
+                                <input class="form-control text-center w-100 h-100" type="text" value="@stat" readonly />
+                                @{
+                                    string print = "Closed Date";
+
+                                    if (obj.Status == "Open")
+                                    {
+                                        print = "Recommit Date";
+                                    }
                                 }
-                            }
-                            <input class="form-control text-center mt-2" type="text" value="@print: @obj.StatusDate.ToShortDateString()" readonly />
-                        </td>
-                        <td><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@obj.Result</textarea></td>
-                        <td>
-                            @if (obj.Files != null || obj.Files.Count() > 0)
-                            {
-                                <button class="btn btn-secondary mt-2 w-100 mt-1" onclick="getsrc('@Url.Action("ShowFile", "RCV", new {ID = obj.VerID})')">File</button>
-                            }
-                        </td>
-                    </tr>
+                                <input class="form-control text-center mt-2" type="text" value="@print: @obj.StatusDate.ToShortDateString()" readonly />
+                            </td>
+                            <td><textarea style="max-height:100px; max-width:100%; min-height:100px; min-width:100%; background-color:transparent" readonly>@obj.Result</textarea></td>
+                            <td>
+                                @if (obj.Files != null || obj.Files.Count() > 0)
+                                {
+                                    <button class="btn btn-secondary mt-2 w-100 mt-1" onclick="getsrc('@Url.Action("ShowFile", "RCV", new {ID = obj.VerID})')">File</button>
+                                }
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div id="modalContent" class="modal-content">
