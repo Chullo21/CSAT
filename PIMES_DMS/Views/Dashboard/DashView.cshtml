@@ -46,17 +46,17 @@
             <form asp-controller="Dashboard" asp-action="RecentYear" id="dashForm">
                 <div class="d-flex justify-content-between mt-2">
                     <div class="w-50 d-flex justify-content-evenly">
-                        <div class="w-50 card text-center text-nowrap" style="background-color:#2F852B">
+                        <div class="w-100 card text-center text-nowrap border-2 border-dark" style="background-color:#2F852B">
                             <p class="card-header" style="font-family:Impact"> Invalid: @ViewBag.invalidforpie</p>
                         </div>
-                        <div class="w-50 card text-center text-nowrap" style="background-color:#E83800">
+                        <div class="w-100 card text-center text-nowrap border-2 border-dark" style="background-color:#E83800">
                             <p class="card-header" style="font-family:Impact"> Valid: @ViewBag.validforpie</p>
                         </div>
                     </div>
                     <marquee class="align-self-center w-25 text-white mx-2 border-dark bg-black" style="border:3px solid">
                         Welcome to CSat Portal - Dashboard. Please contact ATS-QA for feedback or suggestion for improvements. Have a great day!!
                     </marquee>
-                    <select class="form-select w-25" id="dateSelect" onchange="Submit()" name="year">
+                    <select class="form-select w-25 border-2 border-dark" id="dateSelect" onchange="Submit()" name="year">
                         <option>Select Year</option>
                     </select>
                 </div>
@@ -64,16 +64,16 @@
         </div>
         <div class="row mt-4">
             <div class="col-sm-12 col-md-6">
-                <div class="card border-0 h-100" style="background-color:#E9E4E9">
-                    <h4 class="card-header text-center" style="background-color:#B5AD9A">Validation Status</h4>
+                <div class="card border-2 border-dark h-100" style="background-color:#E9E4E9">
+                    <h4 class="card-header text-center border-2 border-dark" style="background-color:#B5AD9A">Validation Status</h4>
                     <div class="pb-2">
                         <canvas id="pieChartValid" class=""></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-6">
-                <div class="card border-0 h-100" style="background-color:#E9E4E9">
-                    <h4 class="card-header text-center" style="background-color:#B5AD9A">3F1S</h4>
+                <div class="card h-100 border-2 border-dark" style="background-color:#E9E4E9">
+                    <h4 class="card-header text-center border-2 border-dark" style="background-color:#B5AD9A"> Fit, Form, Function & Safety</h4>
                     <div class="pb-2">
                         <canvas id="fs" class=""></canvas>
                     </div>
@@ -83,16 +83,16 @@
     </div>
     <div class="flex-column col-sm-12 col-md-4">
         <div class="w-100 mb-2">
-            <div class="card w-100" style="background-color:#E9E4E9">
-                <h4 class="card-header text-center" style="background-color:#B5AD9A">CSat Performance</h4>
+            <div class="card w-100 border-2 border-dark" style="background-color:#E9E4E9">
+                <h4 class="card-header text-center border-2 border-dark" style="background-color:#B5AD9A">CSat Performance</h4>
                 <div>
                     <canvas id="bar"></canvas>
                 </div>
             </div>
         </div>
         <div class="w-100">
-            <div class="card w-100" style="background-color:#E9E4E9">
-                <h4 class="card-header text-center" style="background-color:#B5AD9A">VR Turn Around Time</h4>
+            <div class="card w-100 border-2 border-dark" style="background-color:#E9E4E9">
+                <h4 class="card-header text-center border-2 border-dark" style="background-color:#B5AD9A">VR Turn Around Time</h4>
                 <div class="legend-item d-flex justify-content-center justify-content-evenly">
                     <div class="d-flex">
                         <div class="legend-color align-self-center" style="background-color:#2F852B; border: 1px solid black"></div>
@@ -306,7 +306,7 @@
                         title: {
                             color: 'black',
                             display: true,
-                            text: 'QI Count'
+                            text: 'Q.I Count'
                         },
                     },
                     x: {

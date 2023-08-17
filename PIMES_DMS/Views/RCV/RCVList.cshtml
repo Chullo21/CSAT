@@ -36,7 +36,7 @@
         <table class="table table-striped text-center" id="myTable">
             <thead>
                 <tr>
-                    <th class="desktop-only">
+                    <th>
                         @Html.DisplayNameFor(model => model.IssueNo)
                     </th>
                     <th>
@@ -45,7 +45,7 @@
                     <th>
                         Problem Description
                     </th>
-                    <th style="width:10%" class="desktop-only text-danger">
+                    <th style="width:10%">
                         For Ver.
                     </th>
                     <th style="width:10%">
@@ -69,7 +69,7 @@
                     if (fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber) != null) fv = fvd.FirstOrDefault(j => j.ControlNo == item.ControlNumber).ForVer; else fv = 0;
 
                     <tr>
-                        <td class="desktop-only">
+                        <td>
                             @Html.DisplayFor(modelItem => item.IssueNo)
                         </td>
                         <td>
@@ -78,7 +78,7 @@
                         <td>
                             @item.ProbDesc
                         </td>
-                        <td class="desktop-only">
+                        <td>
                             @{
                                 Write(fv.ToString());
                             }

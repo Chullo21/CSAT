@@ -39,6 +39,12 @@
     }
 }
 
+<style>
+    thead{
+        background-color: darkslateblue;
+    }
+</style>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="container flex-column">
@@ -80,23 +86,23 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-12 col-md-9 mx-md-2 table-responsive">
+            <div class="col-12 col-md-9 mx-md-2 overflow-auto">
                 <table class="table table-bordered text-center border-dark h-100">
-                    <thead>
+                    <thead class="top-0 position-sticky">
                         <tr>
-                            <th class="w-50">
+                            <th style="width:40%">
                                 Action
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 PIC
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 TCD
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 STATUS
                             </th>
-                            <th class="w-25">
+                            <th style="width:15%">
 
                             </th>
                         </tr>
@@ -159,7 +165,7 @@
                                                 }
                                             </div>
                                         </td>
-                                        <td class="">
+                                        <td class="w-100">
                                             <div class="d-flex flex-column flex-lg-row">
                                                 @{
                                                     if (tc.HasVer)
@@ -170,7 +176,7 @@
                                                     {
                                                         <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">Action</a>                                                 
                                                     }
-                                                    if (tc.HasVer)
+                                                    if (tc.HasVer && Role == "Viewer")
                                                     {
                                                         string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
 
@@ -204,11 +210,11 @@
            </div>          
         </div>
     </div>
-    <div class="col-12 col-md-4 w-100 flex-column mt-2">
+    <div class="col-12 col-md-4 w-100 flex-column mt-5">
         <div class="d-flex flex-column flex-md-row">
             <div class="col-12 col-md-3">
                 <table class="table table-bordered text-center border-dark h-100">
-                    <thead>
+                    <thead class="top-0 position-sticky">
                         <tr>
                             <th>
                                 Escape Cause:
@@ -226,21 +232,21 @@
             </div>
             <div class="col-12 col-md-9 mx-md-2 table-responsive">
                 <table class="table table-bordered text-center border-dark h-100">
-                    <thead>
+                    <thead class="top-0 position-sticky">
                         <tr>
-                            <th class="w-50">
+                            <th style="width:40%">
                                 Action
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 PIC
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 TCD
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 STATUS
                             </th>
-                            <th class="w-25">
+                            <th style="width:15%" ">
 
                             </th>
                         </tr>
@@ -314,7 +320,7 @@
                                                     {
                                                         <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">Action</a>
                                                     }
-                                                    if (tc.HasVer)
+                                                    if (tc.HasVer && Role == "Viewer")
                                                     {
                                                         string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
 
@@ -348,7 +354,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-4 w-100 flex-column mt-2">
+    <div class="col-12 col-md-4 w-100 flex-column mt-5">
         <div class="d-flex flex-column flex-md-row">
             <div class="col-12 col-md-3">
                 <table class="table table-bordered text-center border-dark h-100">
@@ -370,21 +376,21 @@
             </div>
             <div class="col-12 col-md-9 mx-md-2 table-responsive">
                 <table class="table table-bordered text-center border-dark h-100">
-                    <thead>
+                    <thead class="top-0 position-sticky">
                         <tr>
-                            <th class="w-50">
+                            <th style="width:40%">
                                 Action
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 PIC 
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 TCD
                             </th>
-                            <th>
+                            <th style="width:15%">
                                 STATUS
                             </th>
-                            <th class="w-25">
+                            <th style="width:15%" ">
 
                             </th>
                         </tr>
@@ -458,7 +464,7 @@
                                                     {
                                                         <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">Action</a>
                                                     }
-                                                    if (tc.HasVer)
+                                                    if (tc.HasVer && Role == "Viewer")
                                                     {
                                                         string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
 
@@ -494,10 +500,42 @@
     </div>
 </div>
 
+<div class="modal-content w-auto h-auto" id="vermodal">
+    <h4 class="modal-title text-center">Verify Action Item</h4>
+    <button class="modal-close btn btn-danger" onclick="CloseVerModal()">X</button>
+    <hr />       
+    <form class="flex-column text-dark" asp-controller="RCV" asp-action="VerifyActionItem" enctype="">
+        <input id="verid" name="actionid" type="hidden" />
+        <div class="flex-column mt-2">
+            <label class="form-label">Status</label>
+            <select class="form-select w-50" onchange="ChangedStatus(this.value)" name="status" required>
+                <option value="" selected hidden>Please select status</option>
+                <option>Open</option>
+                <option>Closed</option>
+            </select>
+        </div>
+        <div class="flex-column mt-2">
+            <label class="form-label">Date Verified</label>
+            <input type="date" class="form-control w-50" name="date" required />
+        </div>
+        <div class="flex-column mt-2">
+            <label class="form-label">Evidence</label>
+            <input type="file" class="form-control w-50" name="file" required />
+        </div>
+        <div class="flex-column mt-2">
+            <label class="form-label">Remarks</label>
+            <textarea name="remarks" class="form-control" style="max-height:150px; min-height:50px; max-width:100%; min-width:100%; height:50px"></textarea>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            <input type="submit" class="btn btn-primary w-25" />
+        </div>   
+    </form>
+</div>
+
 <form asp-controller="RCV" asp-action="SubmitActionItem" method="post">
 <div class="modal-content w-75 h-75 flex-column" id="modal" style="z-index:2100">
     <div>
-            <button class="btn btn-danger modal-close" onclick="closeModal()"><i style="font-size:24px" class="fa">&#xf00d;</i></button>
+        <button class="btn btn-danger modal-close" onclick="closeModal()"><i style="font-size:24px" class="fa">&#xf00d;</i></button>
         <h4 class="modal-title text-center">Create Action ID</h4>
     </div>
     <div class="mt-2">        
@@ -561,38 +599,6 @@
             <iframe class="w-100 h-100" src="@Url.Action("ShowPdf", new { ID = Model.ControlNo})">Attachment here</iframe>
         }
     </div>
-</div>
-
-<div class="modal-content w-auto h-auto" id="vermodal">
-    <h4 class="modal-title text-center">Verify Action Item</h4>
-    <button class="modal-close btn btn-danger" onclick="CloseVerModal()">X</button>
-    <hr />
-    <form class="flex-column text-dark" asp-controller="RCV" asp-action="VerifyActionItem" enctype="multipart/form-data">
-        <input id="verid" name="actionid" hidden/>
-        <div class="flex-column mt-2">
-            <label class="form-label">Status</label>
-            <select class="form-select w-50" onchange="ChangedStatus('this.value')" name="status" required>
-                <option value="" selected hidden>Please select status</option>
-                <option>Open</option>
-                <option>Closed</option>
-            </select>
-        </div>
-        <div class="flex-column mt-2">
-            <label class="form-label">Date Verified</label>
-            <input type="date" class="form-control w-50" name="date" required/>
-        </div>
-        <div class="flex-column mt-2">
-            <label class="form-label">Evidence</label>
-            <input type="file" class="form-control w-50" name="file" required/>
-        </div>
-        <div class="flex-column mt-2">
-            <label class="form-label">Remarks</label>
-            <textarea name="remarks" class="form-control" style="max-height:150px; min-height:50px; max-width:100%; min-width:100%; height:50px"></textarea>
-        </div>
-        <div class="d-flex justify-content-center mt-4">
-            <input type="submit" class="btn btn-primary w-25"/>
-        </div>
-    </form>
 </div>
 
 <div class="modal-content h-auto w-25" id="recommitDate">
