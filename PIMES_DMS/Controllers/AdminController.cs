@@ -28,7 +28,6 @@ namespace PIMES_DMS.Controllers
                 nm.Type = t;
             }
            
-
             if (ModelState.IsValid)
             {
                 _Db.NotifDb.Add(nm);
@@ -108,9 +107,7 @@ namespace PIMES_DMS.Controllers
             {
                 _Db.AccountsDb.Update(obj);
                 UpdateNotif(DateTime.Now, ", have edited an account named '" + obj.AccName + "'.", "Admin");
-                _Db.SaveChanges();
-
-                
+                _Db.SaveChanges();               
             }
 
             return RedirectToAction("AdminView");
@@ -146,13 +143,49 @@ namespace PIMES_DMS.Controllers
             var del = _Db.AccountsDb.FirstOrDefault(j => j.AccID == ID);
 
             _Db.AccountsDb.Remove(del!);
-            UpdateNotif(DateTime.Now, ", have deleted an account named '" + del.AccName + "'.", "Admin");
+            UpdateNotif(DateTime.Now, ", have deleted an account named '" + del?.AccName + "'.", "Admin");
             _Db.SaveChanges();
 
             
 
             return RedirectToAction("AdminView");
         }
+
+        public IActionResult ShowAnnouncementsList()
+        {
+            return View(_Db.AnnDb);  
+        }
+
+        public IActionResult CreateAnnouncement(string announcement)
+        {
+            AnnouncementModel ann = new AnnouncementModel();
+            {
+                ann.AnnouncementMessage = announcement;
+            }
+
+            if (!string.IsNullOrEmpty(announcement))
+            {
+                _Db.AnnDb.Add(ann);
+                UpdateNotif(DateTime.Now,", have posted a new announcement.", "All");
+
+                _Db.SaveChanges();
+            }
+
+            return RedirectToAction("ShowAnnouncementsList");
+        }
+
+        //private void Notif(string message)
+        //{
+        //    string? EN = TempData["EN"] as string;
+
+        //    NotifModel notifModel = new NotifModel();
+        //    {
+        //        notifModel.Message = EN + message;
+        //        notifModel.Type = "All";
+        //    }
+
+        //    _Db.NotifDb.Add(notifModel);
+        //}
 
     }
 }

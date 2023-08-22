@@ -1,0 +1,73 @@
+﻿@model IEnumerable<PIMES_DMS.Models.AnnouncementModel>
+
+@{
+    ViewData["Title"] = "Announcements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                searching: true,
+                lengthChange: false,
+                pageLength: 7,
+                order: [],
+                ordering: false
+            });
+        });
+    </script>
+}
+
+
+<div class="container">
+    <h1 class="text-center">Announcements</h1>
+
+    <p class="d-flex justify-content-end">
+        <button class="btn btn-primary" onclick="document.getElementById('createannmodal').style.display = 'block'">Create New Announcement</button>
+    </p>
+    <table class="table text-center table-hover" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    Announcements
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-start">
+                        @Html.DisplayFor(modelItem => item.AnnouncementMessage)
+                    </td>
+                    <td>
+                        <div class="d-flex">
+                            <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.AnnID">Edit</a> |
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.AnnID">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal-content w-50 h-auto" id="createannmodal">
+    <h4 class="modal-title text-center">Create Announcement</h4>
+    <button class="btn btn-danger modal-close" onclick="document.getElementById('createannmodal').style.display = 'none'">X</button>
+       
+   <form asp-controller="Admin" asp-action="CreateAnnouncement">
+        <div class="mt-3">
+            <label class="form-label">Announcement:</label>
+            <textarea class="form-control w-100" style="max-height:300px" name="announcement" required></textarea>
+        </div>
+
+        <input type="submit" class="btn btn-primary mt-3" />
+   </form>
+</div>

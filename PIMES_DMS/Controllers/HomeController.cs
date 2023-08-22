@@ -357,6 +357,10 @@ namespace PIMES_DMS.Controllers
                     {
                         return RedirectToAction("Login", "Login");
                     }
+                case "Announcements":
+                    {
+                        return RedirectToAction("ShowAnnouncementsList", "Admin");
+                    }
                 default:
                     {
                         return Ok();
