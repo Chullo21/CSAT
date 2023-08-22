@@ -9,17 +9,26 @@ namespace PIMES_DMS.Controllers
 
         private readonly AppDbContext _Db;
         private readonly List<AccountsModel> mainAccounts = new List<AccountsModel>();
+        private readonly List<AnnouncementModel> mainAnns = new List<AnnouncementModel>();
 
         public LoginController(AppDbContext db)
         {
             _Db = db;
             mainAccounts = _Db.AccountsDb.ToList();
+            mainAnns = _Db.AnnDb.ToList();
+        }
+
+        private void GetAnnouncements()
+        {
+            ViewBag.Announcements = mainAnns;
         }
 
         public IActionResult Login()
         {
             TempData.Clear();
             TempData["loginTimes"] = 0;
+
+            GetAnnouncements();
 
             return View("Login_View");
         }

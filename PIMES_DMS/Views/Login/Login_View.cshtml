@@ -59,6 +59,20 @@
                                 </div>
                             }
                         }
+                        @{
+                            var anns = ViewBag.Announcements as List<AnnouncementModel>;
+                            if (anns != null || anns.Count > 0)
+                            {
+                                string concatenatedString = "";
+                                foreach (AnnouncementModel str in anns)
+                                {
+                                    concatenatedString += "//" + str.AnnouncementMessage + " ";
+                                }
+
+                                <marquee class="text-danger">@concatenatedString</marquee>
+                            }
+
+                        }
                         <div class="input-group my-2 mx-auto w-75">
                             <span class="input-group-text fw-bolder" id="basic-addon1">&#64;</span>
                             <input class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="user">

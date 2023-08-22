@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIMES_DMS.Data;
 
@@ -11,9 +12,11 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230818080927_addchatindb")]
+    partial class addchatindb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,23 +157,6 @@ namespace PIMES_DMS.Migrations
                     b.HasKey("ActionID");
 
                     b.ToTable("ActionDb");
-                });
-
-            modelBuilder.Entity("PIMES_DMS.Models.AnnouncementModel", b =>
-                {
-                    b.Property<int>("AnnID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnnID"));
-
-                    b.Property<string>("AnnouncementMessage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AnnID");
-
-                    b.ToTable("AnnDb");
                 });
 
             modelBuilder.Entity("PIMES_DMS.Models.DefinitionsModel", b =>

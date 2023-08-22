@@ -234,8 +234,6 @@ namespace PIMES_DMS.Controllers
 
             totalDays += totalSpan.Days;
 
-            if (totalDays > 0) totalDays--;
-
             return totalDays;
         }
 

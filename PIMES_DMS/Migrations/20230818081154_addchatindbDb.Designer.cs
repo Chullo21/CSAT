@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIMES_DMS.Data;
 
@@ -11,9 +12,11 @@ using PIMES_DMS.Data;
 namespace PIMES_DMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230818081154_addchatindbDb")]
+    partial class addchatindbDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,21 +159,25 @@ namespace PIMES_DMS.Migrations
                     b.ToTable("ActionDb");
                 });
 
-            modelBuilder.Entity("PIMES_DMS.Models.AnnouncementModel", b =>
+            modelBuilder.Entity("PIMES_DMS.Models.ChatModel", b =>
                 {
-                    b.Property<int>("AnnID")
+                    b.Property<int>("UserID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnnID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
 
-                    b.Property<string>("AnnouncementMessage")
+                    b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AnnID");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("AnnDb");
+                    b.HasKey("UserID");
+
+                    b.ToTable("ChatDb");
                 });
 
             modelBuilder.Entity("PIMES_DMS.Models.DefinitionsModel", b =>
