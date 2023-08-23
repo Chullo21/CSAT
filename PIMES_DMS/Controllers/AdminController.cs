@@ -38,11 +38,27 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult AdminView()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_Db.AccountsDb);
         }
 
         public IActionResult CreateUserView()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View();
         }
 
@@ -50,7 +66,6 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult CreateUser(string username, string password, string accname, string compname, string role, string email, string sec, string dom)
         {
-
             if (username != null || password != null || accname != null || compname != null || role != null)
             {
                 Guid guid = Guid.NewGuid();
@@ -82,6 +97,13 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult EditView(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
 
             if (ID.ToString() == null)
             {
@@ -102,7 +124,6 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult EditUser(AccountsModel obj)
         {
-
             if (ModelState.IsValid)
             {
                 _Db.AccountsDb.Update(obj);
@@ -117,6 +138,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Details(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             var det = _Db.AccountsDb.Find(ID);
 
             if (det != null)
@@ -131,6 +160,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult DeleteView(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             var del = _Db.AccountsDb.Find(ID);
 
             return View(del);
@@ -139,20 +176,25 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Delete(int ID)
         {
-
             var del = _Db.AccountsDb.FirstOrDefault(j => j.AccID == ID);
 
             _Db.AccountsDb.Remove(del!);
             UpdateNotif(DateTime.Now, ", have deleted an account named '" + del?.AccName + "'.", "Admin");
             _Db.SaveChanges();
 
-            
-
             return RedirectToAction("AdminView");
         }
 
         public IActionResult ShowAnnouncementsList()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_Db.AnnDb);  
         }
 

@@ -37,6 +37,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult SubmitIssueView()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View();
         }
 
@@ -122,6 +130,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult IssuesList()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_context.IssueDb.Where(j => !j.Acknowledged));
         }
 
@@ -129,12 +145,28 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult AcknowledgedIssues()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View("AckIssues", _context.IssueDb.Where(j => j.Acknowledged && !j.ValidatedStatus));
         }
 
         [AutoValidateAntiforgeryToken]
         public IActionResult IssueDetails(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             IssueModel? det = _context.IssueDb.Find(ID);
 
             return View(det);
@@ -167,6 +199,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult EditIssueView(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_context.IssueDb.FirstOrDefault(j => j.IssueID == ID));
         }
 
@@ -216,16 +256,40 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult GetInvalids()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_context.IssueDb.Where(j => !j.isDeleted && j.Acknowledged && j.ValidatedStatus && j.ValRes == "Invalid"));
         }
 
         public IActionResult GetValids()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_context.IssueDb.Where(j => j.ValRes == "Valid"));
         }
 
         public IActionResult GetRMA()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_context.RMADb.OrderByDescending(j => j.DateCreated));
         }
 
@@ -262,11 +326,27 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult DefinitionsView()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_context.DefDb.ToList());
         }
 
         public IActionResult Completed8D()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             List<IssueModel> issuestoshow = new List<IssueModel>();
 
             List<IssueModel> issues = _context.IssueDb.Where(j => j.HasTES).ToList();

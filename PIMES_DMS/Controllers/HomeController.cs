@@ -122,6 +122,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult AdminHome()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             ViewData["InComingIssue"] = mainIssues.Where(j => !j.Acknowledged && !j.ValidatedStatus);
             ViewData["OnProgressIssue"] = mainIssues.Where(j => j.Acknowledged && !j.ValidatedStatus);
 
@@ -357,7 +365,7 @@ namespace PIMES_DMS.Controllers
                     }
                 case "Log-out":
                     {
-                        return RedirectToAction("Login", "Login");
+                        return RedirectToAction("Logout", "Login");
                     }
                 case "Announcements":
                     {

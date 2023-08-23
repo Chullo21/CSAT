@@ -21,6 +21,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult DashView()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             int yearNow = DateTime.Now.Year;
             TempData["selectedYear"] = yearNow;
 
@@ -37,6 +45,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult RecentYear(int year)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             TempData["selectedYear"] = year;
             int currentMonths = 0;
 
@@ -286,6 +302,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult GetInvalids()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             IEnumerable<IssueModel> issues = mainIssues.Where(j => j.ValidatedStatus && j.ValRes == "Invalid");
 
             TempData["sfd"] = "Invalid Claims";
@@ -295,6 +319,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult GetValids()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
             List<ActionModel> actions = new List<ActionModel>();
             List<GetActionPercent> gaps = new List<GetActionPercent>();

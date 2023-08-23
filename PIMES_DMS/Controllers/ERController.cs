@@ -39,6 +39,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Create_ContainmentView(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             IssueModel? obj = _Db.IssueDb.FirstOrDefault(j => j.IssueID == ID);
 
             return View(obj);
@@ -141,6 +149,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ERView()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_Db.IssueDb.Where(j => j.HasCR));
         }
 
@@ -157,6 +173,13 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult EditERView(string ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
 
             var obj = _Db.ERDb.FirstOrDefault(j => j.IssueNo == ID);
 
@@ -203,6 +226,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult DeleteView()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View();
         }
 

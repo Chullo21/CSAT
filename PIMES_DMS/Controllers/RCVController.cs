@@ -107,6 +107,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult RCVList()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             GetDataForVerification();
             GetOpenAndCloseDataForTable();
 
@@ -180,6 +188,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult RCVView(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(mainIssues.FirstOrDefault(j => j.IssueID == ID));
         }
 
@@ -187,14 +203,19 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ClientViewRCV()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             string? Role = TempData["Role"] as string;
             TempData.Keep();
 
             if (Role == "CLIENT")
             {
-                string? EN = TempData["EN"] as string;
-                TempData.Keep();
-
                 return View(mainIssues.Where(j => j.Acknowledged && j.ValidatedStatus && j.HasCR && j.IssueCreator == EN && !j.isDeleted && j.HasTES));
             }
             else
@@ -207,6 +228,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ViewVer(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             var action = mainActions.FirstOrDefault(j => j.ActionID == ID);
             List<ShowVerification> sv = new List<ShowVerification>();
             var verifications = mainVers.Where(j => !j.IsDeleted && j.RCType == "tc" && j.ActionID == ID);
@@ -328,6 +357,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult RCVViewDet(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             ViewBag.td = null;
             ViewData["Ver"] = null;
 
@@ -412,6 +449,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult CreateTESView(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(mainIssues.FirstOrDefault(j => j.IssueID == ID));
         }
 
@@ -462,7 +507,15 @@ namespace PIMES_DMS.Controllers
         }
 
         public IActionResult TESActions(string ID)
-       {
+        {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             ViewBag.tds = null;
             List<Vermodel> vermodels = new List<Vermodel>();
             List<ActionModel> actions = mainActions.Where(j => !j.IsDeleted && j.ControlNo == ID).ToList();

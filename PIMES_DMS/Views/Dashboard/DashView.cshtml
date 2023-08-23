@@ -7,15 +7,6 @@
 
     var m = @Html.Raw(TempData["Months"]);
     TempData.Keep();
-
-    string? EN = TempData["EN"] as string;
-    string? Role = TempData["Role"] as string;
-    TempData.Keep();
-
-    if (EN!.ToString() == "" || Role!.ToString() == "")
-    {
-        Url.Action("Login", "Login");
-    }
 }
 
 @functions

@@ -17,6 +17,14 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult ShowNotif()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(_Db.NotifDb.OrderByDescending(j => j.DateCreated));
         }
 

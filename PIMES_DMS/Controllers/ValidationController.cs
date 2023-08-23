@@ -67,14 +67,19 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ShowIssuesWithReport()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             string? Role = TempData["Role"] as string;
             TempData.Keep();
 
             if (Role == "CLIENT")
             {
-                string? EN = TempData["EN"] as string;
-                TempData.Keep();
-
                 IEnumerable<IssueModel> det = _Db.IssueDb.Where(j => j.IssueCreator == EN && j.ValidatedStatus && j.Acknowledged);
 
                 return View(det);
@@ -89,11 +94,27 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult ValIssueDet(int ID)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View("ValidatedIssueDetail", _Db.IssueDb.FirstOrDefault(j => j.IssueID == ID));
         }
 
         public IActionResult ValidatedIssueDetail(IssueModel issue)
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             return View(issue);
         }
 
@@ -110,6 +131,14 @@ namespace PIMES_DMS.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult ForGERVal()
         {
+            string? EN = TempData["EN"] as string;
+            TempData.Keep();
+
+            if (string.IsNullOrEmpty(EN))
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+
             IEnumerable<IssueModel> obj = _Db.IssueDb.Where(j => (j.Acknowledged && j.ValidatedStatus && !j.HasCR && j.ValRes == "Valid")
             || (j.Acknowledged && j.ValidatedStatus && !j.HasCR && j.ValRes == "Invalid" && j.NeedRMA == "Yes"));
 
