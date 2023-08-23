@@ -110,7 +110,7 @@ namespace PIMES_DMS.Controllers
             GetDataForVerification();
             GetOpenAndCloseDataForTable();
 
-            List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
+            List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid" && !j.Verified).ToList();
             List<IssueModel> issuestoshow = new List<IssueModel>();
 
             foreach (var issue in issues)

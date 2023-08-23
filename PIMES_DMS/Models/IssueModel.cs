@@ -81,6 +81,8 @@ namespace PIMES_DMS.Models
         [DisplayName("Date Validated")]
         public DateTime DateVdal { get; set; }
 
+        public bool Verified { get; set; }
+
         public string? NeedRMA { get; set; }
 
         public bool Acknowledged { get; set; } = false;

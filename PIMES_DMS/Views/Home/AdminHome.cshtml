@@ -9,6 +9,7 @@
     IEnumerable<IssueModel>? InComingIssue = ViewData["InComingIssue"] as IEnumerable<IssueModel>;
     IEnumerable<IssueModel>? Progress = ViewData["OnProgressIssue"] as IEnumerable<IssueModel>;
     List<ActionModel>? Actions = ViewBag.Acts as List<ActionModel>;
+    List<AnnouncementModel>? anns = ViewBag.Announcements as List<AnnouncementModel>;
 
     string? Warning = TempData["Existing8D"] as string;
     TempData.Remove("Existing8D");
@@ -77,8 +78,8 @@
     }
     <div class="row">
         <div class="col-sm-10 col-md-3 mt-2">
-            <div class="card bg-transparent h-100">
-                <h4 class="card-header text-center bg-secondary text-white mb-2" style="font-family:Impact">Q.I PROCESS</h4>
+            <div class="card bg-transparent h-100 border-3 border-dark">
+                <h4 class="card-header text-center bg-secondary text-white mb-2 border-3 border-dark" style="font-family:Impact">Q.I PROCESS</h4>
                 <div class="flex-column justify-content-center">
                     @if (Role == "Admin")
                     {
@@ -181,8 +182,8 @@
         </div>
 
         <div class="col-12 col-md-4 mx-auto mt-2">
-           <div class="card w-100 h-100 bg-transparent">
-               <h4 class="card-header text-center bg-secondary text-white">
+            <div class="card w-100 h-100 bg-transparent border-3 border-dark">
+                <h4 class="card-header text-center bg-secondary text-white border-3 border-dark" style="font-family:Impact">
                     Pending (@InComingIssue.Count())
                </h4>
                 <div class="card-body table-data table-responsive h-100">
@@ -227,9 +228,9 @@
            </div>
         </div>
 
-        <div class="col-12 col-md-4 mx-auto mt-2">
-            <div class="card w-100 h-100 bg-transparent">
-                <h4 class="card-header text-center bg-secondary text-white">
+        <div class="col-12 col-md-4 mt-2">
+            <div class="card w-100 h-100 bg-transparent border-3 border-dark">
+                <h4 class="card-header text-center bg-secondary text-white border-3 border-dark" style="font-family:Impact">
                     On-Process (@Progress.Count())
                 </h4>
                 <div class="card-body table-data table-responsive h-100">
@@ -315,8 +316,8 @@
     </div>
     @if (Role != "Admin")
     {
-        <div class="card bg-transparent mt-2">
-            <h4 class="card-header text-center bg-secondary text-white">Pending Action Item/s (@Actions.Count())</h4>
+        <div class="card bg-transparent mt-2 border-dark border-3">
+            <h4 class="card-header text-center bg-secondary text-white border-3 border-dark" style="font-family:Impact">Pending Action Item/s (@Actions.Count())</h4>
             <div class="table-responsive">
                 <table class="w-100 text-center mt-1 table table-striped" id="myTable">
                     <thead class="bg-primary">

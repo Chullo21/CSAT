@@ -12,6 +12,7 @@ namespace PIMES_DMS.Controllers
         private readonly List<IssueModel> mainIssues = new List<IssueModel>();
         private readonly List<ActionModel> mainActions = new List<ActionModel>();
         private readonly List<AccountsModel> mainAccounts = new List<AccountsModel>();
+        private readonly List<AnnouncementModel> mainAnn = new List<AnnouncementModel>();
 
         public HomeController(AppDbContext db)
         {
@@ -20,6 +21,7 @@ namespace PIMES_DMS.Controllers
             mainIssues = _Db.IssueDb.ToList();
             mainActions = _Db.ActionDb.ToList();
             mainAccounts = _Db.AccountsDb.ToList();
+            mainAnn = _Db.AnnDb.ToList();
         }
 
         private string? GetUsername()
@@ -229,14 +231,14 @@ namespace PIMES_DMS.Controllers
 
         private int GetNumberOfRC()
         {
-            List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid").ToList();
+            List<IssueModel> issues = mainIssues.Where(j => j.HasCR && j.ValRes == "Valid" && !j.Verified).ToList();
             List<IssueModel> issuestoshow = new List<IssueModel>();
 
             foreach (var issue in issues)
             {
                 List<ActionModel> actions = mainActions.Where(j => j.ControlNo == issue.ControlNumber).ToList();
 
-                if (!actions.All(j => j.ActionStatus == "Closed") || actions.Count == 0)
+                if (!actions.All(j => j.ActionStatus == "Closed" && j.VerStatus) || actions.Count == 0)
                 {
                     issuestoshow.Add(issue);
                 }

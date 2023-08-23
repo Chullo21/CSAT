@@ -9,6 +9,7 @@ namespace PIMES_DMS.Models
 
         public string AnnouncementMessage { get; set; } = string.Empty;
 
+        public string Type { get; set; } = string.Empty;
 
     }
 }

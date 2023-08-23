@@ -504,7 +504,7 @@
     <h4 class="modal-title text-center">Verify Action Item</h4>
     <button class="modal-close btn btn-danger" onclick="CloseVerModal()">X</button>
     <hr />       
-    <form class="flex-column text-dark" asp-controller="RCV" asp-action="VerifyActionItem" enctype="">
+    <form class="flex-column text-dark" asp-controller="RCV" asp-action="VerifyActionItem" enctype="multipart/form-data">
         <input id="verid" name="actionid" type="hidden" />
         <div class="flex-column mt-2">
             <label class="form-label">Status</label>

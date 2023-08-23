@@ -2,6 +2,8 @@
     Layout = null;
     int times = (int)TempData["loginTimes"];
     TempData.Keep();    
+
+    List<AnnouncementModel>? anns = ViewBag.Announcements as List<AnnouncementModel>;
 }
 
 <!DOCTYPE html>
@@ -59,19 +61,15 @@
                                 </div>
                             }
                         }
-                        @{
-                            var anns = ViewBag.Announcements as List<AnnouncementModel>;
-                            if (anns != null || anns.Count > 0)
+                        @if (anns.Any())
+                        {
+                            string concatenatedString = "!!REMINDER!!  ";
+                            foreach (AnnouncementModel str in anns)
                             {
-                                string concatenatedString = "";
-                                foreach (AnnouncementModel str in anns)
-                                {
-                                    concatenatedString += "-------------------" + str.AnnouncementMessage + " ";
-                                }
-
-                                <marquee class="text-danger">@concatenatedString</marquee>
+                                concatenatedString += " -- " + str.AnnouncementMessage;
                             }
 
+                            <marquee class="text-danger">@concatenatedString</marquee>
                         }
                         <div class="input-group my-2 mx-auto w-75">
                             <span class="input-group-text fw-bolder" id="basic-addon1">&#64;</span>

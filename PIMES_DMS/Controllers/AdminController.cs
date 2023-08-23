@@ -156,11 +156,12 @@ namespace PIMES_DMS.Controllers
             return View(_Db.AnnDb);  
         }
 
-        public IActionResult CreateAnnouncement(string announcement)
+        public IActionResult CreateAnnouncement(string announcement, string type)
         {
             AnnouncementModel ann = new AnnouncementModel();
             {
                 ann.AnnouncementMessage = announcement;
+                ann.Type = type;
             }
 
             if (!string.IsNullOrEmpty(announcement))
@@ -174,18 +175,16 @@ namespace PIMES_DMS.Controllers
             return RedirectToAction("ShowAnnouncementsList");
         }
 
-        //private void Notif(string message)
-        //{
-        //    string? EN = TempData["EN"] as string;
+       public IActionResult DeleteAnnouncement(int ID)
+        {
+            AnnouncementModel ann = _Db.AnnDb.FirstOrDefault(j => j.AnnID == ID);
 
-        //    NotifModel notifModel = new NotifModel();
-        //    {
-        //        notifModel.Message = EN + message;
-        //        notifModel.Type = "All";
-        //    }
+            _Db.AnnDb.Remove(ann);
+            UpdateNotif(DateTime.Now, ", have deleted an announcement.", "All");
+            _Db.SaveChanges();
 
-        //    _Db.NotifDb.Add(notifModel);
-        //}
+            return RedirectToAction("ShowAnnouncementsList");
+        }
 
     }
 }

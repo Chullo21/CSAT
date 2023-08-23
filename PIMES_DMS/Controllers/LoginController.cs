@@ -6,10 +6,9 @@ namespace PIMES_DMS.Controllers
 {
     public class LoginController : Controller
     {
-
         private readonly AppDbContext _Db;
         private readonly List<AccountsModel> mainAccounts = new List<AccountsModel>();
-        private readonly List<AnnouncementModel> mainAnns = new List<AnnouncementModel>();
+        private readonly List<AnnouncementModel>? mainAnns = new List<AnnouncementModel>();
 
         public LoginController(AppDbContext db)
         {
@@ -20,7 +19,7 @@ namespace PIMES_DMS.Controllers
 
         private void GetAnnouncements()
         {
-            ViewBag.Announcements = mainAnns;
+            ViewBag.Announcements = mainAnns.Where(j => j.Type == "Everyone").ToList();
         }
 
         public IActionResult Login()

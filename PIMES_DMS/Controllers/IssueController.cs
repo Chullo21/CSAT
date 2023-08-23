@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using PIMES_DMS.Data;
 using PIMES_DMS.Models;
 using System.Net.Mail;
@@ -51,7 +50,7 @@ namespace PIMES_DMS.Controllers
 
             if (checkForExistingIssue != null)
             {
-                TempData["Existing8D"] = "An Issue with issue number of '" + issueno +"' already exist. Issue Submission was not successful.";
+                TempData["Existing8D"] = "An Issue with issue number of '" + issueno + "' already exist. Issue Submission was not successful.";
                 return RedirectToAction("AdminHome", "Home");
             }
 
