@@ -24,9 +24,6 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult Login()
         {
-            TempData.Clear();
-            TempData["loginTimes"] = 0;
-
             GetAnnouncements();
 
             return View("Login_View");
@@ -45,7 +42,7 @@ namespace PIMES_DMS.Controllers
 
                 TempData["message"] = "Please input your log-in credentials.";
 
-                return View("Login_View");
+                return RedirectToAction("Login");
             }
 
             var log = mainAccounts.FirstOrDefault(j => j.UserName == user && j.Password == pass);
@@ -63,12 +60,15 @@ namespace PIMES_DMS.Controllers
                 TempData["loginTimes"] = loginTimes;
                 TempData["message"] = "Invalid log-in credentials.";
 
-                return View("Login_View");
+                return RedirectToAction("Login");
             }
         }
 
         public IActionResult Logout()
         {
+            TempData.Clear();
+            TempData["loginTimes"] = 0;
+
             return RedirectToAction("Login");
         }
     }
