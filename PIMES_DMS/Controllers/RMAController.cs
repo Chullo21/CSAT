@@ -16,7 +16,7 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult ShowFA(int id)
         {
-            RMAModel rma = _Db.RMADb.FirstOrDefault(j => j.RMAID == id);
+            RMAModel? rma = _Db.RMADb.FirstOrDefault(j => j.RMAID == id);
 
             byte[]? faByte = rma.FA;
 

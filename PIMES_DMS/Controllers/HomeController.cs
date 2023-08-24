@@ -26,7 +26,7 @@ namespace PIMES_DMS.Controllers
 
         private string? GetUsername()
         {
-            string username = TempData["EN"] as string;
+            string? username = TempData["EN"] as string;
             TempData.Keep();
 
             return username;

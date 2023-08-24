@@ -170,7 +170,8 @@ namespace PIMES_DMS.Controllers
 
             foreach (var issue in issues)
             {
-                int tc = mainActions.Count(j => (!j.VerStatus && j.TargetDate < DateTime.Now.Date && j.ControlNo == issue.ControlNumber) || (!j.VerStatus && j.ActionStatus == "Closed" && j.ControlNo == issue.ControlNumber));
+                int tc = mainActions.Count(j => (!j.VerStatus && j.TargetDate.Date <= DateTime.Now.Date && j.ControlNo == issue.ControlNumber) 
+                || (!j.VerStatus && j.ActionStatus == "Closed" && j.ControlNo == issue.ControlNumber));
 
                 ForVerificationData fvdd = new ForVerificationData();
                 {
@@ -348,7 +349,6 @@ namespace PIMES_DMS.Controllers
                 if (ModelState.IsValid)
                 {
                     _Db.ART_8D.Add(art);
-                    _Db.SaveChanges();
                 }
             }
         }
@@ -542,8 +542,7 @@ namespace PIMES_DMS.Controllers
 
         public IActionResult SubmitActionItem(string ID, string action, string pic, DateTime td, string whichdb, string dep)
         {
-            CheckForArt(ID);
-
+            
             ActionModel act = new ActionModel();
             {
                 act.ControlNo = ID;
@@ -561,8 +560,10 @@ namespace PIMES_DMS.Controllers
 
                 _Db.ActionDb.Add(act);
                 UpdateNotif(", have submitted an action item on a CAPA with Control# of " + act.ControlNo + ".", "All");
-                _Db.SaveChanges();
                 
+                CheckForArt(ID);
+                _Db.SaveChanges();
+
                 AddTd(ID, action, whichdb, td);
             }
 
@@ -571,20 +572,23 @@ namespace PIMES_DMS.Controllers
 
         void AddTd(string ID, string action, string whichdb, DateTime td)
         {
-            var setTd = _Db.ActionDb.FirstOrDefault(j => j.ControlNo == ID && j.Action == action && j.Type == whichdb);
+            ActionModel setTd = _Db.ActionDb.FirstOrDefault(j => j.ControlNo == ID && j.Action == action && j.Type == whichdb);
 
-            TargetDateModel targetDateModel = new TargetDateModel();
+            if (setTd != null)
             {
-                targetDateModel.ActionID = setTd.ActionID;
-                targetDateModel.ControlNo = ID;
-                targetDateModel.TD = td;
-                targetDateModel.Status = "Open";
-            }
+                TargetDateModel targetDateModel = new TargetDateModel();
+                {
+                    targetDateModel.ActionID = setTd.ActionID;
+                    targetDateModel.ControlNo = ID;
+                    targetDateModel.TD = td;
+                    targetDateModel.Status = "Open";
+                }
 
-            if (ModelState.IsValid)
-            {
-                _Db.TDDb.Add(targetDateModel);
-                _Db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    _Db.TDDb.Add(targetDateModel);
+                    _Db.SaveChanges();
+                }
             }
         }
 

@@ -246,7 +246,7 @@
                             <th style="width:15%">
                                 STATUS
                             </th>
-                            <th style="width:15%" ">
+                            <th style="width:15%">
 
                             </th>
                         </tr>
@@ -255,23 +255,23 @@
                         @{
                             if (tcdb.Where(j => j.Type == "ec") != null)
                             {
-                                foreach (var tc in tcdb.Where(j => j.Type == "ec").OrderByDescending(j => j.DateCreated))
+                                foreach (var ec in tcdb.Where(j => j.Type == "ec").OrderByDescending(j => j.DateCreated))
                                 {
                                     string style = "background-color: green";
-                                    if (tc.ActionStatus == "Open")
+                                    if (ec.ActionStatus == "Open")
                                     {
                                         style = "background-color: red";
                                     }
                                     <tr>
                                         <td>
-                                            <textarea class="bg-transparent border-0" style="max-width:100%; max-height:100%; min-width:100%; min-height: auto" readonly>@tc.Action</textarea>
+                                            <textarea class="bg-transparent border-0" style="max-width:100%; max-height:100%; min-width:100%; min-height: auto" readonly>@ec.Action</textarea>
                                         </td>
                                         <td>
-                                            @tc.PIC
+                                            @ec.PIC
                                         </td>
                                         <td>
                                             @{
-                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList().OrderBy(j => j.TDID);
+                                                var tdss = tds.Where(j => j.ControlNo == ec.ControlNo && j.Status == "Open" && j.ActionID == ec.ActionID).ToList().OrderBy(j => j.TDID);
                                                 int index = 0;
 
                                                 foreach (var td in tdss)
@@ -293,15 +293,15 @@
                                         <td style="@style" class="text-white">
                                             <div class="flex-column">
                                                 <div>
-                                                    @tc.ActionStatus
+                                                        @ec.ActionStatus
                                                 </div>
-                                                @if (tc.ActionStatus == "Closed")
+                                                @if (ec.ActionStatus == "Closed")
                                                 {
                                                     <div>
-                                                        @tc.TargetDate.ToShortDateString()
+                                                           @ec.TargetDate.ToShortDateString()
                                                     </div>
                                                 }
-                                                @if (tc.VerStatus)
+                                                @if (ec.VerStatus)
                                                 {
                                                     <div class="bg-primary">
                                                         Verified
@@ -309,41 +309,40 @@
                                                 }
                                             </div>
                                         </td>
-                                        <td class="">
+                                        <td class="w-100">
                                             <div class="d-flex flex-column flex-lg-row">
-                                                @{
-                                                    if (tc.HasVer)
-                                                    {
-                                                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@tc.ActionID">View</a>
-                                                    }
-                                                    if ((tc.PIC == EN || Role == "Admin") && tc.ActionStatus == "Open" && !tc.VerStatus)
-                                                    {
-                                                        <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">Action</a>
-                                                    }
-                                                    if (tc.HasVer && Role == "Viewer")
-                                                    {
-                                                        string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
+                                                    @{
+                                                        if (ec.HasVer)
+                                                        {
+                                                            <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@ec.ActionID">View</a>
+                                                        }
+                                                        if ((ec.PIC == EN || Role == "Admin") && ec.ActionStatus == "Open" && !ec.VerStatus)
+                                                        {
+                                                            <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@ec.ActionID">Action</a>
+                                                        }
+                                                        if (ec.HasVer && Role == "Viewer")
+                                                        {
+                                                            string rem = remarks.FirstOrDefault(j => j.ActionID == ec.ActionID).Result;
+                                                            <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
+                                                        }
 
-                                                        <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
                                                     }
-
-                                                }
                                             </div>
 
-                                            @if (tc.ActionStatus == "Closed")
-                                            {
-                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD,tc.TargetDate).TotalDays Day/s" readonly />
-                                            }
+                                                @if (ec.ActionStatus == "Closed")
+                                                {
+                                                    <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD, ec.TargetDate).TotalDays Day/s" readonly />
+                                                }
 
-                                            @if ((Role == "Admin" && tc.ActionStatus == "Closed" && !tc.VerStatus) || (Role == "Admin" && tc.TargetDate < DateTime.Now && tc.ActionStatus == "Open" && !tc.VerStatus))
-                                            {
-                                                <button class="btn btn-secondary text-white border-2 border-dark w-100" onclick="OpenVerModal('@tc.ActionID')">Verify</button>
-                                            }
+                                                @if ((Role == "Admin" && ec.ActionStatus == "Closed" && !ec.VerStatus) || (Role == "Admin" && ec.TargetDate < DateTime.Now && ec.ActionStatus == "Open" && !ec.VerStatus))
+                                                {
+                                                    <button class="btn btn-secondary text-white border-2 border-dark w-100" onclick="OpenVerModal('@ec.ActionID')">Verify</button>
+                                                }
 
-                                            @if (tc.ActionStatus == "Open" && tc.VerStatus && (EN == tc.PIC || Role == "Admin"))
-                                            {
-                                                <button class="btn btn-secondary w-100" onclick="OpenRecModal('@tc.ActionID')">Recommit</button>
-                                            }
+                                                @if (ec.ActionStatus == "Open" && ec.VerStatus && (EN == ec.PIC || Role == "Admin"))
+                                                {
+                                                    <button class="btn btn-secondary w-100" onclick="OpenRecModal('@ec.ActionID')">Recommit</button>
+                                                }
                                         </td>
                                     </tr>
                                 }
@@ -390,7 +389,7 @@
                             <th style="width:15%">
                                 STATUS
                             </th>
-                            <th style="width:15%" ">
+                            <th style="width:15%">
 
                             </th>
                         </tr>
@@ -399,23 +398,23 @@
                         @{
                             if (tcdb.Where(j => j.Type == "sc") != null)
                             {
-                                foreach (var tc in tcdb.Where(j => j.Type == "sc").OrderByDescending(j => j.DateCreated))
+                                foreach (var sc in tcdb.Where(j => j.Type == "sc").OrderByDescending(j => j.DateCreated))
                                 {
                                     string style = "background-color: green";
-                                    if (tc.ActionStatus == "Open")
+                                    if (sc.ActionStatus == "Open")
                                     {
                                         style = "background-color: red";
                                     }
                                     <tr>
                                         <td>
-                                            <textarea class="bg-transparent border-0" style="max-width:100%; max-height:100%; min-width:100%; min-height: auto" readonly>@tc.Action</textarea>
+                                            <textarea class="bg-transparent border-0" style="max-width:100%; max-height:100%; min-width:100%; min-height: auto" readonly>@sc.Action</textarea>
                                         </td>
                                         <td>
-                                            @tc.PIC
+                                            @sc.PIC
                                         </td>
                                         <td>
                                             @{
-                                                var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList().OrderBy(j => j.TDID);
+                                                var tdss = tds.Where(j => j.ControlNo == sc.ControlNo && j.Status == "Open" && j.ActionID == sc.ActionID).ToList().OrderBy(j => j.TDID);
                                                 int index = 0;
 
                                                 foreach (var td in tdss)
@@ -437,15 +436,15 @@
                                         <td style="@style" class="text-white">
                                             <div class="flex-column">
                                                 <div>
-                                                    @tc.ActionStatus
+                                                    @sc.ActionStatus
                                                 </div>
-                                                @if (tc.ActionStatus == "Closed")
+                                                @if (sc.ActionStatus == "Closed")
                                                 {
                                                     <div>
-                                                        @tc.TargetDate.ToShortDateString()
+                                                        @sc.TargetDate.ToShortDateString()
                                                     </div>
                                                 }
-                                                @if (tc.VerStatus)
+                                                @if (sc.VerStatus)
                                                 {
                                                     <div class="bg-primary">
                                                         Verified
@@ -453,20 +452,20 @@
                                                 }
                                             </div>
                                         </td>
-                                        <td class="">
+                                        <td class="w-100">
                                             <div class="d-flex flex-column flex-lg-row">
                                                 @{
-                                                    if (tc.HasVer)
+                                                    if (sc.HasVer)
                                                     {
-                                                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@tc.ActionID">View</a>
+                                                        <a class="btn btn-primary w-100" asp-controller="RCV" asp-action="RCVViewDet" asp-route-id="@sc.ActionID">View</a>
                                                     }
-                                                    if ((tc.PIC == EN || Role == "Admin") && tc.ActionStatus == "Open" && !tc.VerStatus)
+                                                    if ((sc.PIC == EN || Role == "Admin") && sc.ActionStatus == "Open" && !sc.VerStatus)
                                                     {
-                                                        <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@tc.ActionID">Action</a>
+                                                        <a class="btn btn-success w-100" asp-controller="RCV" asp-action="ViewVer" asp-route-id="@sc.ActionID">Action</a>
                                                     }
-                                                    if (tc.HasVer && Role == "Viewer")
+                                                    if (sc.HasVer && Role == "Viewer")
                                                     {
-                                                        string rem = remarks.FirstOrDefault(j => j.ActionID == tc.ActionID).Result;
+                                                        string rem = remarks.FirstOrDefault(j => j.ActionID == sc.ActionID).Result;
 
                                                         <button class="btn btn-warning w-100" onclick="ShowRemarks('@rem')">Remarks</button>
                                                     }
@@ -474,19 +473,19 @@
                                                 }
                                             </div>
 
-                                            @if (tc.ActionStatus == "Closed")
+                                            @if (sc.ActionStatus == "Closed")
                                             {
-                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD,tc.TargetDate).TotalDays Day/s" readonly />
+                                                <input class="form-control text-center" value="Aging: @GetBusinessDays(tdss.OrderBy(j => j.TDID).Last().TD, sc.TargetDate).TotalDays Day/s" readonly />
                                             }
 
-                                            @if ((Role == "Admin" && tc.ActionStatus == "Closed" && !tc.VerStatus) || (Role == "Admin" && tc.TargetDate < DateTime.Now && tc.ActionStatus == "Open" && !tc.VerStatus))
+                                            @if ((Role == "Admin" && sc.ActionStatus == "Closed" && !sc.VerStatus) || (Role == "Admin" && sc.TargetDate < DateTime.Now && sc.ActionStatus == "Open" && !sc.VerStatus))
                                             {
-                                                <button class="btn btn-secondary text-white border-2 border-dark w-100" onclick="OpenVerModal('@tc.ActionID')">Verify</button>
+                                                <button class="btn btn-secondary text-white border-2 border-dark w-100" onclick="OpenVerModal('@sc.ActionID')">Verify</button>
                                             }
 
-                                            @if (tc.ActionStatus == "Open" && tc.VerStatus && (EN == tc.PIC || Role == "Admin"))
+                                            @if (sc.ActionStatus == "Open" && sc.VerStatus && (EN == sc.PIC || Role == "Admin"))
                                             {
-                                                <button class="btn btn-secondary w-100" onclick="OpenRecModal('@tc.ActionID')">Recommit</button>
+                                                <button class="btn btn-secondary w-100" onclick="OpenRecModal('@sc.ActionID')">Recommit</button>
                                             }
                                         </td>
                                     </tr>

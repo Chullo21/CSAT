@@ -122,12 +122,28 @@ namespace PIMES_DMS.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult EditUser(AccountsModel obj)
+        public IActionResult EditUser(int accid, string accucode, string accname, string section, string role, string email, string username,
+            string password)
         {
+
+            AccountsModel? fromAm = _Db.AccountsDb.FirstOrDefault(j => j.AccID == accid);
+
+            AccountsModel am = new AccountsModel();
+            {
+                am = fromAm;
+                am.AccUCode = accucode;
+                am.AccName = accname;
+                am.Section = section;
+                am.Role = role;
+                am.Email = email;
+                am.UserName = username;
+                am.Password = password;
+            }
+
             if (ModelState.IsValid)
             {
-                _Db.AccountsDb.Update(obj);
-                UpdateNotif(DateTime.Now, ", have edited an account named '" + obj.AccName + "'.", "Admin");
+                _Db.AccountsDb.Update(am);
+                UpdateNotif(DateTime.Now, ", have edited an account named '" + accname + "'.", "Admin");
                 _Db.SaveChanges();               
             }
 
