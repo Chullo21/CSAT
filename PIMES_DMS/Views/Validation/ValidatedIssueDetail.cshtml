@@ -104,61 +104,61 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-12 col-md-6 d-block justify-content-center" style="background-color:steelblue; border:3px solid">
-                <div>
-                    <p class="fw-bold text-center mt-3">
+            <div class="col-12 col-md-6">
+                <div class="card border-3 border-dark">
+                    <div class="card-header text-center text-white border-3 border-dark" style="background-color:steelblue">
                         VALIDATION FORM RESULT
-                    </p>
-                </div>
-                <div class="flex-column">
-                    <div class="d-flex align-items-center mx-5">
-                        <label class="form-label fw-bold h-100 my-auto">Report Number:</label>
-                        <input class="text-center form-control w-50" style="margin-left:5px" value="@Model.ValNo" readonly />
-                    </div>                    
-                    <div class="flex-column align-items-center mx-5 my-2">
-                        <div class="d-flex">
-                            @{
-                                if (Model.Report != null)
-                                {
-                                    <div class="d-flex align-self-center">
-                                        <label class="form-label fw-bold h-100 my-auto">Evidence:</label>
-                                        <button class="btn btn-primary mx-2" onclick="openModal()">View</button>
-                                    </div>
-                                }
-                                else
-                                {
-                                    Write("No Attachment");
-                                }
-
-                                if (Model.ValRes == "Invalid" && Model.EmailSnip != null)
-                                {
-                                    <div class="mx-3 d-flex align-self-center">
-                                        <label class="form-label text-nowrap h-100 my-auto fw-bold my-auto">Reply:</label>
-                                        <button class="btn btn-primary mx-2" onclick="OpenEmailSnip()">View</button>
-                                    </div>
-                                }
-                                else if (Model.ValRes == "Invalid" && Model.EmailSnip == null)
-                                {
-                                    <div class="mx-3 d-flex align-self-center">
-                                        <label class="form-label text-nowrap h-100 my-auto fw-bold">Add Reply:</label>
-                                        <button class="btn btn-primary mx-2" onclick="openAddEmailSnip()">Add</button>
-                                    </div>
-                                }
-
-                                if (Model.ValRes == "Valid" && Model.HasTES)
-                                {
-                                    <div class="mx-3 d-flex align-self-center">
-                                        <label class="form-label text-nowrap h-100 my-auto fw-bold">View Action Items:</label>
-                                        <a class="btn btn-primary w-100 mx-2" asp-controller="RCV" asp-action="TESActions" asp-route-id="@Model.ControlNumber">Action Items</a>
-                                    </div>
-                                }
-                            }
-                        </div>
                     </div>
-                    <div class="mx-5 mb-5">
-                        <label class="form-label fw-bold mb-0">Summary Report:</label>
-                        <div>
-                            <textarea class="w-100 h-75 mt-0" style="max-height:250px; min-height:250px" readonly>@Model.ValidationRepSum</textarea>
+                    <div class="card-body flex-column" style="background-color:lightsteelblue">
+                        <div class="d-flex align-items-center mx-5">
+                            <label class="form-label fw-bold h-100 my-auto">Report Number:</label>
+                            <input class="text-center form-control w-50" style="margin-left:5px" value="@Model.ValNo" readonly />
+                        </div>
+                        <div class="flex-column align-items-center mx-5 my-3">
+                            <div class="row w-100">
+                                @{
+                                    if (Model.Report != null)
+                                    {
+                                        <div class="d-flex align-self-center col-sm-12 col-md-5">
+                                            <label class="form-label fw-bold h-100 my-auto">Evidence:</label>
+                                            <button class="btn btn-primary mx-2" onclick="openModal()">View</button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        Write("No Attachment");
+                                    }
+
+                                    @if (Model.ValRes == "Invalid" && Model.EmailSnip != null)
+                                    {
+                                        <div class="col-sm-12 col-md-5">
+                                            <label class="form-label text-nowrap h-100 my-auto fw-bold my-auto">Reply:</label>
+                                            <button class="btn btn-primary mx-2" onclick="OpenEmailSnip()">View</button>
+                                        </div>
+                                    }
+                                    else if (Model.ValRes == "Invalid" && Model.EmailSnip == null)
+                                    {
+                                        <div>
+                                            <label class="form-label text-nowrap h-100 my-auto fw-bold">Add Reply:</label>
+                                            <button class="btn btn-primary mx-2" onclick="openAddEmailSnip()">Add</button>
+                                        </div>
+                                    }
+
+                                    if (Model.ValRes == "Valid" && Model.HasTES)
+                                    {
+                                        <div class="d-flex align-self-center col-sm-12 col-md-5">
+                                            <label class="form-label text-nowrap my-auto fw-bold">View Action Items:</label>
+                                            <a class="btn btn-primary mx-2 text-nowrap" asp-controller="RCV" asp-action="TESActions" asp-route-id="@Model.ControlNumber">Action Items</a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="mx-5">
+                            <label class="form-label fw-bold mb-0">Summary Report:</label>
+                            <div>
+                                <textarea class="w-100 mt-2" style="max-height:200px; min-height:200px" readonly>@Model.ValidationRepSum</textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
