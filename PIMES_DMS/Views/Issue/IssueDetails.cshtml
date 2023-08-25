@@ -1,5 +1,4 @@
 ﻿ @model PIMES_DMS.Models.IssueModel
-
 @{
     ViewData["Title"] = "Details > " + Model.IssueNo;
 
@@ -17,25 +16,19 @@
                 <h1 class="text-nowrap">Claim Details</h1>
             </div>
             <div class="d-flex justify-content-end w-100">
-                @*<div class="align-self-center d-flex justify-content-end mx-3">
-                    <a class="btn btn-secondary" asp-controller="Issue" asp-action="IssuesList">Back</a>
-                </div>*@
                 <div class="align-self-center mx-2 d-flex justify-content-end">
-                    @{
-                        if (Role == "Admin" && !Model.ValidatedStatus)
+                    @if (Role == "Admin" && !Model.ValidatedStatus)
+                    {
+                        if (!Model.Acknowledged)
                         {
-                            if (!Model.Acknowledged)
-                            {
-                                <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
-                            }
-                            else if (Model.Acknowledged)
-                            {
-                                <button class="btn btn-primary" onclick="openValModal()">Validate</button>
-                            }
+                            <a class="btn btn-success" asp-route-id="@Model.IssueID" asp-controller="Issue" asp-action="AcknowledgeIssue">Acknowledge</a>
+                        }
+                        else if (Model.Acknowledged)
+                        {
+                            <button class="btn btn-primary" onclick="openValModal()">Validate</button>
                         }
                     }
-                </div>
-                
+                </div>             
             </div>
         </div>
     </div>
@@ -98,43 +91,37 @@
                             <td>
                                 @Model.Desc
                             </td>
-                            @{
-                                if (Model.Acknowledged)
+                            @if (Model.Acknowledged)
+                            {
+                                <td style="background-color:green" class="desktop-only">
+                                    YES
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="background-color:red" class="desktop-only">
+                                    NO
+                                </td>
+                            }
+                            <td class="desktop-only">
+                                @if (Model.Acknowledged)
                                 {
-                                    <td style="background-color:green" class="desktop-only">
-                                        YES
-                                    </td>
+                                    Write(Model.DateAck.ToShortDateString());
                                 }
                                 else
                                 {
-                                    <td style="background-color:red" class="desktop-only">
-                                        NO
-                                    </td>
-                                }
-                            }
-                            <td class="desktop-only">
-                                @{
-                                    if (Model.Acknowledged)
-                                    {
-                                        Write(Model.DateAck.ToShortDateString());
-                                    }
-                                    else
-                                    {
-                                        Write("Not acknowledged yet");
-                                    }
+                                    Write("Not acknowledged yet");
                                 }
                             </td>
                             <td>
                                 <div class="align-self-center">
-                                    @{
-                                        if (Model.ClientRep != null)
-                                        {
-                                            <button class="btn btn-primary" onclick="openAttachModal()">Show Attachment</button>
-                                        }
-                                        else
-                                        {
-                                            Write("No Attachment");
-                                        }
+                                    @if (Model.ClientRep != null)
+                                    {
+                                        <button class="btn btn-primary" onclick="openAttachModal()">Show Attachment</button>
+                                    }
+                                    else
+                                    {
+                                        Write("No Attachment");
                                     }
                                 </div>
                             </td>

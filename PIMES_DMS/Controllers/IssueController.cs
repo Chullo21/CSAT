@@ -31,7 +31,6 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _context.NotifDb.Add(nm);
-                _context.SaveChangesAsync();
             }
         }
 
@@ -99,10 +98,9 @@ namespace PIMES_DMS.Controllers
                 NotifyAboutSubmittedIssue(issueno);
 
                 _context.IssueDb.Add(issue);
-                _context.SaveChanges();
-
                 UpdateNotif(DateTime.Now, ", have submitted a claim having issue# of  " + issueno + ".", "All");
 
+                _context.SaveChanges();
                 return View("IssueDetails", issue);
             }
 
@@ -187,9 +185,8 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _context.IssueDb.Update(ackissue);
-                _context.SaveChanges();
-
                 UpdateNotif(DateTime.Now, ", have acknowledged a claim with Issue# of " + issue!.IssueNo + ".", "All");
+                _context.SaveChanges();
 
                 return View("IssueDetails", ackissue);
             }
@@ -246,9 +243,9 @@ namespace PIMES_DMS.Controllers
             if (ModelState.IsValid)
             {
                 _context.IssueDb.Update(model);
-                _context.SaveChanges();
-
                 UpdateNotif(DateTime.Now, ", have edited a claim with issue# of " + issue!.IssueNo + ".", "All");
+
+                _context.SaveChanges();                
             }
 
             return RedirectToAction("IssuesList");
