@@ -95,12 +95,13 @@ namespace PIMES_DMS.Controllers
 
             if (ModelState.IsValid)
             {
-                NotifyAboutSubmittedIssue(issueno);
-
                 _context.IssueDb.Add(issue);
                 UpdateNotif(DateTime.Now, ", have submitted a claim having issue# of  " + issueno + ".", "All");
 
                 _context.SaveChanges();
+
+                NotifyAboutSubmittedIssue(issueno);
+
                 return View("IssueDetails", issue);
             }
 
@@ -370,21 +371,48 @@ namespace PIMES_DMS.Controllers
                 Random rand = new Random();
                 int random = rand.Next(0, 2);
 
-                if (random == 0)
+                switch (random)
                 {
-                    randtobeused.Email = "atsnoreply01@gmail.com";
-                    randtobeused.Password = "dlthqvxnsbnfpwzs";
+                    case 0:
+                        {
+                            randtobeused.Email = "atsnoreply01@gmail.com";
+                            randtobeused.Password = "dlthqvxnsbnfpwzs";
+                            break;
+                        }
+                    case 1:
+                        {
+                            randtobeused.Email = "noreplyATS1@gmail.com";
+                            randtobeused.Password = "mxmppmodmskwwzhv";
+                            break;
+                        }
+                    case 2:
+                        {
+                            randtobeused.Email = "noreplyATS3@gmail.com";
+                            randtobeused.Password = "peddcrnhcsswsjuf";
+                            break;
+                        }
+                    default:
+                        {
+                            randtobeused.Email = "noreplyATS3@gmail.com";
+                            randtobeused.Password = "peddcrnhcsswsjuf";
+                            break;
+                        }
                 }
-                else if (random == 1)
-                {
-                    randtobeused.Email = "noreplyATS1@gmail.com";
-                    randtobeused.Password = "mxmppmodmskwwzhv";
-                }
-                else
-                {
-                    randtobeused.Email = "noreplyATS3@gmail.com";
-                    randtobeused.Password = "peddcrnhcsswsjuf";
-                }
+                //if (random == 0)
+                //{
+                //    randtobeused.Email = "atsnoreply01@gmail.com";
+                //    randtobeused.Password = "dlthqvxnsbnfpwzs";
+                //}
+                //else if (random == 1)
+                //{
+                //    randtobeused.Email = "noreplyATS1@gmail.com";
+                //    randtobeused.Password = "mxmppmodmskwwzhv";
+                //}
+                //else
+                //{
+                //    randtobeused.Email = "noreplyATS3@gmail.com";
+                //    randtobeused.Password = "peddcrnhcsswsjuf";
+                //}
             }
 
             string link = "http://192.168.3.39";

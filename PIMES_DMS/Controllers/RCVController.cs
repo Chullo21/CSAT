@@ -91,6 +91,8 @@ namespace PIMES_DMS.Controllers
             {
                 _Db.ActionDb.Update(act);
                 _Db.SaveChanges();
+
+                NotifyAboutSubmittedIssue(action.PIC, action.ControlNo, "Good day,\r\n\r\nYour action-item, having a controller number of " + action.ControlNo + ", has been verified and concluded as '" + status + "'. ");
             }
 
             return RedirectToAction("RCVViewDet", new {ID = actionid});
@@ -556,14 +558,13 @@ namespace PIMES_DMS.Controllers
 
             if (ModelState.IsValid)
             {
-                NotifyAboutSubmittedIssue(pic, ID);
-
                 _Db.ActionDb.Add(act);
                 UpdateNotif(", have submitted an action item on a CAPA with Control# of " + act.ControlNo + ".", "All");
                 
                 CheckForArt(ID);
                 _Db.SaveChanges();
 
+                NotifyAboutSubmittedIssue(pic, ID, "Good day,\r\n\r\nYou have been asigned as PIC to an action item, having the controller number of " + ID + ".");
                 AddTd(ID, action, whichdb, td);
             }
 
@@ -592,7 +593,7 @@ namespace PIMES_DMS.Controllers
             }
         }
 
-        public void NotifyAboutSubmittedIssue(string pic, string controlno)
+        public void NotifyAboutSubmittedIssue(string pic, string controlno, string mess)
         {
             var sendTo = _Db.AccountsDb.FirstOrDefault(j => j.AccName == pic && !string.IsNullOrEmpty(j.Email));
 
@@ -603,35 +604,45 @@ namespace PIMES_DMS.Controllers
                     Random rand = new Random();
                     int random = rand.Next(0, 2);
 
-                    if (random == 0)
+                    switch (random)
                     {
-                        randtobeused.Email = "atsnoreply01@gmail.com";
-                        randtobeused.Password = "dlthqvxnsbnfpwzs";
-                    }
-                    else if (random == 1)
-                    {
-                        randtobeused.Email = "noreplyATS1@gmail.com";
-                        randtobeused.Password = "mxmppmodmskwwzhv";
-                    }
-                    else
-                    {
-                        randtobeused.Email = "noreplyATS3@gmail.com";
-                        randtobeused.Password = "peddcrnhcsswsjuf";
+                        case 0:
+                            {
+                                randtobeused.Email = "atsnoreply01@gmail.com";
+                                randtobeused.Password = "dlthqvxnsbnfpwzs";
+                                break;
+                            }
+                        case 1:
+                            {
+                                randtobeused.Email = "noreplyATS1@gmail.com";
+                                randtobeused.Password = "mxmppmodmskwwzhv";
+                                break;
+                            }
+                        case 2:
+                            {
+                                randtobeused.Email = "noreplyATS3@gmail.com";
+                                randtobeused.Password = "peddcrnhcsswsjuf";
+                                break;
+                            }
+                        default:
+                            {
+                                randtobeused.Email = "noreplyATS3@gmail.com";
+                                randtobeused.Password = "peddcrnhcsswsjuf";
+                                break;
+                            }
                     }
                 }
 
                 string link = "http://192.168.3.39";
 
-                string body = "Good day,\r\n\r\nYou have been asigned as PIC to an action item, having the controller number of " + controlno
-                    + ". You can view this data by visiting our CSat Portal.\r\n\r\n";
-                body += $"Please click \"{link}\" for your reference.\r\n\r\nHave a great day!";
+                string body = "\r\nYou can view this data by visiting our CSat Portal.\r\n\r\n" + $"Please click \"{link}\" for your reference.\r\n\r\nHave a great day!";
 
                 using (MailMessage message = new MailMessage())
                 {
                     message.From = new MailAddress(randtobeused.Email);
                     message.To.Add(sendTo.Email);
-                    message.Subject = "New Action Item";
-                    message.Body = body;
+                    message.Subject = "Action Item Reminder";
+                    message.Body = mess + body;
 
                     using (SmtpClient smtp = new SmtpClient("smtp.gmail.com"))
                     {

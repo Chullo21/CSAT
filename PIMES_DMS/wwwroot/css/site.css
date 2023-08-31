@@ -88,6 +88,7 @@ body {
 thead {
     color: white;
     background-color: darkslateblue;
+    white-space: nowrap;
 }
 
 .modal-overlay {
@@ -241,4 +242,12 @@ thead {
     align-items: center;
     justify-content: center;
     z-index: 9999;
+}
+
+.table{
+    word-break: break-all;
+}
+
+.btn {
+    white-space: nowrap;
 }

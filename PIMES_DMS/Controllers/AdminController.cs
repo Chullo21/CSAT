@@ -144,6 +144,7 @@ namespace PIMES_DMS.Controllers
             {
                 _Db.AccountsDb.Update(am);
                 UpdateNotif(DateTime.Now, ", have edited an account named '" + accname + "'.", "Admin");
+
                 _Db.SaveChanges();               
             }
 

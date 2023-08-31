@@ -1,4 +1,4 @@
-﻿ @model PIMES_DMS.Models.IssueModel
+﻿     @model PIMES_DMS.Models.IssueModel
 @{
     ViewData["Title"] = "Details > " + Model.IssueNo;
 
@@ -39,7 +39,7 @@
                 Creator: @Model.IssueCreator
             </div>
             <div>
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped border-dark border-2">
                     <thead>
                         <tr class="text-center align-content-center">
                             <th>
@@ -51,19 +51,19 @@
                             <th>
                                 Product
                             </th>
-                            <th class="desktop-only">
+                            <th>
                                 Serial
                             </th>
-                            <th class="desktop-only">
+                            <th>
                                 Affected P/N
                             </th>
                             <th>
                                 Description
                             </th>
-                            <th class="desktop-only">
+                            <th>
                                 Ack. Stat.
                             </th>
-                            <th class="desktop-only">
+                            <th>
                                 Date Ack.
                             </th>
                             <th>
@@ -76,20 +76,20 @@
                             <td>
                                 @Model.IssueNo
                             </td>
-                            <td class="desktop-only">
+                            <td>
                                 @Model.DateFound.ToShortDateString()
                             </td>
                             <td>
                                 @Model.Product
                             </td>
-                            <td class="desktop-only">
+                            <td>
                                 @Model.SerialNo
                             </td>
-                            <td class="desktop-only">
+                            <td>
                                 @Model.AffectedPN
                             </td>
                             <td>
-                                @Model.Desc
+                                <textarea style="min-height:70px" class="bg-transparent border-0 w-100">@Model.Desc</textarea>
                             </td>
                             @if (Model.Acknowledged)
                             {
@@ -103,14 +103,14 @@
                                     NO
                                 </td>
                             }
-                            <td class="desktop-only">
+                            <td>
                                 @if (Model.Acknowledged)
                                 {
                                     Write(Model.DateAck.ToShortDateString());
                                 }
                                 else
                                 {
-                                    Write("Not acknowledged yet");
+                                    Write("Not yet");
                                 }
                             </td>
                             <td>
@@ -121,7 +121,7 @@
                                     }
                                     else
                                     {
-                                        Write("No Attachment");
+                                        Write("None");
                                     }
                                 </div>
                             </td>
@@ -129,7 +129,7 @@
                     </tbody>
                 </table>
                 <div class="w-100 h-100 d-flex justify-content-center">
-                    <table class="table table-bordered w-75">
+                    <table class="table table-bordered w-75 border-dark">
                         <thead>
                             <tr>
                                 <th class="text-center">
@@ -140,7 +140,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <textarea style="min-height:250px; max-height:250px; min-width:100%; max-width:100%" class="w-auto h-100 form-control">@Model.ProbDesc</textarea>
+                                    <textarea style="min-height:200px; max-height:200px; min-width:100%; max-width:100%" class="w-auto h-100 form-control bg-transparent">@Model.ProbDesc</textarea>
                                 </td>
                             </tr>
                         </tbody>

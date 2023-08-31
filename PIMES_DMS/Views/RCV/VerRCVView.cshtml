@@ -21,7 +21,7 @@
         <hr />
 
         <div class="w-100">
-            <table class="table table-bordered text-center">
+            <table class="table table-bordered text-center table-hover">
                 <thead>
                     <tr>
                         <th>Action Item</th>
@@ -48,7 +48,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table table-bordered text-center">
+            <table class="table table-bordered text-center table-hover">
                 <thead>
                     <tr>
                         <th class="w-25">Status</th>
@@ -70,7 +70,7 @@
                             </select>
                         </td>
                         <td><input class="form-control" type="date" name="statusDate" onchange="CheckDate(this.value)" required /></td>
-                        <td><input class="form-control" type="file" name="evidence" accept=".pdf"></td>
+                        <td><input class="form-control" type="file" name="evidence" accept=".pdf" required></td>
                         <td><textarea style="max-height:100%; max-width:100%; min-height:100%; min-width:100%; background-color:transparent" name="result"></textarea></td>
                     </tr>
                 </tbody>

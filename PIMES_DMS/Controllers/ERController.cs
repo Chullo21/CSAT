@@ -28,7 +28,6 @@ namespace PIMES_DMS.Controllers
                 nm.Type = t;
             }
 
-
             if (ModelState.IsValid)
             {
                 _Db.NotifDb.Add(nm);
@@ -192,9 +191,11 @@ namespace PIMES_DMS.Controllers
             string? iqnogood, string? iqdis, string? wisoh, string? wigood, string? winogood, string? widis, string? fgsoh, string? fggood, string? fgnogood, string? fgdis,
             bool rep, string? rma)
         {
+            var fromER = _Db.IssueDb.FirstOrDefault(j => j.ControlNumber == controlno);
            
             var obj = new ERModel();
             {
+                obj.IssueNo = fromER.IssueNo;
                 obj.ERID = erid;
                 obj.ControlNo = controlno;
                 obj.WHSESOH = whsoh!;
@@ -217,9 +218,14 @@ namespace PIMES_DMS.Controllers
                 obj.RMAno = rma;
             }
 
-            _Db.ERDb.Update(obj);
-            UpdateNotif(", have edited a containment report.", "All");
-            _Db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _Db.ERDb.Update(obj);
+
+                UpdateNotif(", have edited a containment report.", "All");
+
+                _Db.SaveChanges();
+            }
 
             return View("ERDet", _Db.ERDb.FirstOrDefault(j => j.ControlNo == controlno));
         }

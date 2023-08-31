@@ -28,7 +28,7 @@
     <h1 class="w-100 text-center">Claims List</h1>
     <hr />
     <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center align-content-center" id="myTable">
+        <table class="table table-bordered table-striped text-center align-content-center table-hover" id="myTable">
             <thead>
                 <tr>
                     <th>
@@ -57,7 +57,7 @@
             <tbody>
                 @foreach (var item in mod)
                 {
-                    <tr style="height:30px">
+                    <tr class="text-wrap">
                         <td>
                             @Html.DisplayFor(modelItem => item.IssueNo)
                         </td>
@@ -74,9 +74,9 @@
                             @Html.DisplayFor(modelItem => item.Product)
                         </td>
                         <td class="w-25">
-                            <textarea class="w-100" style="min-height:auto; max-height:100px" readonly>@item.ProbDesc</textarea>
+                            <textarea class="w-100" style="min-height:40px; max-height:100px" readonly>@item.ProbDesc</textarea>
                         </td>
-                        <td>
+                        <td class="text-nowrap">
                             <div class="d-flex">
                                 @{
                                     string textSetter = "Details";

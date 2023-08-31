@@ -49,7 +49,7 @@
     </form>
 
     <div class="table-responsive">
-        <table class="table table-striped text-center" id="myTable">
+        <table class="table table-striped text-center table-hover" id="myTable">
             <thead class="text-nowrap">
                 <tr>
                     <th>
@@ -96,12 +96,13 @@
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ProblemDesc)
+                            <textarea class="w-100 border-0 bg-transparent" style="min-height:50px; max-height:200px">@item.ProblemDesc
+                            </textarea>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.QTY)
                         </td>
-                        <td>
+                        <td class="text-nowrap">
                            <div class="d-flex justify-content-between">
                                 @{
                                     if (Role == "Admin")

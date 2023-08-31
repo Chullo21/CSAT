@@ -39,11 +39,7 @@
     }
 }
 
-<style>
-    thead{
-        background-color: darkslateblue;
-    }
-</style>
+
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -69,7 +65,7 @@
         </div>
         <div class="d-flex flex-column flex-md-row">
             <div class="col-12 col-md-3">
-                <table class="table table-bordered text-center border-dark h-100">
+                <table class="table table-bordered text-center border-dark h-100 table-hover">
                     <thead>
                         <tr>
                             <th>
@@ -87,7 +83,7 @@
                 </table>
             </div>
             <div class="col-12 col-md-9 mx-md-2 overflow-auto">
-                <table class="table table-bordered text-center border-dark h-100">
+                <table class="table table-bordered text-center border-dark h-100 table-hover">
                     <thead class="top-0 position-sticky">
                         <tr>
                             <th style="width:40%">
@@ -125,7 +121,7 @@
                                         <td>
                                             @tc.PIC
                                         </td>
-                                        <td>
+                                        <td class="flex-column text-wrap">
                                             @{
                                                 var tdss = tds.Where(j => j.ControlNo == tc.ControlNo && j.Status == "Open" && j.ActionID == tc.ActionID).ToList().OrderBy(j => j.TDID);
                                                 int index = 0;
@@ -135,11 +131,15 @@
                                                     string print = td.TD.ToShortDateString() + "\r\n";
                                                     if (index != tdss.Count() - 1)
                                                     {
-                                                        <s>@print</s>
+                                                        <div>
+                                                            <s>@print</s>
+                                                        </div>
                                                     }
                                                     else
                                                     {
-                                                        Write(print);
+                                                        <div>
+                                                            <p>@print</p>
+                                                        </div>
                                                     }
 
                                                     index++;
@@ -213,7 +213,7 @@
     <div class="col-12 col-md-4 w-100 flex-column mt-5">
         <div class="d-flex flex-column flex-md-row">
             <div class="col-12 col-md-3">
-                <table class="table table-bordered text-center border-dark h-100">
+                <table class="table table-bordered text-center border-dark h-100 table-hover">
                     <thead class="top-0 position-sticky">
                         <tr>
                             <th>
@@ -231,7 +231,7 @@
                 </table>
             </div>
             <div class="col-12 col-md-9 mx-md-2 table-responsive">
-                <table class="table table-bordered text-center border-dark h-100">
+                <table class="table table-bordered text-center border-dark h-100 table-hover">
                     <thead class="top-0 position-sticky">
                         <tr>
                             <th style="width:40%">
@@ -269,7 +269,7 @@
                                         <td>
                                             @ec.PIC
                                         </td>
-                                        <td>
+                                        <td class="flex-column text-wrap">
                                             @{
                                                 var tdss = tds.Where(j => j.ControlNo == ec.ControlNo && j.Status == "Open" && j.ActionID == ec.ActionID).ToList().OrderBy(j => j.TDID);
                                                 int index = 0;
@@ -279,11 +279,15 @@
                                                     string print = td.TD.ToShortDateString() + "\r\n";
                                                     if (index != tdss.Count() - 1)
                                                     {
-                                                        <s>@print</s>
+                                                        <div>
+                                                            <s>@print</s>
+                                                        </div>
                                                     }
                                                     else
                                                     {
-                                                        Write(print);
+                                                        <div>
+                                                            <p>@print</p>
+                                                        </div>
                                                     }
 
                                                     index++;
@@ -356,7 +360,7 @@
     <div class="col-12 col-md-4 w-100 flex-column mt-5">
         <div class="d-flex flex-column flex-md-row">
             <div class="col-12 col-md-3">
-                <table class="table table-bordered text-center border-dark h-100">
+                <table class="table table-bordered text-center border-dark h-100 table-hover">
                     <thead>
                         <tr>
                             <th>
@@ -374,7 +378,7 @@
                 </table>
             </div>
             <div class="col-12 col-md-9 mx-md-2 table-responsive">
-                <table class="table table-bordered text-center border-dark h-100">
+                <table class="table table-bordered text-center border-dark h-100 table-hover">
                     <thead class="top-0 position-sticky">
                         <tr>
                             <th style="width:40%">
@@ -412,7 +416,7 @@
                                         <td>
                                             @sc.PIC
                                         </td>
-                                        <td>
+                                        <td class="flex-column text-wrap">
                                             @{
                                                 var tdss = tds.Where(j => j.ControlNo == sc.ControlNo && j.Status == "Open" && j.ActionID == sc.ActionID).ToList().OrderBy(j => j.TDID);
                                                 int index = 0;
@@ -422,11 +426,15 @@
                                                     string print = td.TD.ToShortDateString() + "\r\n";
                                                     if (index != tdss.Count() - 1)
                                                     {
-                                                        <s>@print</s>
+                                                       <div>
+                                                            <s>@print</s>
+                                                       </div>
                                                     }
                                                     else
                                                     {
-                                                        Write(print);
+                                                        <div>
+                                                            <p>@print</p>
+                                                        </div>
                                                     }
 
                                                     index++;
@@ -507,7 +515,7 @@
         <input id="verid" name="actionid" type="hidden" />
         <div class="flex-column mt-2">
             <label class="form-label">Status</label>
-            <select class="form-select w-50" onchange="ChangedStatus(this.value)" name="status" required>
+            <select class="form-select" onchange="ChangedStatus(this.value)" name="status" required>
                 <option value="" selected hidden>Please select status</option>
                 <option>Open</option>
                 <option>Closed</option>
@@ -515,18 +523,18 @@
         </div>
         <div class="flex-column mt-2">
             <label class="form-label">Date Verified</label>
-            <input type="date" class="form-control w-50" name="date" required />
+            <input type="date" class="form-control" name="date" required />
         </div>
         <div class="flex-column mt-2">
             <label class="form-label">Evidence</label>
-            <input type="file" class="form-control w-50" name="file" required />
+            <input type="file" class="form-control" name="file" accept=".pdf" required />
         </div>
         <div class="flex-column mt-2">
             <label class="form-label">Remarks</label>
             <textarea name="remarks" class="form-control" style="max-height:150px; min-height:50px; max-width:100%; min-width:100%; height:50px"></textarea>
         </div>
         <div class="d-flex justify-content-center mt-4">
-            <input type="submit" class="btn btn-primary w-25" />
+            <input type="submit" class="btn btn-primary" />
         </div>   
     </form>
 </div>
