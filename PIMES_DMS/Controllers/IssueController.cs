@@ -208,14 +208,16 @@ namespace PIMES_DMS.Controllers
             return View(_context.IssueDb.FirstOrDefault(j => j.IssueID == ID));
         }
 
-        public IActionResult EditIssue(int ID, string issueno, string? serial, string? affected, int qty, string? desc, string? probdesc, IFormFile? doc)
+        public IActionResult EditIssue(int ID, string issueno, string? serial, 
+            string? affected, int qty, string? desc, string? probdesc, IFormFile? doc)
         {
 
             var checkForIssueWithSameNumber = _context.IssueDb.FirstOrDefault(j => j.IssueNo == issueno && j.IssueID != ID);
 
             if (checkForIssueWithSameNumber != null)
             {
-                TempData["Existing8D"] = "An Issue with issue number of '" + issueno + "' already exist. Request to edit Issue was not successful.";
+                TempData["Existing8D"] = "An Issue with issue number of '" 
+                    + issueno + "' already exist. Request to edit Issue was not successful.";
                 return RedirectToAction("AdminHome", "Home");
             }
 
@@ -262,7 +264,8 @@ namespace PIMES_DMS.Controllers
                 return RedirectToAction("Logout", "Login");
             }
 
-            return View(_context.IssueDb.Where(j => !j.isDeleted && j.Acknowledged && j.ValidatedStatus && j.ValRes == "Invalid"));
+            return View(_context.IssueDb.Where(j => !j.isDeleted && j.Acknowledged 
+            && j.ValidatedStatus && j.ValRes == "Invalid"));
         }
 
         public IActionResult GetValids()
@@ -415,7 +418,7 @@ namespace PIMES_DMS.Controllers
                 //}
             }
 
-            string link = "http://192.168.3.39";
+            string link = "http://192.168.6.144:8080";
 
             string body = "Good day,\r\n\r\nWe have received a new quality claim from our costumer with issue# of " + issueno + ". Feel free to access our CSat Portal to review the said claim.\r\n\r\n";
             body += $"Please click \"{link}\" for your reference.\r\n\r\nHave a great day!";

@@ -4,15 +4,6 @@
     TempData.Keep();    
 
     List<AnnouncementModel>? anns = ViewBag.Announcements as List<AnnouncementModel>;
-
-    //    string? EN = TempData["EN"] as string;
-    //    string? Role = TempData["Role"] as string;
-    //    TempData.Keep();
-
-    //if (string.IsNullOrEmpty(EN) || string.IsNullOrEmpty(Role))
-    //{
-    //    Url.Action("Login", "Login");
-    //}
 }
 
 <!DOCTYPE html>
@@ -72,7 +63,7 @@
                         }
                         @if (anns.Any())
                         {
-                            string concatenatedString = "!!REMINDER!!  ";
+                            string concatenatedString = "Announcement!  ";
                             foreach (AnnouncementModel str in anns)
                             {
                                 concatenatedString += " -- " + str.AnnouncementMessage;

@@ -269,7 +269,7 @@ namespace PIMES_DMS.Controllers
                 }
             }
 
-            string link = "http://192.168.3.39";
+            string link = "http://192.168.6.144:8080";
 
             string body = "Good day,\r\n\r\nA new RMA number has been generated. You can view this data by visiting our CSat Portal.\r\n\r\nHave a great day!\r\n\r\n";
             body += $"Please click \"{link}\" for your reference.";

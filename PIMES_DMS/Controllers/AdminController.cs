@@ -62,9 +62,22 @@ namespace PIMES_DMS.Controllers
             return View();
         }
 
+        private string CheckEmail(string email, string sec, string dom)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return "";
+            }
+            else
+            {
+                return email + sec + dom;
+            }
+            
+        }
+
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult CreateUser(string username, string password, string accname, string compname, string role, string email, string sec, string dom)
+        public IActionResult CreateUser(string username, string password, string accname, string compname, string role, string? email, string sec, string dom)
         {
             if (username != null || password != null || accname != null || compname != null || role != null)
             {
@@ -78,7 +91,7 @@ namespace PIMES_DMS.Controllers
                     acc.Section = compname!;
                     acc.UserName = username!;
                     acc.Password = password!;
-                    acc.Email = email + sec + dom;
+                    acc.Email = CheckEmail(email, sec, dom);
                 }
 
                 if (ModelState.IsValid)
@@ -89,7 +102,6 @@ namespace PIMES_DMS.Controllers
                 }
             }
            
-
             return RedirectToAction("AdminView");
         }
 
@@ -122,8 +134,8 @@ namespace PIMES_DMS.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult EditUser(int accid, string accucode, string accname, string section, string role, string email, string username,
-            string password)
+        public IActionResult EditUser(int accid, string accucode, string accname, string section, string role, string? email, string username,
+            string password, string sec, string dom)
         {
 
             AccountsModel? fromAm = _Db.AccountsDb.FirstOrDefault(j => j.AccID == accid);
@@ -135,7 +147,7 @@ namespace PIMES_DMS.Controllers
                 am.AccName = accname;
                 am.Section = section;
                 am.Role = role;
-                am.Email = email;
+                am.Email = CheckEmail(email, sec, dom);
                 am.UserName = username;
                 am.Password = password;
             }
