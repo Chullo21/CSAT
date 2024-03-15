@@ -3,6 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     string? Role = TempData["Role"] as string;
+    
 
     TempData.Keep("Role");
 
@@ -12,6 +13,7 @@
     List<AnnouncementModel>? anns = ViewBag.Announcements as List<AnnouncementModel>;
 
     string? Warning = TempData["Existing8D"] as string;
+    string numberOfActions = Actions == null ? "0" : Actions.Count().ToString();
     TempData.Remove("Existing8D");
 }
 
@@ -317,7 +319,7 @@
     @if (Role != "Admin")
     {
         <div class="card bg-transparent mt-2 border-dark border-3">
-            <h4 class="card-header text-center bg-secondary text-white border-3 border-dark" style="font-family:Impact">Pending Action Item/s (@Actions.Count())</h4>
+            <h4 class="card-header text-center bg-secondary text-white border-3 border-dark" style="font-family:Impact">Pending Action Item/s (@numberOfActions)</h4>
             <div class="table-responsive">
                 <table class="w-100 text-center mt-1 table table-striped" id="myTable">
                     <thead class="bg-primary">
@@ -338,27 +340,30 @@
                     </thead>
                     <tbody>
                         @{
-                            foreach (var action in Actions)
+                            if (Actions != null)
                             {
-                                string tdColor = "";
-                                if (action.TargetDate < DateTime.Now)
+                                foreach (var action in Actions)
                                 {
-                                    tdColor = "background-color: red; color: white";
+                                    string tdColor = "";
+                                    if (action.TargetDate < DateTime.Now)
+                                    {
+                                        tdColor = "background-color: red; color: white";
+                                    }
+                                    <tr>
+                                        <td>
+                                            @action.PIC
+                                        </td>
+                                        <td>
+                                            @action.ControlNo
+                                        </td>
+                                        <td>
+                                            @action.Action
+                                        </td>
+                                        <td style="@tdColor">
+                                            @action.TargetDate.ToShortDateString()
+                                        </td>
+                                    </tr>
                                 }
-                                <tr>
-                                    <td>
-                                        @action.PIC
-                                    </td>
-                                    <td>
-                                        @action.ControlNo
-                                    </td>
-                                    <td>
-                                        @action.Action
-                                    </td>
-                                    <td style="@tdColor">
-                                        @action.TargetDate.ToShortDateString()
-                                    </td>
-                                </tr>
                             }
                         }
 

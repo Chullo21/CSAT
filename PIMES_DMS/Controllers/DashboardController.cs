@@ -80,7 +80,7 @@ namespace PIMES_DMS.Controllers
         {
             int[] data = new int[4];
 
-            List<IssueModel> issues = mainIssues.Where(j => j.DateCreated.Year == year).ToList();
+            List<IssueModel> issues = mainIssues.Where(j => j.DateFound.Year == year).ToList();
 
             data[0] = issues.Count(j => j.FFFS == "Function");
             data[1] = issues.Count(j => j.FFFS == "Form");

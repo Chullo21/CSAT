@@ -540,7 +540,7 @@
 </div>
 
 <form asp-controller="RCV" asp-action="SubmitActionItem" method="post">
-<div class="modal-content w-75 h-75 flex-column" id="modal" style="z-index:2100">
+<div class="modal-content w-50 h-75 flex-column" id="modal" style="z-index:2100">
     <div>
         <button class="btn btn-danger modal-close" onclick="closeModal()"><i style="font-size:24px" class="fa">&#xf00d;</i></button>
         <h4 class="modal-title text-center">Create Action ID</h4>
@@ -553,12 +553,16 @@
             </div>
             <div>
                 <label class="form-label">Person In Charge:</label>
-                <select class="form-select w-100 border-dark" name="pic">
-                    @foreach(string name in names)
+                <input class="form-control w-100 border-dark" list="picNames" name="pic"/>
+                <datalist id="picNames">
+                    @foreach (string name in names)
                     {
                         <option value="@name">@name</option>
                     }
-                </select>
+                </datalist>
+                @*<select class="form-select w-100 border-dark" name="pic">
+                    
+                </select>*@
             </div>
             <div>
                 <label class="form-label">Dependency:</label>
